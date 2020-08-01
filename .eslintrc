@@ -62,7 +62,8 @@
     "import/prefer-default-export": "off",
     "react/jsx-closing-bracket-location": "off",
     "class-methods-use-this": "off",
-    "no-useless-constructor": "off"
+    "no-useless-constructor": "off",
+    "no-console": "off"
   },
   "settings": {
     "import/resolver": {
