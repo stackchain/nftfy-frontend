@@ -1,0 +1,34 @@
+name: Development
+
+on:
+  push:
+    branches: *
+
+jobs:
+  build_development:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.20.1'
+
+      - name: Check Branch
+        run: echo ${GITHUB_REF#refs/heads/}
+
+      - name: React Install Dependencies
+        run: yarn
+
+      - name: React Prettier
+        run: node_modules/prettier/bin-prettier.js --check "./src/**/*.{ts,tsx,js,jsx,css,scss,json}"
+
+      - name: React Lint
+        run: yarn lint
+
+      - name: Yarn Build
+        run: yarn build
+      # - name: Firebase Deploy
+      #   run: node_modules/.bin/firebase use azai-development --token "$FIREBASE_TOKEN" && node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
