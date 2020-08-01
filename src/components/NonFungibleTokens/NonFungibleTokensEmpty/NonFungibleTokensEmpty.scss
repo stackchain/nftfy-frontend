@@ -1,0 +1,30 @@
+.non-fungible-tokens {
+  margin-top: 40px;
+  margin-bottom: 40px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    m img {
+      max-width: 200px;
+      width: 100%;
+      height: auto;
+      align-self: center;
+    }
+
+    p {
+      text-align: center;
+    }
+
+    .disabled-form {
+      display: flex;
+      flex-direction: row;
+      input {
+        flex: 0 1 300px;
+        margin-right: 1rem;
+      }
+    }
+  }
+}

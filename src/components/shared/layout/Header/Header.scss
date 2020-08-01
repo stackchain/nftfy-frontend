@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  flex-direction: row;
+
+  .logo {
+    display: flex;
+    flex: 1;
+
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    img {
+      max-width: 140px;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .wallet {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+}

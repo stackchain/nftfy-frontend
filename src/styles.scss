@@ -1,0 +1,25 @@
+@import './variables.scss';
+
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+
+body {
+  background-color: $gray-bg;
+}
+
+#root > main {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.ant-btn-primary {
+  background: linear-gradient(to right, #fe8464 0%, #fe6e9a 50%, #fe8464 100%);
+  border: none;
+
+  &:hover,
+  &:focus {
+    background: linear-gradient(to right, rgba(254, 132, 100, 0.8) 0%, rgba(254, 110, 154, 0.8) 50%, rgba(254, 132, 100, 0.8) 100%);
+    border: none;
+  }
+}

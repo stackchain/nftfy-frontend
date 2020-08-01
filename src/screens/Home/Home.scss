@@ -1,0 +1,31 @@
+.home {
+  .content {
+    h2 {
+      font-size: 1rem;
+      line-height: 1rem;
+      margin-bottom: 1rem;
+      color: #fe8464;
+
+      img {
+        width: 24px;
+        height: 24px;
+        position: relative;
+        top: -2px;
+        margin-right: 10px;
+      }
+    }
+
+    display: flex;
+    flex-direction: row;
+
+    .nft {
+      flex: 1.5;
+      margin-right: 1rem;
+    }
+
+    .ft {
+      flex: 1;
+      justify-content: flex-end;
+    }
+  }
+}
