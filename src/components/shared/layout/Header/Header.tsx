@@ -12,25 +12,15 @@ interface Props {
 
 export default function Header(props: Props) {
   const { buttonAction } = props
-  const { accounts, accountIndex } = useContext(WalletContext)
+  const { accounts, accountIndex, setAccountIndex } = useContext(WalletContext)
 
   const dropdownMenu = (
     <Menu>
-      <Menu.Item>
-        <a target='_blank' rel='noopener noreferrer' href='http://www.alipay.com/'>
-          1st menu item
-        </a>
-      </Menu.Item>
-      <Menu.Item>
-        <a target='_blank' rel='noopener noreferrer' href='http://www.taobao.com/'>
-          2nd menu item
-        </a>
-      </Menu.Item>
-      <Menu.Item>
-        <a target='_blank' rel='noopener noreferrer' href='http://www.tmall.com/'>
-          3rd menu item
-        </a>
-      </Menu.Item>
+      {accounts.map((account, index) => (
+        <Menu.Item key={`account-${accounts[index]}`} onClick={() => setAccountIndex(index)}>
+          {accounts[index]}
+        </Menu.Item>
+      ))}
     </Menu>
   )
 
