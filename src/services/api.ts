@@ -58,10 +58,15 @@ export interface ERC721Item {
 }
 
 export async function listSupportedWallets(): Promise<WalletName[]> {
-  throw new Error('Unimplemented')
+  return ['metamask', 'portis']
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function initializeWallet(walletName: WalletName): Promise<Wallet> {
-  throw new Error('Unimplemented')
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({
+        getAccounts: () => new Promise(resolveGA => resolveGA(['123', '456']))
+      } as Wallet)
+    }, 1000)
+  })
 }

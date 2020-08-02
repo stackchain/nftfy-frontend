@@ -2,7 +2,13 @@
   .ant-btn {
     width: 100%;
     img {
-      margin-right: 16px;
+      margin-right: 4px;
+    }
+
+    margin-bottom: 1rem;
+
+    &:last-of-type {
+      margin-bottom: 0;
     }
   }
 }
