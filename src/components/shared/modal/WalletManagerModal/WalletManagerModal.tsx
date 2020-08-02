@@ -28,9 +28,8 @@ export default function WalletManagerModal(props: Props) {
     const wallet = await initializeWallet(walletName)
     const accounts = await wallet.getAccounts()
     localStorage.setItem('accounts', JSON.stringify(accounts))
-    localStorage.setItem('selectedAccount', JSON.stringify(0))
-    console.log('Wallet', wallet)
-    console.log('Accounts', accounts)
+    localStorage.setItem('accountIndex', JSON.stringify(0))
+    localStorage.setItem('walletName', JSON.stringify(walletName))
     handleCancel()
   }
 
