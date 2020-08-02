@@ -12,7 +12,6 @@ export default function Home() {
   const [openWalletModal, setOpenWalletModal] = useState(false)
 
   const openWalletManager = () => {
-    console.log('Wallet Manager Called')
     setOpenWalletModal(!openWalletModal)
   }
   return (

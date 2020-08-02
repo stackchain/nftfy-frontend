@@ -1,9 +1,9 @@
 import { DownOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Menu } from 'antd'
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import ntfy from '../../../../assets/nftfy.svg'
-import { Wallet } from '../../../../services/api'
+import { WalletContext } from '../../../../context/WalletContext'
 import './Header.scss'
 
 interface Props {
@@ -12,19 +12,7 @@ interface Props {
 
 export default function Header(props: Props) {
   const { buttonAction } = props
-
-  const accountsStorage: any = localStorage.getItem('accounts')
-  const [accounts] = useState<Wallet[] | null>(accountsStorage as Wallet[])
-
-  const selectedAcccountIndexStorage: any = localStorage.getItem('accountIndex')
-  const [selectedAccount] = useState<number>(selectedAcccountIndexStorage || 0)
-
-  const selectedWalletNameStorage: any = localStorage.getItem('walletName')
-  const [walletName] = useState<string | null>(selectedWalletNameStorage)
-
-  console.log('Header Accounts', accounts)
-  console.log('Selected Account', selectedAccount)
-  console.log('WalletName', walletName)
+  const { accounts, accountIndex } = useContext(WalletContext)
 
   const dropdownMenu = (
     <Menu>
@@ -54,15 +42,15 @@ export default function Header(props: Props) {
         </Link>
       </div>
       <div className='wallet'>
-        {accounts && (
+        {accounts.length > 0 && (
           <Dropdown overlay={dropdownMenu} placement='bottomRight' arrow>
             <Button>
-              {accounts[selectedAccount]}
+              {accounts[accountIndex]}
               <DownOutlined />
             </Button>
           </Dropdown>
         )}
-        {!accounts && (
+        {!accounts.length && (
           <Button onClick={buttonAction} type='primary' size='large'>
             Connect Wallet
           </Button>

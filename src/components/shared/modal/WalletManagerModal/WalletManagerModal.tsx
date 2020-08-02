@@ -1,7 +1,8 @@
 import { Button, Modal } from 'antd'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import metamask from '../../../../assets/metamask.svg'
 import portis from '../../../../assets/portis.svg'
+import { WalletContext } from '../../../../context/WalletContext'
 import { initializeWallet, listSupportedWallets, WalletName } from '../../../../services/api'
 import './WalletManagerModal.scss'
 
@@ -11,6 +12,7 @@ interface Props {
 }
 export default function WalletManagerModal(props: Props) {
   const { visible, setVisible } = props
+  const { setAccounts, setWalletName } = useContext(WalletContext)
 
   const [supportedWallets, setSupportedWallets] = useState<WalletName[]>([])
   const [loadingWallet, setLoadingWallet] = useState<WalletName | undefined>(undefined)
@@ -27,9 +29,9 @@ export default function WalletManagerModal(props: Props) {
     setLoadingWallet(walletName)
     const wallet = await initializeWallet(walletName)
     const accounts = await wallet.getAccounts()
-    localStorage.setItem('accounts', JSON.stringify(accounts))
-    localStorage.setItem('accountIndex', JSON.stringify(0))
-    localStorage.setItem('walletName', JSON.stringify(walletName))
+
+    setWalletName(walletName)
+    setAccounts(accounts)
     handleCancel()
   }
 
