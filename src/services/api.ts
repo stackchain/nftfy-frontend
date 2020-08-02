@@ -44,6 +44,7 @@ export interface ERC721 {
 }
 
 export interface ERC721Item {
+  contract: ERC721
   tokenId: number
   name?: string
   description?: string
