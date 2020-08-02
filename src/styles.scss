@@ -11,15 +11,24 @@ body {
 #root > main {
   max-width: 960px;
   margin: 0 auto;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 .ant-btn-primary {
   background: linear-gradient(to right, #fe8464 0%, #fe6e9a 50%, #fe8464 100%);
   border: none;
 
+  box-shadow: 1px 2px 2px -2px rgba(0, 0, 0, 0.5) !important;
+
   &:hover,
   &:focus {
     background: linear-gradient(to right, rgba(254, 132, 100, 0.8) 0%, rgba(254, 110, 154, 0.8) 50%, rgba(254, 132, 100, 0.8) 100%);
     border: none;
   }
+}
+
+.ant-input {
+  border: none;
+  box-shadow: 1px 2px 2px -2px rgba(0, 0, 0, 0.5);
 }

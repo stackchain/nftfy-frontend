@@ -1,5 +1,8 @@
 .home {
   .content {
+    display: flex;
+    flex-direction: row;
+
     h2 {
       font-size: 1rem;
       line-height: 1rem;
@@ -15,8 +18,9 @@
       }
     }
 
-    display: flex;
-    flex-direction: row;
+    > div {
+      margin-bottom: 40px;
+    }
 
     .nft {
       flex: 1.5;
@@ -26,6 +30,19 @@
     .ft {
       flex: 1;
       justify-content: flex-end;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .home {
+    .content {
+      display: flex;
+      flex-direction: column;
+
+      .nft {
+        margin-right: 0;
+      }
     }
   }
 }

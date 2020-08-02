@@ -1,0 +1,23 @@
+.fungible-tokens-empty {
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+    img {
+      max-width: 240px;
+      width: 100%;
+      height: auto;
+      align-self: center;
+    }
+
+    p {
+      text-align: center;
+      color: #cccccc;
+      margin-bottom: 50px;
+    }
+  }
+}

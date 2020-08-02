@@ -1,14 +1,14 @@
-.non-fungible-tokens {
-  margin-top: 40px;
-  margin-bottom: 40px;
-
-  div {
+.non-fungible-tokens-empty {
+  > div {
     display: flex;
     flex-direction: column;
     align-content: center;
     justify-content: center;
-    m img {
-      max-width: 200px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+    img {
+      max-width: 240px;
       width: 100%;
       height: auto;
       align-self: center;
@@ -16,10 +16,15 @@
 
     p {
       text-align: center;
+      color: #cccccc;
+      margin-bottom: 20px;
     }
 
     .disabled-form {
       display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 20px;
       flex-direction: row;
       input {
         flex: 0 1 300px;
