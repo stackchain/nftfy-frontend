@@ -13,7 +13,7 @@ export default function NonFungibleTokensEmpty() {
       {!accounts[accountIndex] ? (
         <p>Connect your Ethereum Wallet to add Non-Fungible Tokens</p>
       ) : (
-        <p>Input your Non Fungible Token Hash on the form and click Add NFT button</p>
+        <p>Input your Non Fungible Token Hash on the form</p>
       )}
       <div className='disabled-form'>
         <Input placeholder='NFT Hash' disabled={!accounts[accountIndex]} />
