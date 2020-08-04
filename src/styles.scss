@@ -63,3 +63,43 @@ body,
   box-shadow: $box-shadow;
   background-color: $gray-bg;
 }
+
+.ant-pagination-item-active {
+  border-color: $orange;
+
+  &:hover,
+  &:focus {
+    border-color: $orange;
+    a {
+      color: $orange;
+      &:hover,
+      &:focus {
+        color: $orange;
+      }
+    }
+  }
+
+  a {
+    color: $orange;
+    &:hover {
+      color: $orange;
+    }
+  }
+}
+
+.ant-pagination-item:hover {
+  a {
+    color: $orange;
+    &:hover {
+      color: $orange;
+    }
+  }
+}
+
+.ant-pagination-next:hover .ant-pagination-item-link {
+  color: $orange;
+}
+
+.ant-pagination-prev:hover .ant-pagination-item-link {
+  color: $orange;
+}

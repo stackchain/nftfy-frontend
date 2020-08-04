@@ -75,24 +75,68 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
                 {
                   contract: {
                     address: '123',
-                    name: 'contrato instagram',
-                    symbol: 'ISNTA'
+                    name: 'Descentraland',
+                    symbol: 'NFT'
                   } as ERC721,
                   tokenId: 1,
-                  name: 'Instagram',
-                  description: 'Instagram Image',
-                  imageUri: 'https://noticias.reclameaqui.com.br/uploads/2020/05/1345839990.jpg'
+                  name: 'Name NFT',
+                  description: 'Name NFT Image',
+                  imageUri: 'https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png'
                 } as ERC721Item,
                 {
                   contract: {
                     address: '456',
-                    name: 'contrato facebook',
-                    symbol: 'FACE'
+                    name: 'Descentraland',
+                    symbol: 'NFT'
                   } as ERC721,
                   tokenId: 2,
-                  name: 'FAcebok',
+                  name: 'Name NFT',
                   description: 'Facebook Image',
-                  imageUri: 'https://www.walberdepaula.com/wp-content/uploads/2016/07/facebook-image-.jpg'
+                  imageUri: 'https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png'
+                } as ERC721Item,
+                {
+                  contract: {
+                    address: '456',
+                    name: 'Descentraland',
+                    symbol: 'NFT'
+                  } as ERC721,
+                  tokenId: 3,
+                  name: 'Name NFT',
+                  description: 'Facebook Image',
+                  imageUri: 'https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png'
+                } as ERC721Item,
+                {
+                  contract: {
+                    address: '456',
+                    name: 'Descentraland',
+                    symbol: 'NFT'
+                  } as ERC721,
+                  tokenId: 4,
+                  name: 'Name NFT',
+                  description: 'Facebook Image',
+                  imageUri: 'https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png'
+                } as ERC721Item,
+                {
+                  contract: {
+                    address: '456',
+                    name: 'Descentraland',
+                    symbol: 'NFT'
+                  } as ERC721,
+                  tokenId: 5,
+                  name: 'Name NFT',
+                  description: 'Facebook Image',
+                  imageUri: 'https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png'
+                } as ERC721Item,
+                {
+                  contract: {
+                    address: '456',
+                    name: 'Descentraland',
+                    symbol: 'NFT'
+                  } as ERC721,
+                  tokenId: 6,
+                  name: 'Name NFT',
+                  description: 'Facebook Image',
+                  imageUri: 'https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png'
                 } as ERC721Item
               ],
               count: 2
