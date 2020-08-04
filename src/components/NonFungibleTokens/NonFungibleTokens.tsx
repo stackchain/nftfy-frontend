@@ -21,7 +21,7 @@ export default function NonFungibleTokens() {
     loadAccountItems()
   }, [loadAccountItems])
 
-  if (!accountItems) {
+  if (!accountItems.length) {
     return <NonFungibleTokensEmpty />
   }
 
