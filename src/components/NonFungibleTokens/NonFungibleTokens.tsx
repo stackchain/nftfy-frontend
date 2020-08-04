@@ -1,30 +1,27 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { WalletContext } from '../../context/WalletContext'
-import { ERC721Item } from '../../services/api'
 import NonFungibleTokensEmpty from './NonFungibleTokensEmpty/NonFungibleTokensEmpty'
 import NonFungibleTokensList from './NonFungibleTokensList/NonFungibleTokensList'
 
 export default function NonFungibleTokens() {
-  const { wallet, accounts, accountIndex } = useContext(WalletContext)
+  const { wallet, accounts, accountIndex, accountItems, setAccountItems } = useContext(WalletContext)
 
-  const [nft, setNft] = useState<ERC721Item[]>([])
-
-  const loadNft = useCallback(async () => {
+  const loadAccountItems = useCallback(async () => {
     if (wallet) {
       try {
         const nfts = await wallet.listAccountItems(accounts[accountIndex], 9, 10)
-        setNft(nfts.items)
+        setAccountItems(nfts.items)
       } catch (error) {
         error('Error on List Non-Fungible Tokens')
       }
     }
-  }, [wallet, accounts, accountIndex])
+  }, [accountIndex, accounts, wallet, setAccountItems])
 
   useEffect(() => {
-    loadNft()
-  }, [loadNft])
+    loadAccountItems()
+  }, [loadAccountItems])
 
-  if (!nft.length) {
+  if (!accountItems) {
     return <NonFungibleTokensEmpty />
   }
 

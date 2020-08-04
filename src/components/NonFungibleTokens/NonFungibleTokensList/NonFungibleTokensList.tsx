@@ -1,17 +1,15 @@
 import { Card } from 'antd'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { WalletContext } from '../../../context/WalletContext'
 
 export default function NonFungibleTokensList() {
-  const { accounts, accountIndex, setSyncAccountItem } = useContext(WalletContext)
-
-  useEffect(() => {
-    setSyncAccountItem(accounts[accountIndex])
-  }, [accounts, accountIndex, setSyncAccountItem])
+  const { accountItems } = useContext(WalletContext)
 
   return (
     <Card>
-      <p>LIST</p>
+      {accountItems.map(erc721 => (
+        <p key={erc721.tokenId}>LIST</p>
+      ))}
     </Card>
   )
 }

@@ -89,7 +89,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
                     name: 'contrato facebook',
                     symbol: 'FACE'
                   } as ERC721,
-                  tokenId: 1,
+                  tokenId: 2,
                   name: 'FAcebok',
                   description: 'Facebook Image',
                   imageUri: 'https://www.walberdepaula.com/wp-content/uploads/2016/07/facebook-image-.jpg'

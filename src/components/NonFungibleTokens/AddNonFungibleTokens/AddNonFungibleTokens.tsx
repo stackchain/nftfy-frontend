@@ -5,7 +5,7 @@ import { error } from '../../../services/notification'
 import './AddNonFungibleTokens.scss'
 
 export default function AddNonFungibleTokens() {
-  const { accounts, accountIndex, wallet, setSyncAccountItem } = useContext(WalletContext)
+  const { accounts, accountIndex, wallet } = useContext(WalletContext)
 
   const [nftInput, setNftInput] = useState('')
 
@@ -20,7 +20,6 @@ export default function AddNonFungibleTokens() {
       error('NFT Hash is invalid')
     } else if (wallet) {
       await wallet.registerERC721(nftInput)
-      setSyncAccountItem(undefined)
     }
   }
 

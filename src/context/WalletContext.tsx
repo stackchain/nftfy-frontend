@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ERC721Item, Wallet, WalletName } from '../services/api'
+import { ERC721Item, initializeWallet, Wallet, WalletName } from '../services/api'
 
 export const WalletContext = React.createContext<{
   walletName: WalletName | undefined
@@ -12,8 +12,6 @@ export const WalletContext = React.createContext<{
   setAccountIndex: (index: number) => void
   accountItems: ERC721Item[]
   setAccountItems: (accountItems: ERC721Item[]) => void
-  syncAccountItem: string | undefined
-  setSyncAccountItem: (address: string | undefined) => void
 }>({
   walletName: undefined,
   setWalletName: () => null,
@@ -24,9 +22,7 @@ export const WalletContext = React.createContext<{
   accountIndex: 0,
   setAccountIndex: () => null,
   accountItems: [],
-  setAccountItems: () => null,
-  syncAccountItem: undefined,
-  setSyncAccountItem: () => null
+  setAccountItems: () => null
 })
 
 export default function WalletContextWrapper(props: React.PropsWithChildren<{}>) {
@@ -37,19 +33,42 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
   const [accounts, setAccounts] = useState<string[]>([])
   const [accountIndex, setAccountIndex] = useState<number>(0)
   const [accountItems, setAccountItems] = useState<ERC721Item[]>([])
-  const [syncAccountItem, setSyncAccountItem] = useState<string | undefined>(undefined)
+  const [rehydrate, setRehydrate] = useState(true)
 
-  const shouldSyncAccountItem = useCallback(async () => {
-    if (syncAccountItem && wallet) {
-      console.log('Set Sync Account Item Chamado')
-      await wallet.listAccountItems(accounts[accountIndex], 0, 9)
-      setSyncAccountItem(undefined)
+  const persistOffline = useCallback(() => {
+    if (!rehydrate) {
+      if (walletName !== undefined) localStorage.setItem('walletName', JSON.stringify(walletName))
+      if (accounts !== undefined) localStorage.setItem('accounts', JSON.stringify({ accounts }))
+      if (accountIndex !== undefined) localStorage.setItem('accountIndex', JSON.stringify(accountIndex))
     }
-  }, [syncAccountItem, wallet, accounts, accountIndex])
+  }, [walletName, accountIndex, accounts, rehydrate])
 
   useEffect(() => {
-    shouldSyncAccountItem()
-  }, [shouldSyncAccountItem])
+    persistOffline()
+  }, [persistOffline])
+
+  const rehydrateOffline = useCallback(async () => {
+    if (rehydrate) {
+      const walletNameStorage = localStorage.getItem('walletName')
+      const accountsStorage = localStorage.getItem('accounts')
+      const accountIndexStorage = localStorage.getItem('accountIndex')
+
+      if (walletNameStorage) {
+        setWalletName(JSON.parse(walletNameStorage))
+        const walletStorage = await initializeWallet(walletNameStorage as WalletName)
+        setWallet(walletStorage)
+      }
+
+      if (accountsStorage) setAccounts(JSON.parse(accountsStorage).accounts)
+      if (accountIndexStorage) setAccountIndex(Number(JSON.parse(accountIndexStorage)))
+
+      setRehydrate(false)
+    }
+  }, [rehydrate])
+
+  useEffect(() => {
+    rehydrateOffline()
+  }, [rehydrateOffline])
 
   return (
     <WalletContext.Provider
@@ -63,9 +82,7 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
         accountIndex,
         setAccountIndex,
         accountItems,
-        setAccountItems,
-        syncAccountItem,
-        setSyncAccountItem
+        setAccountItems
       }}>
       {children}
     </WalletContext.Provider>
