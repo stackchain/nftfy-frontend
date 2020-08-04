@@ -13,7 +13,7 @@ export const WalletContext = React.createContext<{
   accountItems: ERC721Item[]
   setAccountItems: (accountItems: ERC721Item[]) => void
   syncAccountItem: string | undefined
-  setSyncAccountItem: (address: string) => void
+  setSyncAccountItem: (address: string | undefined) => void
 }>({
   walletName: undefined,
   setWalletName: () => null,
@@ -41,10 +41,11 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
 
   const shouldSyncAccountItem = useCallback(async () => {
     if (syncAccountItem && wallet) {
-      await wallet.listAccountItems(syncAccountItem, 0, 9)
+      console.log('Set Sync Account Item Chamado')
+      await wallet.listAccountItems(accounts[accountIndex], 0, 9)
       setSyncAccountItem(undefined)
     }
-  }, [syncAccountItem, wallet])
+  }, [syncAccountItem, wallet, accounts, accountIndex])
 
   useEffect(() => {
     shouldSyncAccountItem()
