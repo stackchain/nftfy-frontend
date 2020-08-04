@@ -16,7 +16,7 @@ export default function Header(props: Props) {
 
   const dropdownMenu = (
     <Menu>
-      {accounts.map((account, index) => (
+      {accounts.map((_account, index) => (
         <Menu.Item key={`account-${accounts[index]}`} onClick={() => setAccountIndex(index)}>
           {accounts[index]}
         </Menu.Item>

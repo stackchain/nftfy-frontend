@@ -11,8 +11,12 @@ export default function NonFungibleTokens() {
 
   const loadNft = useCallback(async () => {
     if (wallet) {
-      const nfts = await wallet.listAccountItems(accounts[accountIndex], 9, 10)
-      setNft(nfts.items)
+      try {
+        const nfts = await wallet.listAccountItems(accounts[accountIndex], 9, 10)
+        setNft(nfts.items)
+      } catch (error) {
+        error('Error on List Non-Fungible Tokens')
+      }
     }
   }, [wallet, accounts, accountIndex])
 

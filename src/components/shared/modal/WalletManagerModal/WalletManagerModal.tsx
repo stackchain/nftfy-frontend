@@ -12,7 +12,7 @@ interface Props {
 }
 export default function WalletManagerModal(props: Props) {
   const { visible, setVisible } = props
-  const { setAccounts, setWalletName } = useContext(WalletContext)
+  const { setAccounts, setWalletName, setWallet } = useContext(WalletContext)
 
   const [supportedWallets, setSupportedWallets] = useState<WalletName[]>([])
   const [loadingWallet, setLoadingWallet] = useState<WalletName | undefined>(undefined)
@@ -30,6 +30,7 @@ export default function WalletManagerModal(props: Props) {
     const wallet = await initializeWallet(walletName)
     const accounts = await wallet.getAccounts()
 
+    setWallet(wallet)
     setWalletName(walletName)
     setAccounts(accounts)
     handleCancel()

@@ -65,8 +65,40 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
   return new Promise(resolve => {
     setTimeout(() => {
       resolve({
-        getAccounts: () => new Promise(resolveGA => resolveGA(['123', '456']))
+        getAccounts: () => new Promise(resolveGA => resolveGA(['123', '456'])),
+        validateAddress: address => new Promise(resolveVA => resolveVA(true)),
+        registerERC721: address => new Promise(resolveRE => resolveRE()),
+        listAccountItems: (address, offset, limit) =>
+          new Promise(resolveLAI =>
+            resolveLAI({
+              items: [
+                {
+                  contract: {
+                    address: '123',
+                    name: 'contrato instagram',
+                    symbol: 'ISNTA'
+                  } as ERC721,
+                  tokenId: 1,
+                  name: 'Instagram',
+                  description: 'Instagram Image',
+                  imageUri: 'https://noticias.reclameaqui.com.br/uploads/2020/05/1345839990.jpg'
+                } as ERC721Item,
+                {
+                  contract: {
+                    address: '456',
+                    name: 'contrato facebook',
+                    symbol: 'FACE'
+                  } as ERC721,
+                  tokenId: 1,
+                  name: 'FAcebok',
+                  description: 'Facebook Image',
+                  imageUri: 'https://www.walberdepaula.com/wp-content/uploads/2016/07/facebook-image-.jpg'
+                } as ERC721Item
+              ],
+              count: 2
+            })
+          )
       } as Wallet)
-    }, 1000)
+    }, 0)
   })
 }
