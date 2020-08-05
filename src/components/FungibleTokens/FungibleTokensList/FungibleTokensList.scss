@@ -1,0 +1,46 @@
+@import '../../../variables.scss';
+
+.ft-list-container {
+  a {
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .ft-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 1fr;
+    grid-gap: 10px;
+    margin-bottom: 1rem;
+
+    .ft-item {
+      background-color: $white;
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      grid-auto-rows: 1fr;
+
+      .ft-symbol {
+        font-size: 1rem;
+        color: $orange;
+      }
+
+      .ft-name,
+      .ft-shares {
+        color: $black;
+      }
+
+      img {
+        max-width: 66px;
+        height: auto;
+        box-shadow: $box-shadow-lg;
+        margin-bottom: 0.45rem;
+      }
+    }
+  }
+  .ft-pagination {
+    display: flex;
+    justify-content: center;
+    margin-left: -1rem;
+  }
+}

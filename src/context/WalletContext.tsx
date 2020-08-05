@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ERC721Item, initializeWallet, Wallet, WalletName } from '../services/api'
+import { ERC20, ERC721Item, initializeWallet, Wallet, WalletName } from '../services/api'
 
 export const WalletContext = React.createContext<{
   walletName: WalletName | undefined
@@ -12,6 +12,8 @@ export const WalletContext = React.createContext<{
   setAccountIndex: (index: number) => void
   accountItems: ERC721Item[]
   setAccountItems: (accountItems: ERC721Item[]) => void
+  accountShares: ERC20[]
+  setAccountShares: (accountShares: ERC20[]) => void
 }>({
   walletName: undefined,
   setWalletName: () => null,
@@ -22,7 +24,9 @@ export const WalletContext = React.createContext<{
   accountIndex: 0,
   setAccountIndex: () => null,
   accountItems: [],
-  setAccountItems: () => null
+  setAccountItems: () => null,
+  accountShares: [],
+  setAccountShares: () => null
 })
 
 export default function WalletContextWrapper(props: React.PropsWithChildren<{}>) {
@@ -32,6 +36,7 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined)
   const [accounts, setAccounts] = useState<string[]>([])
   const [accountIndex, setAccountIndex] = useState<number>(0)
+  const [accountShares, setAccountShares] = useState<ERC20[]>([])
   const [accountItems, setAccountItems] = useState<ERC721Item[]>([])
   const [rehydrate, setRehydrate] = useState(true)
 
@@ -82,7 +87,9 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
         accountIndex,
         setAccountIndex,
         accountItems,
-        setAccountItems
+        setAccountItems,
+        accountShares,
+        setAccountShares
       }}>
       {children}
     </WalletContext.Provider>

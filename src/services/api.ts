@@ -68,6 +68,50 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
         getAccounts: () => new Promise(resolveGA => resolveGA(['123', '456'])),
         validateAddress: address => new Promise(resolveVA => resolveVA(true)),
         registerERC721: address => new Promise(resolveRE => resolveRE()),
+        listAccountShares: (address, offset, limit) =>
+          new Promise(resolveLAS =>
+            resolveLAS({
+              items: [
+                {
+                  address: '123123',
+                  name: 'Descentr',
+                  symbol: 'DESC',
+                  decimals: 4
+                } as ERC20,
+                {
+                  address: '442233',
+                  name: 'Super Cat',
+                  symbol: 'CAT',
+                  decimals: 4
+                } as ERC20,
+                {
+                  address: '123123',
+                  name: 'Descentr',
+                  symbol: 'DESC',
+                  decimals: 4
+                } as ERC20,
+                {
+                  address: '442233',
+                  name: 'Super Cat',
+                  symbol: 'CAT',
+                  decimals: 4
+                } as ERC20,
+                {
+                  address: '123123',
+                  name: 'Descentr',
+                  symbol: 'DESC',
+                  decimals: 4
+                } as ERC20,
+                {
+                  address: '442233',
+                  name: 'Super Cat',
+                  symbol: 'CAT',
+                  decimals: 4
+                } as ERC20
+              ],
+              count: 2
+            })
+          ),
         listAccountItems: (address, offset, limit) =>
           new Promise(resolveLAI =>
             resolveLAI({
@@ -137,9 +181,31 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
                   name: 'Name NFT',
                   description: 'Facebook Image',
                   imageUri: 'https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png'
+                } as ERC721Item,
+                {
+                  contract: {
+                    address: '456',
+                    name: 'Descentraland',
+                    symbol: 'NFT'
+                  } as ERC721,
+                  tokenId: 7,
+                  name: 'Name NFT',
+                  description: 'Facebook Image',
+                  imageUri: 'https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png'
+                } as ERC721Item,
+                {
+                  contract: {
+                    address: '456',
+                    name: 'Descentraland',
+                    symbol: 'NFT'
+                  } as ERC721,
+                  tokenId: 8,
+                  name: 'Name NFT',
+                  description: 'Facebook Image',
+                  imageUri: 'https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png'
                 } as ERC721Item
               ],
-              count: 2
+              count: 8
             })
           )
       } as Wallet)
