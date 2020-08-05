@@ -75,37 +75,37 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
                 {
                   address: '123123',
                   name: 'Descentr',
-                  symbol: 'DESC',
+                  symbol: 'DESC1',
                   decimals: 4
                 } as ERC20,
                 {
                   address: '442233',
                   name: 'Super Cat',
-                  symbol: 'CAT',
+                  symbol: 'CAT2',
                   decimals: 4
                 } as ERC20,
                 {
                   address: '123123',
                   name: 'Descentr',
-                  symbol: 'DESC',
+                  symbol: 'DESC3',
                   decimals: 4
                 } as ERC20,
                 {
                   address: '442233',
                   name: 'Super Cat',
-                  symbol: 'CAT',
+                  symbol: 'CAT4',
                   decimals: 4
                 } as ERC20,
                 {
                   address: '123123',
                   name: 'Descentr',
-                  symbol: 'DESC',
+                  symbol: 'DESC5',
                   decimals: 4
                 } as ERC20,
                 {
                   address: '442233',
                   name: 'Super Cat',
-                  symbol: 'CAT',
+                  symbol: 'CAT6',
                   decimals: 4
                 } as ERC20
               ],
