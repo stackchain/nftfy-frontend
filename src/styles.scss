@@ -17,6 +17,10 @@ body,
   padding-left: 20px;
 }
 
+html {
+  --antd-wave-shadow-color: $color !important;
+}
+
 .ant-btn,
 .ant-dropdown-trigger,
 .ant-card {
@@ -58,7 +62,9 @@ body,
   border-color: #d9d9d9 !important;
 }
 
-.ant-input {
+.ant-input,
+.ant-input-group-addon,
+.ant-select-selector {
   border: none;
   box-shadow: $box-shadow;
   background-color: $gray-bg;

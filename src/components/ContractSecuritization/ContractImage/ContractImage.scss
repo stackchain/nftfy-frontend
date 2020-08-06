@@ -1,0 +1,25 @@
+@import '../../../styles.scss';
+
+.contract-image-item {
+  display: flex;
+  justify-content: center;
+
+  div {
+    img {
+      width: 100%;
+      max-width: 160px;
+      height: auto;
+      box-shadow: $box-shadow-lg;
+      margin-bottom: 1rem;
+    }
+
+    .contract-name {
+      font-size: 1rem;
+      color: $orange;
+    }
+
+    .contract-meta {
+      color: $black;
+    }
+  }
+}
