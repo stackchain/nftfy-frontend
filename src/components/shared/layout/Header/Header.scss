@@ -1,3 +1,4 @@
+@import '../../../../variables.scss';
 .header {
   display: flex;
   flex-direction: row;
@@ -22,5 +23,15 @@
     justify-content: flex-end;
     margin-top: 40px;
     margin-bottom: 40px;
+
+    .walletName.ant-btn {
+      color: $black !important;
+    }
+
+    .walletName.ant-btn[disabled] {
+      background: $white !important;
+      color: $black !important;
+      box-shadow: $box-shadow;
+    }
   }
 }

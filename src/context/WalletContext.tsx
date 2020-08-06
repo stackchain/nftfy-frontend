@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ERC20, ERC721Item, initializeWallet, Wallet, WalletName } from '../services/api'
+import { ERC20, ERC721Item, initializeWallet, listSupportedWallets, Wallet, WalletName } from '../services/api'
 
 export const WalletContext = React.createContext<{
   walletName: WalletName | undefined
@@ -43,10 +43,9 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
   const persistOffline = useCallback(() => {
     if (!rehydrate) {
       if (walletName !== undefined) localStorage.setItem('walletName', JSON.stringify(walletName))
-      if (accounts !== undefined) localStorage.setItem('accounts', JSON.stringify({ accounts }))
       if (accountIndex !== undefined) localStorage.setItem('accountIndex', JSON.stringify(accountIndex))
     }
-  }, [walletName, accountIndex, accounts, rehydrate])
+  }, [walletName, accountIndex, rehydrate])
 
   useEffect(() => {
     persistOffline()
@@ -54,18 +53,30 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
 
   const rehydrateOffline = useCallback(async () => {
     if (rehydrate) {
+      const supportedWallets = await listSupportedWallets()
+
       const walletNameStorage = localStorage.getItem('walletName')
-      const accountsStorage = localStorage.getItem('accounts')
-      const accountIndexStorage = localStorage.getItem('accountIndex')
 
-      if (walletNameStorage) {
-        setWalletName(JSON.parse(walletNameStorage))
-        const walletStorage = await initializeWallet(walletNameStorage as WalletName)
-        setWallet(walletStorage)
+      if (walletNameStorage && supportedWallets.includes(JSON.parse(walletNameStorage))) {
+        const accountIndexStorage = localStorage.getItem('accountIndex')
+
+        if (walletNameStorage) {
+          setWalletName(JSON.parse(walletNameStorage))
+          const walletStorage = (await initializeWallet(JSON.parse(walletNameStorage))) as Wallet
+          setWallet(walletStorage)
+
+          if (walletStorage) {
+            const accountsStorage = await walletStorage.getAccounts()
+
+            setAccounts(accountsStorage)
+
+            if (accountsStorage[0]) {
+              walletStorage.selectAccount(accountsStorage[0])
+            }
+          }
+        }
+        if (accountIndexStorage) setAccountIndex(Number(JSON.parse(accountIndexStorage)))
       }
-
-      if (accountsStorage) setAccounts(JSON.parse(accountsStorage).accounts)
-      if (accountIndexStorage) setAccountIndex(Number(JSON.parse(accountIndexStorage)))
 
       setRehydrate(false)
     }

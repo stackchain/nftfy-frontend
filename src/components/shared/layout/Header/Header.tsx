@@ -12,12 +12,17 @@ interface Props {
 
 export default function Header(props: Props) {
   const { buttonAction } = props
-  const { accounts, accountIndex, setAccountIndex } = useContext(WalletContext)
-
+  const { accounts, accountIndex, setAccountIndex, wallet } = useContext(WalletContext)
+  const selectAccount = (index: number) => {
+    if (wallet) {
+      wallet.selectAccount(accounts[index])
+    }
+    setAccountIndex(index)
+  }
   const dropdownMenu = (
     <Menu>
       {accounts.map((_account, index) => (
-        <Menu.Item key={`account-${accounts[index]}`} onClick={() => setAccountIndex(index)}>
+        <Menu.Item key={`account-${accounts[index]}`} onClick={() => selectAccount(index)}>
           {accounts[index]}
         </Menu.Item>
       ))}
@@ -33,10 +38,10 @@ export default function Header(props: Props) {
       </div>
       <div className='wallet'>
         {accounts.length > 0 && (
-          <Dropdown overlay={dropdownMenu} placement='bottomRight' arrow>
-            <Button>
+          <Dropdown overlay={dropdownMenu} placement='bottomRight' disabled={accounts.length === 1}>
+            <Button className='walletName'>
               {accounts[accountIndex]}
-              <DownOutlined />
+              {accounts.length > 1 && <DownOutlined />}
             </Button>
           </Dropdown>
         )}

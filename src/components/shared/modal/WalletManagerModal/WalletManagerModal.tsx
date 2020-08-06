@@ -27,12 +27,18 @@ export default function WalletManagerModal(props: Props) {
 
   const selectWallet = (walletName: WalletName) => async () => {
     setLoadingWallet(walletName)
+
     const wallet = await initializeWallet(walletName)
     const accounts = await wallet.getAccounts()
+
+    if (accounts[0]) {
+      wallet.selectAccount(accounts[0])
+    }
 
     setWallet(wallet)
     setWalletName(walletName)
     setAccounts(accounts)
+
     handleCancel()
   }
 
