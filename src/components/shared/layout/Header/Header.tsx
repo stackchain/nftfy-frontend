@@ -40,7 +40,9 @@ export default function Header(props: Props) {
         {accounts.length > 0 && (
           <Dropdown overlay={dropdownMenu} placement='bottomRight' disabled={accounts.length === 1}>
             <Button className='walletName'>
-              {accounts[accountIndex]}
+              {accounts[accountIndex].substring(0, 6)}
+              ...
+              {accounts[accountIndex].substring(accounts[accountIndex].length - 4, accounts[accountIndex].length)}
               {accounts.length > 1 && <DownOutlined />}
             </Button>
           </Dropdown>
