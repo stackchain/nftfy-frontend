@@ -108,15 +108,15 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
   async function nftfy(): Promise<string> {
     switch (network) {
       case 'main':
-        return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7'
+        return '0x5f0888412978AEb7d41B153126E890FDc095E239'
       case 'ropsten':
-        return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7'
+        return '0x5f0888412978AEb7d41B153126E890FDc095E239'
       case 'rinkeby':
-        return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7'
+        return '0x5f0888412978AEb7d41B153126E890FDc095E239'
       case 'kovan':
-        return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7'
+        return '0x5f0888412978AEb7d41B153126E890FDc095E239'
       case 'goerli':
-        return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7'
+        return '0x5f0888412978AEb7d41B153126E890FDc095E239'
     }
     throw new Error('Unsupported network')
   }
