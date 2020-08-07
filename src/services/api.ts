@@ -6,7 +6,7 @@ declare global {
   interface Window { ethereum: any; web3: any; }
 }
 
-export type WalletName = 'metamask' | 'portis' /* | 'infura' */;
+export type WalletName = 'metamask' | 'portis';
 
 export interface Wallet {
   network: string;
@@ -82,10 +82,6 @@ async function getWeb3(walletName: WalletName): Promise<Web3> {
   case 'portis':
     const portis = new Portis('a0fa4f71-2d8e-4a67-baa6-33ab41c3ba26', 'mainnet');
     return new Web3(portis.provider);
-/*
-  case 'infura':
-    return new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/8b3f1f9748aa4141b4af6c240af3f64d'));
-*/
   }
 }
 
@@ -107,11 +103,11 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
 
   async function nftfy(): Promise<string> {
     switch (network) {
-    case 'main': return '0x'; // TODO
-    case 'ropsten': return '0x'; // TODO
-    case 'rinkeby': return '0x'; // TODO
-    case 'kovan': return '0x'; // TODO
-    case 'goerli': return '0x'; // TODO
+    case 'main': return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7';
+    case 'ropsten': return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7';
+    case 'rinkeby': return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7';
+    case 'kovan': return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7';
+    case 'goerli': return '0xb71554F46ecAFb851D121320f6dc3A29e9cd81a7';
     }
     throw new Error('Unsupported network');
   }
@@ -262,9 +258,9 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       if (offset < 0) throw new Error('Invalid offset');
       if (limit < 0) throw new Error('Invalid limit');
       const items: ERC721Item[] = [];
-      const count = Number(await abi.methods.balanceOf(account).call());
+      const count = Number(await abi.methods.balanceOf(address).call());
       for (let i = offset; i < Math.min(offset + limit, count); i++) {
-        const tokenId = await abi.methods.tokenOfOwnerByIndex(account, i).call();
+        const tokenId = await abi.methods.tokenOfOwnerByIndex(address, i).call();
         items.push(await newERC721Item(self, tokenId));
       }
       return { items, count };
@@ -563,12 +559,3 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     listPaymentTokens,
   }
 }
-
-/*
-async function main(): Promise<void> {
-  const wallet = await initializeWallet('infura');
-  console.log(wallet.network);
-}
-
-main();
-*/
