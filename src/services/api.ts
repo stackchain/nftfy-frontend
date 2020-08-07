@@ -33,6 +33,7 @@ export interface ERC20 {
   getPaymentToken(): Promise<ERC20 | null>;
   getExitPrice(): Promise<string>;
   getSharePrice(): Promise<string>;
+  getSharesCount(): Promise<string>;
 
   isRedeemable(): Promise<boolean>;
   getAccountRedeemAmount(address: string): Promise<string>;
@@ -322,6 +323,11 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       return coins(await abi.methods.sharePrice().call(), decimals);
     }
 
+    async function getSharesCount(): Promise<string> {
+      const paymentToken = await getPaymentToken();
+      return coins(await abi.methods.sharesCount().call(), decimals);
+    }
+
     async function isRedeemable(): Promise<boolean> {
       return !await abi.methods.released().call();
     }
@@ -401,6 +407,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       getPaymentToken,
       getExitPrice,
       getSharePrice,
+      getSharesCount,
       isRedeemable,
       getAccountRedeemAmount,
       redeem,
