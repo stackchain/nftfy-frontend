@@ -19,7 +19,7 @@ export interface Wallet {
   getEtherBalance(address: string): Promise<string>
   listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
   listAccountItems(address: string, offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }>
-  registerERC721(address: string): Promise<void>
+  registerERC721(address: string): Promise<boolean>
   listPaymentTokens(): Promise<ERC20[]>
 }
 
@@ -169,15 +169,6 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     function getTokenOwner(): Promise<string> {
       const abi = new web3.eth.Contract(ERC721_ABI, contract.address)
       return abi.methods.ownerOf(tokenId).call()
-    }
-
-    async function getShares(): Promise<ERC20 | null> {
-      const wrapper = await contract.getWrapper()
-      if (wrapper == null) return null
-      const abi = new web3.eth.Contract(ERC721_ABI, wrapper.address)
-      const address = abi.methods.shares(tokenId).call()
-      if (address == '0x0000000000000000000000000000000000000000') return null
-      return newERC20(address)
     }
 
     async function isSecuritized(): Promise<boolean> {
@@ -540,11 +531,12 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     return { items, count }
   }
 
-  async function registerERC721(address: string): Promise<void> {
+  async function registerERC721(address: string): Promise<boolean> {
     for (const contract of contracts) {
-      if (address == contract.address) return
+      if (address == contract.address) return false
     }
     contracts.push(await newERC721(address))
+    return true
   }
 
   async function listPaymentTokens(): Promise<ERC20[]> {
