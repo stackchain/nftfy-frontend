@@ -32,9 +32,11 @@ export default function NonFungibleTokensList({ page, offset, count, setPaginati
           </Link>
         ))}
       </div>
-      <div className='nft-pagination'>
-        <Pagination size='small' defaultCurrent={1} total={count} onChange={setPage} />
-      </div>
+      {count > 0 && (
+        <div className='nft-pagination'>
+          <Pagination size='small' defaultCurrent={1} total={count} onChange={setPage} />
+        </div>
+      )}
     </Card>
   )
 }
