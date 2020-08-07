@@ -5,8 +5,18 @@ import { WalletContext } from '../../../context/WalletContext'
 import AddNonFungibleTokens from '../AddNonFungibleTokens/AddNonFungibleTokens'
 import './NonFungibleTokensList.scss'
 
-export default function NonFungibleTokensList() {
+interface Props {
+  page: number
+  offset: number
+  count: number
+  setPagination: (page: number, offset: number) => void
+}
+
+export default function NonFungibleTokensList({ page, offset, count, setPagination }: Props) {
   const { accountItems } = useContext(WalletContext)
+  const setPage = (pageNumber: number) => {
+    setPagination(pageNumber * 9 - 9, 9)
+  }
 
   return (
     <Card className='nft-list-container'>
@@ -15,7 +25,7 @@ export default function NonFungibleTokensList() {
         {accountItems.map(nft => (
           <Link key={nft.tokenId} to='/'>
             <div className='nft-item'>
-              <img src={nft.imageUri} alt={nft.name} />
+              {nft.imageUri && <img src={nft.imageUri.split('https://cors-anywhere.herokuapp.com/')[1]} alt={nft.name} />}
               <div className='contract-name'>{nft.contract.name}</div>
               <div className='nft-name'>{nft.name}</div>
             </div>
@@ -23,7 +33,7 @@ export default function NonFungibleTokensList() {
         ))}
       </div>
       <div className='nft-pagination'>
-        <Pagination size='small' total={50} />
+        <Pagination size='small' defaultCurrent={1} total={count} onChange={setPage} />
       </div>
     </Card>
   )

@@ -1,7 +1,7 @@
 import { Button, Input } from 'antd'
 import React, { useContext, useState } from 'react'
 import { WalletContext } from '../../../context/WalletContext'
-import { error } from '../../../services/notification'
+import { errorNotification } from '../../../services/notification'
 import './AddNonFungibleTokens.scss'
 
 export default function AddNonFungibleTokens() {
@@ -15,9 +15,9 @@ export default function AddNonFungibleTokens() {
 
   const addNft = async () => {
     if (!nftInput.length) {
-      error('NFT Hash is empty')
+      errorNotification('NFT Hash is empty')
     } else if (wallet && !(await wallet.validateAddress(nftInput))) {
-      error('NFT Hash is invalid')
+      errorNotification('NFT Hash is invalid')
     } else if (wallet) {
       await wallet.registerERC721(nftInput)
     }

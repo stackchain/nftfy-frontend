@@ -1,6 +1,6 @@
 import { notification } from 'antd'
 
-export const error = (message: string) => {
+export const errorNotification = (message: string) => {
   notification.error({
     message,
     placement: 'bottomLeft',
