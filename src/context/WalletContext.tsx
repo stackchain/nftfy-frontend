@@ -42,11 +42,10 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
 
   const persistOffline = useCallback(() => {
     if (!rehydrate) {
-      if (walletName !== undefined) localStorage.setItem('walletName', JSON.stringify(walletName))
+      if (walletName !== undefined) localStorage.setItem('walletName', walletName)
       if (accountIndex !== undefined) localStorage.setItem('accountIndex', JSON.stringify(accountIndex))
-      if (wallet) localStorage.setItem('accountItems', JSON.stringify(accountItems))
     }
-  }, [walletName, accountIndex, rehydrate, accountItems, wallet])
+  }, [walletName, accountIndex, rehydrate])
 
   useEffect(() => {
     persistOffline()
@@ -58,31 +57,20 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
 
       const walletNameStorage = localStorage.getItem('walletName')
 
-      if (walletNameStorage && supportedWallets.includes(JSON.parse(walletNameStorage))) {
+      if (walletNameStorage && supportedWallets.includes(walletNameStorage as WalletName)) {
+        const walletStorage = await initializeWallet(walletNameStorage as WalletName)
+        const accountsStorage = await walletStorage.getAccounts()
+
+        if (accountsStorage[0]) {
+          walletStorage.selectAccount(accountsStorage[0])
+        }
+
+        setWallet(walletStorage)
+        setWalletName(walletNameStorage as WalletName)
+        setAccounts(accountsStorage)
+
         const accountIndexStorage = localStorage.getItem('accountIndex')
-
-        if (walletNameStorage) {
-          setWalletName(JSON.parse(walletNameStorage))
-          const walletStorage = (await initializeWallet(JSON.parse(walletNameStorage))) as Wallet
-          setWallet(walletStorage)
-
-          if (walletStorage) {
-            const accountsStorage = await walletStorage.getAccounts()
-
-            setAccounts(accountsStorage)
-
-            if (accountsStorage[0]) {
-              walletStorage.selectAccount(accountsStorage[0])
-            }
-          }
-        }
         if (accountIndexStorage) setAccountIndex(Number(JSON.parse(accountIndexStorage)))
-
-        const accountItemsStorage = localStorage.getItem('accountItems')
-
-        if (accountItemsStorage) {
-          setAccountItems(JSON.parse(accountItemsStorage as string) as ERC721Item[])
-        }
       }
 
       setRehydrate(false)

@@ -7,7 +7,7 @@ import './AddNonFungibleTokens.scss'
 export default function AddNonFungibleTokens() {
   const { accounts, accountIndex, wallet, setAccountItems } = useContext(WalletContext)
 
-  const [nftInput, setNftInput] = useState('')
+  const [nftInput, setNftInput] = useState('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNftInput(event.target.value)
@@ -32,7 +32,7 @@ export default function AddNonFungibleTokens() {
 
   return (
     <div className='add-non-fungible-form'>
-      <Input placeholder='NFT Hash' disabled={!accounts[accountIndex]} onChange={handleInput} />
+      <Input placeholder='NFT Hash' disabled={!accounts[accountIndex]} onChange={handleInput} value={nftInput} />
       <Button type='primary' disabled={!accounts[accountIndex]} onClick={addNft}>
         Add NFT
       </Button>

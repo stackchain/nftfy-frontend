@@ -291,7 +291,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
 
     async function getWrapper(): Promise<ERC721 | null> {
       const abi = new web3.eth.Contract(NFTFY_ABI, await nftfy())
-      const _address = abi.methods.wrappers(address).call()
+      const _address = await abi.methods.wrappers(address).call()
       if (_address == '0x0000000000000000000000000000000000000000') return null
       return newERC721(_address)
     }
@@ -495,6 +495,8 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     let count = 0
     for (const contract of contracts) {
       const wrapper = await contract.getWrapper()
+
+      console.log('Wrapper', wrapper)
       if (wrapper == null) continue
       const { items: subitems } = await wrapper.listAllItems(0, Number.MAX_SAFE_INTEGER)
       for (const subitem of subitems) {

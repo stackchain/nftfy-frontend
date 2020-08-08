@@ -3,6 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { WalletContext } from '../../../context/WalletContext'
 import { ERC20 } from '../../../services/api'
+import { errorNotification } from '../../../services/notification'
 import ContractImage from '../ContractImage/ContractImage'
 import './ContractSecuritizationEdit.scss'
 
@@ -22,6 +23,9 @@ export default function ContractSecuritizationEdit() {
   const { wallet } = useContext(WalletContext)
 
   const [paymentTokens, setPaymentTokens] = useState<ERC20[]>([])
+  const [exitPrice, setExitPrice] = useState<string | undefined>(undefined)
+  const [paymentToken, setPaymentToken] = useState<string | undefined>(undefined)
+  const shares = '1000000'
 
   const listPaymentTokens = useCallback(async () => {
     if (wallet) {
@@ -34,12 +38,20 @@ export default function ContractSecuritizationEdit() {
     listPaymentTokens()
   }, [listPaymentTokens])
 
+  const handleExitPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setExitPrice(event.target.value)
+  }
+
+  const handlePaymentToken = (value: string) => {
+    setPaymentToken(value)
+  }
+
   const selectAfter = (
-    <Select defaultValue='ETH' className='select-after'>
+    <Select defaultValue='ETH' className='select-after' value={paymentToken} onChange={handlePaymentToken}>
       <Option value=''>ETH</Option>
-      {paymentTokens.map(paymentToken => (
-        <Option key={paymentToken.symbol} value={paymentToken.symbol}>
-          {paymentToken.symbol}
+      {paymentTokens.map(paymentTokenItem => (
+        <Option key={paymentTokenItem.symbol} value={paymentTokenItem.symbol}>
+          {paymentTokenItem.symbol}
         </Option>
       ))}
     </Select>
@@ -57,13 +69,32 @@ export default function ContractSecuritizationEdit() {
   const dataSource = [
     {
       label: 'Shares',
-      data: '1.000.000'
+      data: shares
     },
     {
       label: 'Exit Price',
-      data: <Input placeholder='0.00000000' addonAfter={selectAfter} type='number' />
+      data: <Input placeholder='0.00000000' addonAfter={selectAfter} type='number' value={exitPrice} onChange={handleExitPrice} />
     }
   ]
+  const securitize = async () => {
+    if (Number(exitPrice) < 0) {
+      errorNotification("Exit price can't no be negative")
+    }
+
+    if (contract && shares && exitPrice) {
+      await contract.securitize(shares, exitPrice, paymentTokens.find(payToken => payToken.symbol === paymentToken) || null)
+    }
+  }
+
+  const checkSecuritized = useCallback(async () => {
+    if (contract) {
+      console.log(await contract.isSecuritized())
+    }
+  }, [contract])
+
+  useEffect(() => {
+    checkSecuritized()
+  }, [checkSecuritized])
 
   return (
     <Card className='contract-securitization-edit'>
@@ -81,7 +112,7 @@ export default function ContractSecuritizationEdit() {
             <h2>Securitize ERC721 Contract</h2>
           </div>
           <Table dataSource={dataSource} columns={columns} pagination={false} showHeader={false} rowKey='label' />
-          <Button onClick={() => null} type='primary' size='large'>
+          <Button onClick={securitize} type='primary' size='large'>
             Securitize
           </Button>
         </div>
