@@ -14,9 +14,10 @@ export default function ContractSecuritizationDetail() {
   const [isRedeemable, setIsRedeemable] = useState(false)
   const [isClaimable, setIsClaimable] = useState(false)
 
+  const [totalSupply, setTotalSupply] = useState('')
   const [issuedShare, setIssuedShare] = useState('')
   const [exitPrice, setExitPrice] = useState('')
-  const [accountBalance, setAccountBalance] = useState('')
+  const [pay, setPay] = useState('')
 
   const location = useLocation()
   const history = useHistory()
@@ -39,7 +40,8 @@ export default function ContractSecuritizationDetail() {
       setIsClaimable(await contract.isClaimable())
       setIssuedShare(await contract.getSharesCount())
       setExitPrice(await contract.getExitPrice())
-      setAccountBalance(await contract.getAccountBalance(accounts[accountIndex]))
+      setTotalSupply(await contract.getTotalSupply())
+      setPay(`${await contract.getAccountRedeemAmount(accounts[accountIndex])} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
     }
   }, [contract, accounts, accountIndex])
 
@@ -59,13 +61,18 @@ export default function ContractSecuritizationDetail() {
     <Card className='contract-securitization-detail'>
       <div className='content'>
         <div className='contract-image'>
-          {contract?.name && <ContractImage name={contract?.name || ''} meta='' description='' src={contractImg} />}
+          {contractImg && <ContractImage name={contract?.name || ''} meta='' description='' src={contractImg} />}
         </div>
         {contract && (
           <div className='contract-item'>
             {isRedeemable && (
               <div className='contract-redeem-item'>
-                <ContractRedeem redeem={redeemContract} participation='100%' shareBalance='100.000' pay='20ETH' balance={accountBalance} />
+                <ContractRedeem
+                  redeem={redeemContract}
+                  participation={`${(issuedShare && totalSupply && (Number(issuedShare) / Number(totalSupply)) * 100) || 100}%`}
+                  shareBalance={issuedShare}
+                  pay={pay}
+                />
               </div>
             )}
 
@@ -75,7 +82,7 @@ export default function ContractSecuritizationDetail() {
               </div>
             )}
             <div className='contract-data-item'>
-              <ContractData name={contract?.name || ''} issuedShare={issuedShare} exitPrice={exitPrice} />
+              <ContractData name={contract?.name || ''} totalSupply={totalSupply} exitPrice={exitPrice} />
             </div>
           </div>
         )}

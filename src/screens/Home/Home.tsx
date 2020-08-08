@@ -21,7 +21,7 @@ export default function Home() {
         <div className='nft'>
           <h2>
             <img src={nft} alt='Non-Fungible Token' />
-            Non-Fungible Tokens ERC 721
+            Non-Fungible Tokens ERC721
           </h2>
           <NonFungibleTokens />
         </div>

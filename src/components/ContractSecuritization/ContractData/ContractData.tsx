@@ -4,11 +4,11 @@ import './ContractData.scss'
 
 interface Props {
   name: string
-  issuedShare: string
+  totalSupply: string
   exitPrice: string
 }
 
-export default function ContractData({ name, issuedShare, exitPrice }: Props) {
+export default function ContractData({ name, totalSupply, exitPrice }: Props) {
   const columns = [
     {
       title: 'Share Contract Name',
@@ -24,8 +24,8 @@ export default function ContractData({ name, issuedShare, exitPrice }: Props) {
 
   const dataSource = [
     {
-      label: 'Issued Share',
-      data: issuedShare
+      label: 'Total Supply',
+      data: totalSupply
     },
     {
       label: 'Exit Price',
