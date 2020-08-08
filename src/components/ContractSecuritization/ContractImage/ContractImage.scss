@@ -7,10 +7,11 @@
   div {
     img {
       width: 100%;
-      max-width: 160px;
+      max-width: 180px;
       height: auto;
       box-shadow: $box-shadow-lg;
       margin-bottom: 1rem;
+      border-radius: 4px;
     }
 
     .contract-name {
@@ -20,6 +21,26 @@
 
     .contract-meta {
       color: $black;
+      margin-bottom: 10px;
+    }
+
+    .contract-description {
+      width: 100%;
+      max-width: 300px;
+      justify-content: stretch;
+
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .contract-image-item {
+    .contract-description {
+      margin-bottom: 10px;
     }
   }
 }

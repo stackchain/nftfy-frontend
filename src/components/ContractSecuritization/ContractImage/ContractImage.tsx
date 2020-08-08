@@ -1,13 +1,21 @@
 import React from 'react'
 import './ContractImage.scss'
 
-export default function ContractImage() {
+interface Props {
+  name: string
+  meta: string
+  description: string
+  src: string
+}
+
+export default function ContractImage({ name, meta, description, src }: Props) {
   return (
     <div className='contract-image-item'>
       <div>
-        <img src='https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png' alt='Descentraland' />
-        <div className='contract-name'>Descentraland</div>
-        <div className='contract-meta'>Name NFT</div>
+        <img src={src} alt={name} />
+        <div className='contract-name'>{name}</div>
+        <div className='contract-meta'>{meta}</div>
+        <div className='contract-description'>{description}</div>
       </div>
     </div>
   )

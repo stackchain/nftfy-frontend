@@ -93,6 +93,8 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
     rehydrateOffline()
   }, [rehydrateOffline])
 
+  if (rehydrate) return null
+
   return (
     <WalletContext.Provider
       value={{

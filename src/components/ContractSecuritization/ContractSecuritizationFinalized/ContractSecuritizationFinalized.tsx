@@ -1,6 +1,5 @@
 import { Button, Card, Table } from 'antd'
 import React from 'react'
-import ContractImage from '../ContractImage/ContractImage'
 import './ContractSecuritizationFinalized.scss'
 
 export default function ContractSecuritizationFinalized() {
@@ -39,9 +38,7 @@ export default function ContractSecuritizationFinalized() {
   return (
     <Card className='contract-securitization-finalized'>
       <div className='content'>
-        <div className='contract-image'>
-          <ContractImage />
-        </div>
+        <div className='contract-image'>{/* <ContractImage /> */}</div>
         <div className='contract-data'>
           <div className='securitization-form'>
             <Table dataSource={dataSource} columns={columns} pagination={false} rowKey='label' />
