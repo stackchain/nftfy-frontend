@@ -5,7 +5,7 @@ import { errorNotification } from '../../../services/notification'
 import './AddNonFungibleTokens.scss'
 
 export default function AddNonFungibleTokens() {
-  const { accounts, accountIndex, wallet, setAccountItems } = useContext(WalletContext)
+  const { accounts, accountIndex, wallet, setAccountItems, setAccountItemsCount } = useContext(WalletContext)
 
   const [nftInput, setNftInput] = useState('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')
 
@@ -22,9 +22,11 @@ export default function AddNonFungibleTokens() {
       await wallet.registerERC721(nftInput)
 
       if (wallet) {
-        const nfts = await wallet.listAccountItems(accounts[accountIndex], 0, 9)
+        console.log('QUERY ADD', 0, 12)
+        const nfts = await wallet.listAccountItems(accounts[accountIndex], 0, 12)
         if (nfts.items.length > 0) {
           setAccountItems(nfts.items)
+          setAccountItemsCount(nfts.count)
         }
       }
     }

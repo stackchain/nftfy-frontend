@@ -496,7 +496,6 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     for (const contract of contracts) {
       const wrapper = await contract.getWrapper()
 
-      console.log('Wrapper', wrapper)
       if (wrapper == null) continue
       const { items: subitems } = await wrapper.listAllItems(0, Number.MAX_SAFE_INTEGER)
       for (const subitem of subitems) {

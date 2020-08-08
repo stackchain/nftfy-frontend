@@ -12,8 +12,12 @@ export const WalletContext = React.createContext<{
   setAccountIndex: (index: number) => void
   accountItems: ERC721Item[]
   setAccountItems: (accountItems: ERC721Item[]) => void
+  accountItemsCount: number
+  setAccountItemsCount: (count: number) => void
   accountShares: ERC20[]
   setAccountShares: (accountShares: ERC20[]) => void
+  accountSharesCount: number
+  setAccountSharesCount: (count: number) => void
 }>({
   walletName: undefined,
   setWalletName: () => null,
@@ -25,8 +29,12 @@ export const WalletContext = React.createContext<{
   setAccountIndex: () => null,
   accountItems: [],
   setAccountItems: () => null,
+  accountItemsCount: 0,
+  setAccountItemsCount: () => null,
   accountShares: [],
-  setAccountShares: () => null
+  setAccountShares: () => null,
+  accountSharesCount: 0,
+  setAccountSharesCount: () => null
 })
 
 export default function WalletContextWrapper(props: React.PropsWithChildren<{}>) {
@@ -36,8 +44,10 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined)
   const [accounts, setAccounts] = useState<string[]>([])
   const [accountIndex, setAccountIndex] = useState<number>(0)
-  const [accountShares, setAccountShares] = useState<ERC20[]>([])
   const [accountItems, setAccountItems] = useState<ERC721Item[]>([])
+  const [accountItemsCount, setAccountItemsCount] = useState<number>(0)
+  const [accountShares, setAccountShares] = useState<ERC20[]>([])
+  const [accountSharesCount, setAccountSharesCount] = useState<number>(0)
   const [rehydrate, setRehydrate] = useState(true)
 
   const persistOffline = useCallback(() => {
@@ -96,8 +106,12 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
         setAccountIndex,
         accountItems,
         setAccountItems,
+        accountItemsCount,
+        setAccountItemsCount,
         accountShares,
-        setAccountShares
+        setAccountShares,
+        accountSharesCount,
+        setAccountSharesCount
       }}>
       {children}
     </WalletContext.Provider>

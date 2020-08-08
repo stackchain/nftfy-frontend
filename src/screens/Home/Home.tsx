@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import ft from '../../assets/ft-active.svg'
 import nft from '../../assets/nft-active.svg'
+import FungibleTokens from '../../components/FungibleTokens/FungibleTokens'
 import NonFungibleTokens from '../../components/NonFungibleTokens/NonFungibleTokens'
 import Footer from '../../components/shared/layout/Footer/Footer'
 import Header from '../../components/shared/layout/Header/Header'
@@ -23,13 +25,13 @@ export default function Home() {
           </h2>
           <NonFungibleTokens />
         </div>
-        {/* <div className='ft'>
+        <div className='ft'>
           <h2>
             <img src={ft} alt='Fungible Token' />
             Fungible Tokens ERC20
           </h2>
           <FungibleTokens />
-        </div> */}
+        </div>
       </div>
       <Footer />
       <WalletManagerModal visible={openWalletModal} setVisible={openWalletManager} />

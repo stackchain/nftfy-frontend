@@ -1,21 +1,22 @@
 import { Card, Pagination } from 'antd'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { WalletContext } from '../../../context/WalletContext'
 import AddNonFungibleTokens from '../AddNonFungibleTokens/AddNonFungibleTokens'
 import './NonFungibleTokensList.scss'
 
 interface Props {
-  page: number
   count: number
-  setPagination: (page: number, offset: number) => void
+  setPagination: (offset: number) => void
 }
 
-export default function NonFungibleTokensList({ page, count, setPagination }: Props) {
+export default function NonFungibleTokensList({ count, setPagination }: Props) {
   const { accountItems } = useContext(WalletContext)
+  const [page, setPage] = useState(1)
 
-  const setPage = (pageNumber: number) => {
-    setPagination(pageNumber * 9 - 9, 9)
+  const setPageNumber = (pageNumber: number) => {
+    setPage(pageNumber)
+    setPagination(pageNumber * 12 - 12)
   }
 
   return (
@@ -34,7 +35,7 @@ export default function NonFungibleTokensList({ page, count, setPagination }: Pr
       </div>
       {count > 0 && (
         <div className='nft-pagination'>
-          <Pagination size='small' current={page} total={count} onChange={setPage} />
+          <Pagination size='small' current={page} total={count} onChange={setPageNumber} />
         </div>
       )}
     </Card>

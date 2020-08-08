@@ -4,25 +4,27 @@ import NonFungibleTokensEmpty from './NonFungibleTokensEmpty/NonFungibleTokensEm
 import NonFungibleTokensList from './NonFungibleTokensList/NonFungibleTokensList'
 
 export default function NonFungibleTokens() {
-  const { wallet, accounts, accountIndex, accountItems, setAccountItems } = useContext(WalletContext)
-  const [page, setPage] = useState(1)
-  const [offset, setOffset] = useState(0)
-  const [count, setCount] = useState(0)
+  const { wallet, accounts, accountIndex, accountItems, accountItemsCount, setAccountItems, setAccountItemsCount } = useContext(
+    WalletContext
+  )
 
-  const setPagination = (pageNumber: number, offsetNumber: number) => {
-    setPage(pageNumber)
+  const [offset, setOffset] = useState(0)
+
+  const setPagination = (offsetNumber: number) => {
     setOffset(offsetNumber)
   }
 
   const loadAccountItems = useCallback(async () => {
     if (wallet) {
-      const nfts = await wallet.listAccountItems(accounts[accountIndex], offset, page)
+      console.log('QUERY', offset)
+
+      const nfts = await wallet.listAccountItems(accounts[accountIndex], offset, 12)
       if (nfts.items.length > 0) {
         setAccountItems(nfts.items)
-        setCount(nfts.count)
+        setAccountItemsCount(nfts.count)
       }
     }
-  }, [accountIndex, accounts, wallet, setAccountItems, page, offset])
+  }, [accountIndex, accounts, wallet, setAccountItems, offset, setAccountItemsCount])
 
   useEffect(() => {
     loadAccountItems()
@@ -32,5 +34,5 @@ export default function NonFungibleTokens() {
     return <NonFungibleTokensEmpty />
   }
 
-  return <NonFungibleTokensList page={page} setPagination={setPagination} count={count} />
+  return <NonFungibleTokensList setPagination={setPagination} count={accountItemsCount} />
 }
