@@ -20,8 +20,6 @@ export default function FungibleTokensList({ count, setPagination }: Props) {
   }, [accountShares])
 
   const getAccountSharesCount = async (accountSharesItem: ERC20[]) => {
-    console.log(accountSharesItem)
-
     const accountSharesItemPromise = await Promise.all(
       accountSharesItem.map(async shareItem => {
         const sharesCount = await shareItem.getSharesCount()
@@ -46,10 +44,12 @@ export default function FungibleTokensList({ count, setPagination }: Props) {
     <Card className='ft-list-container'>
       <div className='ft-list'>
         {accountSharesCount.map(ft => (
-          <Link key={ft.symbol} to='/'>
+          <Link key={ft.symbol} to={`/contract/detail/${ft.symbol}`}>
             <div className='ft-item'>
               <div>
-                {ft.erc721ImageUri && <img src={ft.erc721ImageUri.split('https://cors-anywhere.herokuapp.com/')[1]} alt={ft.name} />}
+                {ft.erc721ImageUri && (
+                  <img src={ft.erc721ImageUri.split('https://cors-anywhere.herokuapp.com/')[1] || ft.erc721ImageUri} alt={ft.name} />
+                )}
               </div>
               <div>
                 <div className='ft-symbol'>{ft.symbol}</div>
@@ -60,7 +60,7 @@ export default function FungibleTokensList({ count, setPagination }: Props) {
           </Link>
         ))}
       </div>
-      {count > 0 && (
+      {count > 8 && (
         <div className='ft-pagination'>
           <Pagination size='small' current={page} total={count} onChange={setPageNumber} />
         </div>

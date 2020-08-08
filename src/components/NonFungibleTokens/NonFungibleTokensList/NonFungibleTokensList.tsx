@@ -26,14 +26,14 @@ export default function NonFungibleTokensList({ count, setPagination }: Props) {
         {accountItems.map(nft => (
           <Link key={nft.tokenId} to={`/contract/securitize/${nft.tokenId}`}>
             <div className='nft-item'>
-              {nft.imageUri && <img src={nft.imageUri.split('https://cors-anywhere.herokuapp.com/')[1]} alt={nft.name} />}
+              {nft.imageUri && <img src={nft.imageUri.split('https://cors-anywhere.herokuapp.com/')[1] || nft.imageUri} alt={nft.name} />}
               <div className='contract-name'>{nft.contract.name}</div>
               <div className='nft-name'>{nft.name}</div>
             </div>
           </Link>
         ))}
       </div>
-      {count > 0 && (
+      {count > 12 && (
         <div className='nft-pagination'>
           <Pagination size='small' current={page} total={count} onChange={setPageNumber} />
         </div>
