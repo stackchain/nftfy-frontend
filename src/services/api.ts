@@ -35,6 +35,8 @@ export interface ERC20 {
   validateAmount(amount: string): Promise<boolean>
 
   // Nftfy extensions
+  getERC721Item(): Promise<ERC721Item>
+
   getPaymentToken(): Promise<ERC20 | null> // pegar saldo da carteira (getAccountBalance),  se for null getEtherBalance da interface wallet
   getExitPrice(): Promise<string>
   getSharePrice(): Promise<string>
@@ -346,6 +348,15 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       return valid(amount, decimals)
     }
 
+    async function getERC721Item(): Promise<ERC721Item> {
+      const address = await abi.methods.wrapper().call()
+      const tokenId = await abi.methods.tokenId().call()
+      const _abi = new web3.eth.Contract(ERC721_ABI, address)
+      const _address = await abi.methods.target().call()
+      const contract = newERC721(_address);
+      return newERC721Item(contract, tokenId);
+    }
+
     async function getPaymentToken(): Promise<ERC20 | null> {
       const address = await abi.methods.paymentToken().call()
       if (address == '0x0000000000000000000000000000000000000000') return null
@@ -448,6 +459,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       getTotalSupply,
       getAccountBalance,
       validateAmount,
+      getERC721Item,
       getPaymentToken,
       getExitPrice,
       getSharePrice,
