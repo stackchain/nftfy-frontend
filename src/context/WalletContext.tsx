@@ -44,8 +44,9 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
     if (!rehydrate) {
       if (walletName !== undefined) localStorage.setItem('walletName', JSON.stringify(walletName))
       if (accountIndex !== undefined) localStorage.setItem('accountIndex', JSON.stringify(accountIndex))
+      if (wallet) localStorage.setItem('accountItems', JSON.stringify(accountItems))
     }
-  }, [walletName, accountIndex, rehydrate])
+  }, [walletName, accountIndex, rehydrate, accountItems, wallet])
 
   useEffect(() => {
     persistOffline()
@@ -76,6 +77,12 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
           }
         }
         if (accountIndexStorage) setAccountIndex(Number(JSON.parse(accountIndexStorage)))
+
+        const accountItemsStorage = localStorage.getItem('accountItems')
+
+        if (accountItemsStorage) {
+          setAccountItems(JSON.parse(accountItemsStorage as string) as ERC721Item[])
+        }
       }
 
       setRehydrate(false)

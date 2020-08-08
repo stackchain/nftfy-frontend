@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Portis from '@portis/web3'
 import axios from 'axios'
 import Web3 from 'web3'
@@ -29,14 +30,14 @@ export interface ERC20 {
   symbol: string
   decimals: number
   getTotalSupply(): Promise<string>
-  getAccountBalance(address: string): Promise<string>
+  getAccountBalance(address: string): Promise<string> // pegar numero de shares
   validateAmount(amount: string): Promise<boolean>
 
   // Nftfy extensions
-  getPaymentToken(): Promise<ERC20 | null>
+  getPaymentToken(): Promise<ERC20 | null> // pegar saldo da carteira (getAccountBalance),  se for null getEtherBalance da interface wallet
   getExitPrice(): Promise<string>
   getSharePrice(): Promise<string>
-  getSharesCount(): Promise<string>
+  getSharesCount(): Promise<string> // total de shares  (fazer calculo percentual )
 
   isRedeemable(): Promise<boolean>
   getAccountRedeemAmount(address: string): Promise<string>
@@ -69,9 +70,9 @@ export interface ERC721Item {
   getTokenOwner(): Promise<string>
 
   // Nftfy extensions
-  isSecuritized(): Promise<boolean>
+  isSecuritized(): Promise<boolean> // 1
   listAllShares(offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
-  securitize(sharesCount: string, exitPrice: string, paymentToken: ERC20 | null): Promise<void>
+  securitize(sharesCount: string, exitPrice: string, paymentToken: ERC20 | null): Promise<void> // 1
 }
 
 async function getWeb3(walletName: WalletName): Promise<Web3> {
@@ -155,7 +156,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
         const CORS_PREFIX = 'https://cors-anywhere.herokuapp.com/'
         const uri = await getTokenURI()
         const headers: { [key: string]: string } = {}
-        headers.Origin = 'https://nftfy.tk'
+        // headers.Origin = 'https://nftfy.tk'
         const response = await axios.get(CORS_PREFIX + uri, { headers })
         const { name, description, image } = response.data
         const imageUri = image ? CORS_PREFIX + image : image

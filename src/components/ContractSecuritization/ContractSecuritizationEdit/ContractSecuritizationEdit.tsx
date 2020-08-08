@@ -1,17 +1,41 @@
 import { Button, Card, Input, Select, Table } from 'antd'
-import React from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { WalletContext } from '../../../context/WalletContext'
+import { ERC20 } from '../../../services/api'
 import ContractImage from '../ContractImage/ContractImage'
 import './ContractSecuritizationEdit.scss'
 
 const { Option } = Select
 
 export default function ContractSecuritizationEdit() {
+  const location = useLocation()
+
+  console.log('MATCH', location.pathname)
+
+  const { wallet } = useContext(WalletContext)
+
+  const [paymentTokens, setPaymentTokens] = useState<ERC20[]>([])
+
+  const listPaymentTokens = useCallback(async () => {
+    if (wallet) {
+      const tokens = await wallet.listPaymentTokens()
+      setPaymentTokens(tokens)
+    }
+  }, [wallet])
+
+  useEffect(() => {
+    listPaymentTokens()
+  }, [listPaymentTokens])
+
   const selectAfter = (
     <Select defaultValue='ETH' className='select-after'>
-      <Option value='ETH'>ETH</Option>
-      <Option value='DAI'>DAI</Option>
-      <Option value='WBTC'>WBTC</Option>
-      <Option value='AMPL'>AMPL</Option>
+      <Option value=''>ETH</Option>
+      {paymentTokens.map(paymentToken => (
+        <Option key={paymentToken.symbol} value={paymentToken.symbol}>
+          {paymentToken.symbol}
+        </Option>
+      ))}
     </Select>
   )
   const columns = [
@@ -25,10 +49,6 @@ export default function ContractSecuritizationEdit() {
     }
   ]
   const dataSource = [
-    {
-      label: 'Non Fungible Token',
-      data: '1231231231312313133131'
-    },
     {
       label: 'Shares',
       data: '1.000.000'

@@ -32,5 +32,5 @@ export default function NonFungibleTokens() {
     return <NonFungibleTokensEmpty />
   }
 
-  return <NonFungibleTokensList page={page} offset={offset} setPagination={setPagination} count={count} />
+  return <NonFungibleTokensList page={page} setPagination={setPagination} count={count} />
 }
