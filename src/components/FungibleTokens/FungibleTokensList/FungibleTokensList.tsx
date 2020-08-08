@@ -44,7 +44,7 @@ export default function FungibleTokensList({ count, setPagination }: Props) {
     <Card className='ft-list-container'>
       <div className='ft-list'>
         {accountSharesCount.map(ft => (
-          <Link key={ft.symbol} to={`/contract/detail/${ft.symbol}`}>
+          <Link key={ft.address} to={`/contract/detail/${ft.address}`}>
             <div className='ft-item'>
               <div>
                 {ft.erc721ImageUri && (

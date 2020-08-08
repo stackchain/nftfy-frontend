@@ -86,16 +86,6 @@ export default function ContractSecuritizationEdit() {
     }
   }
 
-  const checkSecuritized = useCallback(async () => {
-    if (contract) {
-      console.log(await contract.isSecuritized())
-    }
-  }, [contract])
-
-  useEffect(() => {
-    checkSecuritized()
-  }, [checkSecuritized])
-
   return (
     <Card className='contract-securitization-edit'>
       <div className='content'>

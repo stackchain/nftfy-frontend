@@ -19,7 +19,7 @@ export default function ContractSecuritization() {
     <main className='contract-securitization'>
       <Header buttonAction={openWalletManager} />
       {location.pathname.includes('/contract/securitize') && <ContractSecuritizationEdit />}
-      {location.pathname === '/contract/detail' && <ContractSecuritizationDetail />}
+      {location.pathname.includes('/contract/detail') && <ContractSecuritizationDetail />}
       <Footer />
       <WalletManagerModal visible={openWalletModal} setVisible={openWalletManager} />
     </main>
