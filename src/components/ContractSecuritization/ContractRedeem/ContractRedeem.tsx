@@ -36,7 +36,7 @@ export default function ContractRedeem() {
   ]
 
   return (
-    <div className='redeem'>
+    <div className='contract-redeem'>
       <div className='title'>
         <h2>Redeem ERC721 to your wallet</h2>
       </div>

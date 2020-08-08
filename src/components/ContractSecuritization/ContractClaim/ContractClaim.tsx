@@ -36,7 +36,7 @@ export default function ContractClaim() {
   ]
 
   return (
-    <div className='claim'>
+    <div className='contract-claim'>
       <div className='title'>
         <h2>Claim ETH</h2>
       </div>

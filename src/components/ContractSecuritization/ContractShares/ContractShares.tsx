@@ -36,7 +36,7 @@ export default function ContractShares() {
   ]
 
   return (
-    <div className='data'>
+    <div className='contract-data'>
       <div className='title'>
         <h2>Contract Data</h2>
       </div>

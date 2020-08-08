@@ -50,17 +50,17 @@ export default function ContractSecuritizationDetail() {
         </div>
         <div className='contract-item'>
           {isRedeemable && (
-            <div className='contract-redeem'>
+            <div className='contract-redeem-item'>
               <ContractRedeem />
             </div>
           )}
 
           {isClaimable && (
-            <div className='contract-claim'>
+            <div className='contract-claim-item'>
               <ContractClaim />
             </div>
           )}
-          <div className='contract-data'>
+          <div className='contract-data-item'>
             <ContractShares />
           </div>
         </div>
