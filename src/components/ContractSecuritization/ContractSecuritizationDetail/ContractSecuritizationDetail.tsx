@@ -1,8 +1,8 @@
 import { Button, Card, Table } from 'antd'
 import React from 'react'
-import './ContractSecuritizationFinalized.scss'
+import './ContractSecuritizationDetail.scss'
 
-export default function ContractSecuritizationFinalized() {
+export default function ContractSecuritizationDetail() {
   const columns = [
     {
       title: 'Share Contract Name',
@@ -36,7 +36,7 @@ export default function ContractSecuritizationFinalized() {
   ]
 
   return (
-    <Card className='contract-securitization-finalized'>
+    <Card className='contract-securitization-detail'>
       <div className='content'>
         <div className='contract-image'>{/* <ContractImage /> */}</div>
         <div className='contract-data'>

@@ -29,7 +29,6 @@ export interface ERC20 {
   name: string
   symbol: string
   decimals: number
-  sharesCount?: string
   getTotalSupply(): Promise<string>
   getAccountBalance(address: string): Promise<string> // pegar numero de shares
   validateAmount(amount: string): Promise<boolean>
@@ -352,9 +351,9 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       const address = await abi.methods.wrapper().call()
       const tokenId = await abi.methods.tokenId().call()
       const _abi = new web3.eth.Contract(ERC721_ABI, address)
-      const _address = await abi.methods.target().call()
-      const contract = newERC721(_address);
-      return newERC721Item(contract, tokenId);
+      const _address = await _abi.methods.target().call()
+      const contract = await newERC721(_address)
+      return newERC721Item(contract, tokenId)
     }
 
     async function getPaymentToken(): Promise<ERC20 | null> {

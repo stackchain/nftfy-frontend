@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import ContractSecuritizationDetail from '../../components/ContractSecuritization/ContractSecuritizationDetail/ContractSecuritizationDetail'
 import ContractSecuritizationEdit from '../../components/ContractSecuritization/ContractSecuritizationEdit/ContractSecuritizationEdit'
-import ContractSecuritizationFinalized from '../../components/ContractSecuritization/ContractSecuritizationFinalized/ContractSecuritizationFinalized'
-import ContractSecuritizationRedeem from '../../components/ContractSecuritization/ContractSecuritizationRedeem/ContractSecuritizationRedeem'
 import Footer from '../../components/shared/layout/Footer/Footer'
 import Header from '../../components/shared/layout/Header/Header'
 import WalletManagerModal from '../../components/shared/modal/WalletManagerModal/WalletManagerModal'
@@ -20,8 +19,7 @@ export default function ContractSecuritization() {
     <main className='contract-securitization'>
       <Header buttonAction={openWalletManager} />
       {location.pathname.includes('/contract/securitize') && <ContractSecuritizationEdit />}
-      {location.pathname === '/contract/redeem' && <ContractSecuritizationRedeem />}
-      {location.pathname === '/contract/finalized' && <ContractSecuritizationFinalized />}
+      {location.pathname === '/contract/detail' && <ContractSecuritizationDetail />}
       <Footer />
       <WalletManagerModal visible={openWalletModal} setVisible={openWalletManager} />
     </main>

@@ -9,8 +9,7 @@ export default function Routes() {
       <Switch>
         <Route path='/' exact component={Home} />
         <Route path='/contract/securitize/:id' component={ContractSecuritization} />
-        <Route path='/contract/redeem' component={ContractSecuritization} />
-        <Route path='/contract/finalized' component={ContractSecuritization} />
+        <Route path='/contract/detail/:id' component={ContractSecuritization} />
         <Route path='*' component={Home} />
       </Switch>
     </BrowserRouter>

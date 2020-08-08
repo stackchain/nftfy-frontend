@@ -13,7 +13,7 @@ interface Props {
 export default function FungibleTokensList({ count, setPagination }: Props) {
   const { accountShares } = useContext(WalletContext)
 
-  const [accountSharesCount, setAccountSharesCount] = useState<ERC20[]>([])
+  const [accountSharesCount, setAccountSharesCount] = useState<Array<ERC20 & { sharesCount: string; erc721ImageUri: string }>>([])
 
   useEffect(() => {
     getAccountSharesCount(accountShares)
@@ -26,11 +26,11 @@ export default function FungibleTokensList({ count, setPagination }: Props) {
       accountSharesItem.map(async shareItem => {
         const sharesCount = await shareItem.getSharesCount()
 
-        return { ...shareItem, sharesCount }
+        const erc721 = await shareItem.getERC721Item()
+
+        return { ...shareItem, sharesCount, erc721ImageUri: erc721.imageUri || '' }
       })
     )
-
-    console.log('accountSharesItem', accountSharesItem)
 
     setAccountSharesCount(accountSharesItemPromise)
   }
@@ -49,7 +49,7 @@ export default function FungibleTokensList({ count, setPagination }: Props) {
           <Link key={ft.symbol} to='/'>
             <div className='ft-item'>
               <div>
-                <img src='https://dao.decentraland.org/static/what_is-b6cc98a75c6c5af46dadf7e9b853e13a.png' alt='des' />
+                {ft.erc721ImageUri && <img src={ft.erc721ImageUri.split('https://cors-anywhere.herokuapp.com/')[1]} alt={ft.name} />}
               </div>
               <div>
                 <div className='ft-symbol'>{ft.symbol}</div>
