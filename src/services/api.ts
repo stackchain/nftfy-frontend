@@ -29,6 +29,7 @@ export interface ERC20 {
   name: string
   symbol: string
   decimals: number
+  sharesCount?: string
   getTotalSupply(): Promise<string>
   getAccountBalance(address: string): Promise<string> // pegar numero de shares
   validateAmount(amount: string): Promise<boolean>

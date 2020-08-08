@@ -22,7 +22,6 @@ export default function AddNonFungibleTokens() {
       await wallet.registerERC721(nftInput)
 
       if (wallet) {
-        console.log('QUERY ADD', 0, 12)
         const nfts = await wallet.listAccountItems(accounts[accountIndex], 0, 12)
         if (nfts.items.length > 0) {
           setAccountItems(nfts.items)

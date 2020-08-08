@@ -16,8 +16,6 @@ export default function NonFungibleTokens() {
 
   const loadAccountItems = useCallback(async () => {
     if (wallet) {
-      console.log('QUERY', offset)
-
       const nfts = await wallet.listAccountItems(accounts[accountIndex], offset, 12)
       if (nfts.items.length > 0) {
         setAccountItems(nfts.items)
