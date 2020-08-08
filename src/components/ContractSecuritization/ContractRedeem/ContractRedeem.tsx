@@ -1,16 +1,22 @@
-import { Table } from 'antd'
+import { Button, Table } from 'antd'
 import React from 'react'
 import './ContractRedeem.scss'
 
-export default function ContractRedeem() {
+interface Props {
+  redeem: () => void
+  participation: string
+  shareBalance: string
+  pay: string
+  balance: string
+}
+
+export default function ContractRedeem({ redeem, participation, shareBalance, pay, balance }: Props) {
   const columns = [
     {
-      title: 'Share Contract Name',
       dataIndex: 'label',
       key: 'label'
     },
     {
-      title: 'CK Genesis Nftfy',
       dataIndex: 'data',
       key: 'data'
     }
@@ -18,29 +24,36 @@ export default function ContractRedeem() {
 
   const dataSource = [
     {
-      label: 'issued Share',
-      data: 32
+      label: 'Your Participation',
+      data: participation
     },
     {
-      label: 'Exit Price',
-      data: 42
+      label: 'Share Balance',
+      data: shareBalance
     },
     {
-      label: 'Duration',
-      data: 42
+      label: 'Pay Amount',
+      data: pay
     },
     {
-      label: 'Extractor Buyer',
-      data: 42
+      label: 'Wallet Balance',
+      data: balance
     }
   ]
+
+  const handleRedeem = () => {
+    redeem()
+  }
 
   return (
     <div className='contract-redeem'>
       <div className='title'>
-        <h2>Redeem ERC721 to your wallet</h2>
+        <h2>Redeem ERC721</h2>
       </div>
       <Table dataSource={dataSource} columns={columns} pagination={false} rowKey='label' />
+      <Button onClick={handleRedeem} type='primary' size='large'>
+        Redeem
+      </Button>
     </div>
   )
 }

@@ -11,6 +11,7 @@ const { Option } = Select
 
 export default function ContractSecuritizationEdit() {
   const { accountItems } = useContext(WalletContext)
+  const [loading, setLoading] = useState(false)
 
   const location = useLocation()
   const history = useHistory()
@@ -82,7 +83,10 @@ export default function ContractSecuritizationEdit() {
     }
 
     if (contract && shares && exitPrice) {
+      setLoading(true)
       await contract.securitize(shares, exitPrice, paymentTokens.find(payToken => payToken.symbol === paymentToken) || null)
+      setLoading(false)
+      history.push(`/`)
     }
   }
 
@@ -102,7 +106,7 @@ export default function ContractSecuritizationEdit() {
             <h2>Securitize ERC721 Contract</h2>
           </div>
           <Table dataSource={dataSource} columns={columns} pagination={false} showHeader={false} rowKey='label' />
-          <Button onClick={securitize} type='primary' size='large'>
+          <Button onClick={securitize} type='primary' size='large' loading={loading}>
             Securitize
           </Button>
         </div>

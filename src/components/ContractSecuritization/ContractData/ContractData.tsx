@@ -1,8 +1,14 @@
 import { Table } from 'antd'
 import React from 'react'
-import './ContractShares.scss'
+import './ContractData.scss'
 
-export default function ContractShares() {
+interface Props {
+  name: string
+  issuedShare: string
+  exitPrice: string
+}
+
+export default function ContractData({ name, issuedShare, exitPrice }: Props) {
   const columns = [
     {
       title: 'Share Contract Name',
@@ -10,7 +16,7 @@ export default function ContractShares() {
       key: 'label'
     },
     {
-      title: 'CK Genesis Nftfy',
+      title: name,
       dataIndex: 'data',
       key: 'data'
     }
@@ -18,20 +24,12 @@ export default function ContractShares() {
 
   const dataSource = [
     {
-      label: 'issued Share',
-      data: 32
+      label: 'Issued Share',
+      data: issuedShare
     },
     {
       label: 'Exit Price',
-      data: 42
-    },
-    {
-      label: 'Duration',
-      data: 42
-    },
-    {
-      label: 'Extractor Buyer',
-      data: 42
+      data: exitPrice
     }
   ]
 

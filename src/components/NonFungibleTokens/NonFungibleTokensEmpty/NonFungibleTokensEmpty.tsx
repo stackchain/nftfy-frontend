@@ -12,7 +12,7 @@ export default function NonFungibleTokensEmpty() {
     <Card className='non-fungible-tokens-empty'>
       <img src={nft} alt='Non Fungible Token' />
       {!accounts[accountIndex] ? (
-        <p>Connect your Ethereum Wallet to add Non-Fungible Tokens</p>
+        <p>Connect your Ethereum Wallet to set Non-Fungible Tokens</p>
       ) : (
         <p>Input your Non Fungible Token Hash on the form</p>
       )}

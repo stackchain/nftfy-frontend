@@ -3,16 +3,20 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { WalletContext } from '../../../context/WalletContext'
 import ContractClaim from '../ContractClaim/ContractClaim'
+import ContractData from '../ContractData/ContractData'
 import ContractImage from '../ContractImage/ContractImage'
 import ContractRedeem from '../ContractRedeem/ContractRedeem'
-import ContractShares from '../ContractShares/ContractShares'
 import './ContractSecuritizationDetail.scss'
 
 export default function ContractSecuritizationDetail() {
-  const { accountShares } = useContext(WalletContext)
+  const { accountShares, accountIndex, accounts } = useContext(WalletContext)
   const [contractImg, setContractImg] = useState<string>('')
   const [isRedeemable, setIsRedeemable] = useState(false)
   const [isClaimable, setIsClaimable] = useState(false)
+
+  const [issuedShare, setIssuedShare] = useState('')
+  const [exitPrice, setExitPrice] = useState('')
+  const [accountBalance, setAccountBalance] = useState('')
 
   const location = useLocation()
   const history = useHistory()
@@ -25,22 +29,31 @@ export default function ContractSecuritizationDetail() {
   const getContractImg = useCallback(async () => {
     if (contract) {
       const erc721 = await contract.getERC721Item()
-
       setContractImg(erc721.imageUri || '')
     }
   }, [contract])
 
-  const getContractShares = useCallback(async () => {
+  const getContractData = useCallback(async () => {
     if (contract) {
       setIsRedeemable(await contract.isRedeemable())
       setIsClaimable(await contract.isClaimable())
+      setIssuedShare(await contract.getSharesCount())
+      setExitPrice(await contract.getExitPrice())
+      setAccountBalance(await contract.getAccountBalance(accounts[accountIndex]))
     }
-  }, [contract])
+  }, [contract, accounts, accountIndex])
 
   useEffect(() => {
     getContractImg()
-    getContractShares()
-  }, [getContractImg, getContractShares])
+    getContractData()
+  }, [getContractImg, getContractData])
+
+  const redeemContract = async () => {
+    if (contract) {
+      await contract.redeem(accounts[accountIndex])
+      setIsRedeemable(false)
+    }
+  }
 
   return (
     <Card className='contract-securitization-detail'>
@@ -48,22 +61,24 @@ export default function ContractSecuritizationDetail() {
         <div className='contract-image'>
           {contract?.name && <ContractImage name={contract?.name || ''} meta='' description='' src={contractImg} />}
         </div>
-        <div className='contract-item'>
-          {isRedeemable && (
-            <div className='contract-redeem-item'>
-              <ContractRedeem />
-            </div>
-          )}
+        {contract && (
+          <div className='contract-item'>
+            {isRedeemable && (
+              <div className='contract-redeem-item'>
+                <ContractRedeem redeem={redeemContract} participation='100%' shareBalance='100.000' pay='20ETH' balance={accountBalance} />
+              </div>
+            )}
 
-          {isClaimable && (
-            <div className='contract-claim-item'>
-              <ContractClaim />
+            {isClaimable && (
+              <div className='contract-claim-item'>
+                <ContractClaim />
+              </div>
+            )}
+            <div className='contract-data-item'>
+              <ContractData name={contract?.name || ''} issuedShare={issuedShare} exitPrice={exitPrice} />
             </div>
-          )}
-          <div className='contract-data-item'>
-            <ContractShares />
           </div>
-        </div>
+        )}
       </div>
     </Card>
   )
