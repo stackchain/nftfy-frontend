@@ -495,11 +495,11 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     let count = 0
     for (const contract of contracts) {
       const wrapper = await contract.getWrapper()
-
       if (wrapper == null) continue
       const { items: subitems } = await wrapper.listAllItems(0, Number.MAX_SAFE_INTEGER)
       for (const subitem of subitems) {
-        const { items: subsubitems } = await subitem.listAllShares(0, Number.MAX_SAFE_INTEGER)
+        const target = await contract.getItem(subitem.tokenId)
+        const { items: subsubitems } = await target.listAllShares(0, Number.MAX_SAFE_INTEGER)
         for (const subsubitem of subsubitems) {
           const balance = await subsubitem.getAccountBalance(address)
           if (balance != coins('0', subsubitem.decimals)) {
