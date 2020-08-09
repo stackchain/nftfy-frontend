@@ -20,6 +20,8 @@ export interface Wallet {
   getEtherBalance(address: string): Promise<string>
   listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
   listAccountItems(address: string, offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }>
+  retrieveItem(address: string, tokenId: string): Promise<ERC721Item>
+  retrieveShares(address: string): Promise<ERC20>
   registerERC721(address: string): Promise<boolean>
   listPaymentTokens(): Promise<ERC20[]>
 }
@@ -561,6 +563,14 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     return { items, count }
   }
 
+  function retrieveItem(address: string, tokenId: string): Promise<ERC721Item> {
+    return newERC721Item(address, tokenId)
+  }
+
+  function retrieveShares(address: string): Promise<ERC20> {
+    return newERC20(address)
+  }
+
   async function registerERC721(address: string): Promise<boolean> {
     for (const contract of contracts) {
       if (address == contract.address) return false
@@ -644,6 +654,8 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     getEtherBalance,
     listAccountShares,
     listAccountItems,
+    retrieveItem,
+    retrieveShares,
     registerERC721,
     listPaymentTokens
   }
