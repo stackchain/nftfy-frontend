@@ -530,7 +530,9 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     const items: ERC20[] = []
     let count = 0
     for (const contract of contracts) {
-      const { items: subitems, count: subcount } = await contract.listAllShares(0, Number.MAX_SAFE_INTEGER)
+      const wrapper = await contract.getWrapper()
+      if (wrapper == null) continue
+      const { items: subitems, count: subcount } = await wrapper.listAllShares(0, Number.MAX_SAFE_INTEGER)
       for (const subitem of subitems) {
         const balance = await subitem.getAccountBalance(address)
         if (balance != coins('0', subitem.decimals)) {
