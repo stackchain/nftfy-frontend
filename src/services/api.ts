@@ -210,7 +210,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     async function securitize(sharesCount: string, exitPrice: string, paymentToken: ERC20 | null): Promise<void> {
       const address = await nftfy()
       const abi = new web3.eth.Contract(NFTFY_ABI, address)
-      const decimals = 8
+      const decimals = 0
       const paymentDecimals = paymentToken ? paymentToken.decimals : 18
       const paymentAddress = paymentToken ? paymentToken.address : '0x0000000000000000000000000000000000000000'
       await approve(address)
