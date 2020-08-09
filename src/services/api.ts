@@ -61,6 +61,7 @@ export interface ERC721 {
 
   // Nftfy extensions
   getWrapper(): Promise<ERC721 | null>
+  listAllShares(offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
 }
 
 export interface ERC721Item {
@@ -73,7 +74,7 @@ export interface ERC721Item {
 
   // Nftfy extensions
   isSecuritized(): Promise<boolean> // 1
-  listAllShares(offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
+  listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
   securitize(sharesCount: string, exitPrice: string, paymentToken: ERC20 | null): Promise<void> // 1
 }
 
@@ -111,15 +112,15 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
   async function nftfy(): Promise<string> {
     switch (network) {
       case 'main':
-        return '0x640eb33362Caced0B5843F3CF64cF6c469Dd11d7'
+        return '0x3BFFF8566fb6C2921be92bb86716469496aE1818'
       case 'ropsten':
-        return '0x640eb33362Caced0B5843F3CF64cF6c469Dd11d7'
+        return '0x3BFFF8566fb6C2921be92bb86716469496aE1818'
       case 'rinkeby':
-        return '0x640eb33362Caced0B5843F3CF64cF6c469Dd11d7'
+        return '0x3BFFF8566fb6C2921be92bb86716469496aE1818'
       case 'kovan':
-        return '0x640eb33362Caced0B5843F3CF64cF6c469Dd11d7'
+        return '0x3BFFF8566fb6C2921be92bb86716469496aE1818'
       case 'goerli':
-        return '0x640eb33362Caced0B5843F3CF64cF6c469Dd11d7'
+        return '0x3BFFF8566fb6C2921be92bb86716469496aE1818'
     }
     throw new Error('Unsupported network')
   }
@@ -181,17 +182,25 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       return abi.methods.securitized(tokenId).call()
     }
 
-    async function listAllShares(offset: number, limit: number): Promise<{ items: ERC20[]; count: number }> {
+    async function listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }> {
       if (offset < 0) throw new Error('Invalid offset')
       if (limit < 0) throw new Error('Invalid limit')
       const wrapper = await contract.getWrapper()
       if (wrapper == null) return { items: [], count: 0 }
-      const abi = new web3.eth.Contract(ERC721_ABI, wrapper.address)
-      const items: ERC20[] = []
-      const count = Number(await abi.methods.historyLength(tokenId).call())
-      for (let i = offset; i < Math.min(offset + limit, count); i++) {
-        const address = await abi.methods.historyAt(tokenId, i).call()
-        items.push(await newERC20(address))
+      let items: ERC20[] = []
+      let count = 0
+      const { items: subitems, count: subcount } = await wrapper.listAllShares(0, Number.MAX_SAFE_INTEGER)
+      for (const subitem of subitems) {
+        const item = subitem.getERC721Item()
+        const balance = await subitem.getAccountBalance(address)
+        if (item.tokenId == tokenId && balance != coins('0', subitem.decimals)) {
+          if (count == offset && limit > 0) {
+            items.push(subsubitem)
+            offset++
+            limit--
+          }
+          count++
+        }
       }
       return { items, count }
     }
@@ -239,7 +248,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       imageUri,
       getTokenOwner,
       isSecuritized,
-      listAllShares,
+      listAccountShares,
       securitize
     })
   }
@@ -298,6 +307,18 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       return newERC721(_address)
     }
 
+    async function listAllShares(offset: number, limit: number): Promise<{ items: ERC20[]; count: number }> {
+      if (offset < 0) throw new Error('Invalid offset')
+      if (limit < 0) throw new Error('Invalid limit')
+      const items: ERC20[] = []
+      const count = Number(await abi.methods.historyLength().call())
+      for (let i = offset; i < Math.min(offset + limit, count); i++) {
+        const address = await abi.methods.historyAt(i).call()
+        items.push(await newERC20(address))
+      }
+      return { items, count }
+    }
+
     return (self = {
       address,
       name,
@@ -305,7 +326,8 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       getItem,
       listAllItems,
       listAccountItems,
-      getWrapper
+      getWrapper,
+      listAllShares
     })
   }
 
@@ -506,22 +528,16 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     const items: ERC20[] = []
     let count = 0
     for (const contract of contracts) {
-      const wrapper = await contract.getWrapper()
-      if (wrapper == null) continue
-      const { items: subitems } = await wrapper.listAllItems(0, Number.MAX_SAFE_INTEGER)
+      const { items: subitems, count: subcount } = await contract.listAllShares(0, Number.MAX_SAFE_INTEGER)
       for (const subitem of subitems) {
-        const target = await contract.getItem(subitem.tokenId)
-        const { items: subsubitems } = await target.listAllShares(0, Number.MAX_SAFE_INTEGER)
-        for (const subsubitem of subsubitems) {
-          const balance = await subsubitem.getAccountBalance(address)
-          if (balance != coins('0', subsubitem.decimals)) {
-            if (count == offset && limit > 0) {
-              items.push(subsubitem)
-              offset++
-              limit--
-            }
-            count++
+        const balance = await subitem.getAccountBalance(address)
+        if (balance != coins('0', subitem.decimals)) {
+          if (count == offset && limit > 0) {
+            items.push(subsubitem)
+            offset++
+            limit--
           }
+          count++
         }
       }
     }
@@ -582,12 +598,12 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     const contracts: ERC721[] = []
     switch (network) {
       case 'main':
-        contracts.push(await newERC721('0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')) // CK
+        // contracts.push(await newERC721('0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')) // CK
         contracts.push(await newERC721('0xc1Caf0C19A8AC28c41Fe59bA6c754e4b9bd54dE9')) // CriptoSkulls
-        contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
+        // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
         contracts.push(await newERC721('0x959e104E1a4dB6317fA58F8295F586e1A978c297')) // EST
         contracts.push(await newERC721('0x4F41d10F7E67fD16bDe916b4A6DC3Dd101C57394')) // FLOWER
-        contracts.push(await newERC721('0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d')) // LAND
+        // contracts.push(await newERC721('0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d')) // LAND
         contracts.push(await newERC721('0xFBeef911Dc5821886e1dda71586d90eD28174B7d')) // KODA
         contracts.push(await newERC721('0x913ae503153d9A335398D0785Ba60A2d63dDB4e2')) // PARCEL
         contracts.push(await newERC721('0x22C1f6050E56d2876009903609a2cC3fEf83B415')) // POAP
@@ -595,25 +611,25 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
         contracts.push(await newERC721('0xb932a70A57673d89f4acfFBE830E8ed7f75Fb9e0')) // SUPR
         break
       case 'ropsten':
-        contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
+        // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
         contracts.push(await newERC721('0x124bf28A423B2CA80B3846c3AA0eB944FE7EbB95')) // EST
-        contracts.push(await newERC721('0x7A73483784ab79257bB11B96Fd62A2C3AE4Fb75B')) // LAND
+        // contracts.push(await newERC721('0x7A73483784ab79257bB11B96Fd62A2C3AE4Fb75B')) // LAND
         contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         contracts.push(await newERC721('0x29a3f97E9AC395E2E1BFa789bbBbb5468E6022af')) // KODA
         break
       case 'rinkeby':
-        contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
-        contracts.push(await newERC721('0x28bEf22DF3e2040A4bE64A9Ca0e8b5Ae2B91462D')) // LAND
+        // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
+        // contracts.push(await newERC721('0x28bEf22DF3e2040A4bE64A9Ca0e8b5Ae2B91462D')) // LAND
         contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         contracts.push(await newERC721('0x2Df6816286c583A7EF8637CD4b7Cc1CC62F6161E')) // KODA
         contracts.push(await newERC721('0x913ae503153d9A335398D0785Ba60A2d63dDB4e2')) // PARCEL
         break
       case 'kovan':
         // contracts.push(await newERC721('0x537263c440943f6a6808bCb8CcB3fe03EE838aD1')) // LAND
-        // contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
+        contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         break
       case 'goerli':
-        contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
+        // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
         contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         break
     }
