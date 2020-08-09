@@ -20,12 +20,11 @@
       grid-template-columns: 76px 1fr;
       grid-auto-rows: 1fr;
 
-      .ft-symbol {
+      .ft-name {
         font-size: 1rem;
         color: $orange;
       }
 
-      .ft-name,
       .ft-shares {
         color: $black;
       }

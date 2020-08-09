@@ -4,16 +4,9 @@ import FungibleTokensEmpty from './FungibleTokensEmpty/FungibleTokensEmpty'
 import FungibleTokensList from './FungibleTokensList/FungibleTokensList'
 
 export default function FungibleTokens() {
-  const {
-    wallet,
-    accounts,
-    accountIndex,
-    accountShares,
-    setAccountShares,
-    setAccountSharesCount,
-    accountSharesCount,
-    accountItems
-  } = useContext(WalletContext)
+  const { wallet, accounts, accountIndex, accountShares, setAccountShares, setAccountSharesCount, accountSharesCount } = useContext(
+    WalletContext
+  )
 
   const [offset, setOffset] = useState(0)
 
@@ -22,16 +15,17 @@ export default function FungibleTokens() {
   }
 
   const loadAccountShares = useCallback(async () => {
-    if (wallet && accountItems) {
-      try {
-        const fts = await wallet.listAccountShares(accounts[accountIndex], offset, 8)
-        setAccountShares(fts.items)
-        setAccountSharesCount(fts.count)
-      } catch (error) {
-        setAccountShares([])
-      }
+    console.log('AccountShares')
+    if (wallet) {
+      console.log('INICIOU - listAccountShares')
+      console.log('loadAccountShares', accounts[accountIndex], offset, 8)
+      const fts = await wallet.listAccountShares(accounts[accountIndex], offset, 8)
+
+      setAccountShares(fts.items)
+      setAccountSharesCount(fts.count)
+      console.log('FIM - listAccountShares')
     }
-  }, [accountIndex, accounts, wallet, setAccountShares, setAccountSharesCount, accountItems, offset])
+  }, [accountIndex, accounts, wallet, setAccountShares, setAccountSharesCount, offset])
   useEffect(() => {
     loadAccountShares()
   }, [loadAccountShares])

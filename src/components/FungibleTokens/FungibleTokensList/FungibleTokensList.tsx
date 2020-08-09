@@ -1,5 +1,5 @@
 import { Card, Pagination } from 'antd'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { WalletContext } from '../../../context/WalletContext'
 import { ERC20 } from '../../../services/api'
@@ -11,27 +11,30 @@ interface Props {
 }
 
 export default function FungibleTokensList({ count, setPagination }: Props) {
-  const { accountShares } = useContext(WalletContext)
+  const { accountShares, accounts, accountIndex } = useContext(WalletContext)
 
   const [accountSharesCount, setAccountSharesCount] = useState<Array<ERC20 & { sharesCount: string; erc721ImageUri: string }>>([])
 
+  const getAccountSharesCount = useCallback(
+    async (accountSharesItem: ERC20[]) => {
+      const accountSharesItemPromise = await Promise.all(
+        accountSharesItem.map(async shareItem => {
+          const sharesCount = await shareItem.getAccountBalance(accounts[accountIndex])
+
+          const erc721 = await shareItem.getERC721Item()
+
+          return { ...shareItem, sharesCount, erc721ImageUri: erc721.imageUri || '' }
+        })
+      )
+
+      setAccountSharesCount(accountSharesItemPromise)
+    },
+    [accountIndex, accounts]
+  )
+
   useEffect(() => {
     getAccountSharesCount(accountShares)
-  }, [accountShares])
-
-  const getAccountSharesCount = async (accountSharesItem: ERC20[]) => {
-    const accountSharesItemPromise = await Promise.all(
-      accountSharesItem.map(async shareItem => {
-        const sharesCount = await shareItem.getSharesCount()
-
-        const erc721 = await shareItem.getERC721Item()
-
-        return { ...shareItem, sharesCount, erc721ImageUri: erc721.imageUri || '' }
-      })
-    )
-
-    setAccountSharesCount(accountSharesItemPromise)
-  }
+  }, [accountShares, getAccountSharesCount])
 
   const [page, setPage] = useState(1)
 
@@ -52,9 +55,8 @@ export default function FungibleTokensList({ count, setPagination }: Props) {
                 )}
               </div>
               <div>
-                <div className='ft-symbol'>{ft.symbol}</div>
                 <div className='ft-name'>{ft.name}</div>
-                <div className='ft-shares'>{ft.sharesCount}</div>
+                <div className='ft-shares'>{`${ft.sharesCount} ${ft.symbol}`}</div>
               </div>
             </div>
           </Link>
