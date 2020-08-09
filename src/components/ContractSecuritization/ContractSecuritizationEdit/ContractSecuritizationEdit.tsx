@@ -26,7 +26,7 @@ export default function ContractSecuritizationEdit() {
   const [paymentTokens, setPaymentTokens] = useState<ERC20[]>([])
   const [exitPrice, setExitPrice] = useState<string | undefined>(undefined)
   const [paymentToken, setPaymentToken] = useState<string | undefined>(undefined)
-  const shares = '1000000.00000000'
+  const shares = '1000000'
 
   const listPaymentTokens = useCallback(async () => {
     if (wallet) {
