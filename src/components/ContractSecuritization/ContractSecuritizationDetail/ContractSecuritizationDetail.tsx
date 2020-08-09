@@ -11,6 +11,9 @@ import './ContractSecuritizationDetail.scss'
 export default function ContractSecuritizationDetail() {
   const { accountShares, accountIndex, accounts } = useContext(WalletContext)
   const [contractImg, setContractImg] = useState<string>('')
+  const [contractName, setContractName] = useState<string>('')
+  const [contractDescription, setContractDescription] = useState('')
+  const [contractMeta, setContractMeta] = useState('')
   const [isRedeemable, setIsRedeemable] = useState(false)
   const [isClaimable, setIsClaimable] = useState(false)
 
@@ -32,6 +35,9 @@ export default function ContractSecuritizationDetail() {
     if (contract) {
       const erc721 = await contract.getERC721Item()
       setContractImg(erc721.imageUri || '')
+      setContractDescription(erc721.description || '')
+      setContractMeta(`#${erc721?.tokenId}`)
+      setContractName(erc721.name || '')
     }
   }, [contract])
 
@@ -72,7 +78,7 @@ export default function ContractSecuritizationDetail() {
     <Card className='contract-securitization-detail'>
       <div className='content'>
         <div className='contract-image'>
-          {contractImg && <ContractImage name={contract?.name || ''} meta='' description='' src={contractImg} />}
+          {contractImg && <ContractImage name={contractName} meta={contractMeta} description={contractDescription} src={contractImg} />}
         </div>
         {contract && (
           <div className='contract-item'>

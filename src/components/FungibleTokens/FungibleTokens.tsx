@@ -15,15 +15,11 @@ export default function FungibleTokens() {
   }
 
   const loadAccountShares = useCallback(async () => {
-    console.log('AccountShares')
     if (wallet) {
-      console.log('INICIOU - listAccountShares')
-      console.log('loadAccountShares', accounts[accountIndex], offset, 8)
       const fts = await wallet.listAccountShares(accounts[accountIndex], offset, 8)
 
       setAccountShares(fts.items)
       setAccountSharesCount(fts.count)
-      console.log('FIM - listAccountShares')
     }
   }, [accountIndex, accounts, wallet, setAccountShares, setAccountSharesCount, offset])
   useEffect(() => {
