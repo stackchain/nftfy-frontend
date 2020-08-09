@@ -20,6 +20,8 @@ export interface Wallet {
   getEtherBalance(address: string): Promise<string>
   listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
   listAccountItems(address: string, offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }>
+  retrieveItem(address: string, tokenId: string): Promise<ERC721Item>
+  retrieveShares(address: string): Promise<ERC20>
   registerERC721(address: string): Promise<boolean>
   listPaymentTokens(): Promise<ERC20[]>
 }
@@ -533,7 +535,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
         const balance = await subitem.getAccountBalance(address)
         if (balance != coins('0', subitem.decimals)) {
           if (count == offset && limit > 0) {
-            items.push(subsubitem)
+            items.push(subitem)
             offset++
             limit--
           }
@@ -559,6 +561,14 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       offset -= subcount
     }
     return { items, count }
+  }
+
+  function retrieveItem(address: string, tokenId: string): Promise<ERC721Item> {
+    return newERC721Item(address, tokenId)
+  }
+
+  function retrieveShares(address: string): Promise<ERC20> {
+    return newERC20(address)
   }
 
   async function registerERC721(address: string): Promise<boolean> {
@@ -644,6 +654,8 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     getEtherBalance,
     listAccountShares,
     listAccountItems,
+    retrieveItem,
+    retrieveShares,
     registerERC721,
     listPaymentTokens
   }
