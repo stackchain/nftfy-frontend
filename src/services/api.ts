@@ -191,11 +191,11 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
       let count = 0
       const { items: subitems, count: subcount } = await wrapper.listAllShares(0, Number.MAX_SAFE_INTEGER)
       for (const subitem of subitems) {
-        const item = subitem.getERC721Item()
+        const item = await subitem.getERC721Item()
         const balance = await subitem.getAccountBalance(address)
         if (item.tokenId == tokenId && balance != coins('0', subitem.decimals)) {
           if (count == offset && limit > 0) {
-            items.push(subsubitem)
+            items.push(subitem)
             offset++
             limit--
           }
