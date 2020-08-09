@@ -134,6 +134,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
 
   function coins(units: string, decimals: number): string {
     if (!valid(units, 0)) throw new Error('Invalid amount')
+    if (decimals == 0) return units;
     const s = units.padStart(1 + decimals, '0')
     return `${s.slice(0, -decimals)}.${s.slice(-decimals)}`
   }
