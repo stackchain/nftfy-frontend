@@ -6,9 +6,10 @@ interface Props {
   claim: () => void
   shares: string
   receive: string
+  loading: boolean
 }
 
-export default function ContractClaim({ claim, shares, receive }: Props) {
+export default function ContractClaim({ claim, shares, receive, loading }: Props) {
   const columns = [
     {
       dataIndex: 'label',
@@ -40,7 +41,7 @@ export default function ContractClaim({ claim, shares, receive }: Props) {
       <div className='title'>
         <h2>Claim NFT</h2>
       </div>
-      <Table dataSource={dataSource} columns={columns} pagination={false} rowKey='label' />
+      <Table dataSource={dataSource} columns={columns} pagination={false} rowKey='label' loading={loading} />
       <Button onClick={handleClaim} type='primary' size='large'>
         Claim
       </Button>

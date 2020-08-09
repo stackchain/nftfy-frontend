@@ -22,6 +22,7 @@ export default function ContractSecuritizationDetail() {
   const [exitPrice, setExitPrice] = useState('')
   const [pay, setPay] = useState('')
   const [receive, setReceive] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const location = useLocation()
   const history = useHistory()
@@ -60,16 +61,20 @@ export default function ContractSecuritizationDetail() {
 
   const redeemContract = async () => {
     if (contract && redeemContract) {
+      setLoading(true)
       await contract.redeem(accounts[accountIndex])
       setIsRedeemable(false)
+      setLoading(false)
       history.push('/')
     }
   }
 
   const claimContract = async () => {
     if (contract && claimContract) {
+      setLoading(true)
       await contract.claim(accounts[accountIndex])
       setIsClaimable(false)
+      setLoading(false)
       history.push('/')
     }
   }
@@ -89,13 +94,14 @@ export default function ContractSecuritizationDetail() {
                   participation={`${(issuedShare && totalSupply && (Number(issuedShare) / Number(totalSupply)) * 100) || 100}%`}
                   shareBalance={issuedShare}
                   pay={pay}
+                  loading={loading}
                 />
               </div>
             )}
 
             {isClaimable && (
               <div className='contract-claim-item'>
-                <ContractClaim claim={claimContract} receive={receive} shares={issuedShare} />
+                <ContractClaim claim={claimContract} receive={receive} shares={issuedShare} loading={loading} />
               </div>
             )}
             <div className='contract-data-item'>

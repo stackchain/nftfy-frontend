@@ -7,9 +7,10 @@ interface Props {
   participation: string
   shareBalance: string
   pay: string
+  loading: boolean
 }
 
-export default function ContractRedeem({ redeem, participation, shareBalance, pay }: Props) {
+export default function ContractRedeem({ redeem, participation, shareBalance, pay, loading }: Props) {
   const columns = [
     {
       dataIndex: 'label',
@@ -46,7 +47,7 @@ export default function ContractRedeem({ redeem, participation, shareBalance, pa
         <h2>Redeem NFT</h2>
       </div>
       <Table dataSource={dataSource} columns={columns} pagination={false} rowKey='label' />
-      <Button onClick={handleRedeem} type='primary' size='large'>
+      <Button onClick={handleRedeem} type='primary' size='large' loading={loading}>
         Redeem
       </Button>
     </div>
