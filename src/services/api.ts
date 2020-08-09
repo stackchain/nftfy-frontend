@@ -533,7 +533,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
         const balance = await subitem.getAccountBalance(address)
         if (balance != coins('0', subitem.decimals)) {
           if (count == offset && limit > 0) {
-            items.push(subsubitem)
+            items.push(subitem)
             offset++
             limit--
           }
