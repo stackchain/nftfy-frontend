@@ -5,6 +5,7 @@ import { errorNotification } from '../../../services/notification'
 import './AddNonFungibleTokens.scss'
 
 export default function AddNonFungibleTokens() {
+  const [loading, setLoading] = useState(false)
   const { accounts, accountIndex, wallet, setAccountItems, setAccountItemsCount, setAccountShares, setAccountSharesCount } = useContext(
     WalletContext
   )
@@ -24,6 +25,7 @@ export default function AddNonFungibleTokens() {
       await wallet.registerERC721(nftInput)
 
       if (wallet) {
+        setLoading(false)
         const nfts = await wallet.listAccountItems(accounts[accountIndex], 0, 12)
         if (nfts.items.length > 0) {
           setAccountItems(nfts.items)
@@ -35,6 +37,7 @@ export default function AddNonFungibleTokens() {
           setAccountShares(fts.items)
           setAccountSharesCount(fts.count)
         }
+        setLoading(true)
       }
     }
   }
@@ -42,7 +45,7 @@ export default function AddNonFungibleTokens() {
   return (
     <div className='add-non-fungible-form'>
       <Input placeholder='NFT Hash' disabled={!accounts[accountIndex]} onChange={handleInput} value={nftInput} />
-      <Button type='primary' disabled={!accounts[accountIndex]} onClick={addNft}>
+      <Button type='primary' disabled={!accounts[accountIndex]} onClick={addNft} loading={loading}>
         Set NFT
       </Button>
     </div>
