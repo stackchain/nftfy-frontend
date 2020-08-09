@@ -564,7 +564,8 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
   }
 
   function retrieveItem(address: string, tokenId: string): Promise<ERC721Item> {
-    return newERC721Item(address, tokenId)
+    const contract = await newERC721(address)
+    return newERC721Item(contract, tokenId)
   }
 
   function retrieveShares(address: string): Promise<ERC20> {
