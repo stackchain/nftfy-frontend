@@ -9,7 +9,7 @@ export default function AddNonFungibleTokens() {
     WalletContext
   )
 
-  const [nftInput, setNftInput] = useState('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')
+  const [nftInput, setNftInput] = useState('')
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNftInput(event.target.value)

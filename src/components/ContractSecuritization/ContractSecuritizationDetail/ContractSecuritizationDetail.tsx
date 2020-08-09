@@ -37,10 +37,6 @@ export default function ContractSecuritizationDetail() {
 
   const getContractData = useCallback(async () => {
     if (contract) {
-      console.log('CONTRACT', contract)
-
-      console.log('REDEEM', await contract.isRedeemable())
-      console.log('CLAIM', await contract.isClaimable())
       setIsRedeemable(await contract.isRedeemable())
       setIsClaimable(await contract.isClaimable())
       setIssuedShare(await contract.getAccountBalance(accounts[accountIndex]))
@@ -60,6 +56,7 @@ export default function ContractSecuritizationDetail() {
     if (contract && redeemContract) {
       await contract.redeem(accounts[accountIndex])
       setIsRedeemable(false)
+      history.push('/')
     }
   }
 
@@ -67,6 +64,7 @@ export default function ContractSecuritizationDetail() {
     if (contract && claimContract) {
       await contract.claim(accounts[accountIndex])
       setIsClaimable(false)
+      history.push('/')
     }
   }
 
