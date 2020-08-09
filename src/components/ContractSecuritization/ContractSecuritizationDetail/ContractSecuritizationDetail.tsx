@@ -18,6 +18,7 @@ export default function ContractSecuritizationDetail() {
   const [issuedShare, setIssuedShare] = useState('')
   const [exitPrice, setExitPrice] = useState('')
   const [pay, setPay] = useState('')
+  const [receive, setReceive] = useState('')
 
   const location = useLocation()
   const history = useHistory()
@@ -36,11 +37,16 @@ export default function ContractSecuritizationDetail() {
 
   const getContractData = useCallback(async () => {
     if (contract) {
+      console.log('CONTRACT', contract)
+
+      console.log('REDEEM', await contract.isRedeemable())
+      console.log('CLAIM', await contract.isClaimable())
       setIsRedeemable(await contract.isRedeemable())
       setIsClaimable(await contract.isClaimable())
-      setIssuedShare(await contract.getSharesCount())
+      setIssuedShare(await contract.getAccountBalance(accounts[accountIndex]))
       setExitPrice(await contract.getExitPrice())
       setTotalSupply(await contract.getTotalSupply())
+      setReceive(await contract.getVaultBalance())
       setPay(`${await contract.getAccountRedeemAmount(accounts[accountIndex])} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
     }
   }, [contract, accounts, accountIndex])
@@ -51,9 +57,16 @@ export default function ContractSecuritizationDetail() {
   }, [getContractImg, getContractData])
 
   const redeemContract = async () => {
-    if (contract) {
+    if (contract && redeemContract) {
       await contract.redeem(accounts[accountIndex])
       setIsRedeemable(false)
+    }
+  }
+
+  const claimContract = async () => {
+    if (contract && claimContract) {
+      await contract.claim(accounts[accountIndex])
+      setIsClaimable(false)
     }
   }
 
@@ -78,11 +91,11 @@ export default function ContractSecuritizationDetail() {
 
             {isClaimable && (
               <div className='contract-claim-item'>
-                <ContractClaim />
+                <ContractClaim claim={claimContract} receive={receive} shares={issuedShare} />
               </div>
             )}
             <div className='contract-data-item'>
-              <ContractData name={contract?.name || ''} totalSupply={totalSupply} exitPrice={exitPrice} />
+              <ContractData name={contract?.name || ''} totalSupply={totalSupply} exitPrice={exitPrice} address={contract.address} />
             </div>
           </div>
         )}

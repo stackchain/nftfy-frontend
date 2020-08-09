@@ -5,7 +5,9 @@ import { errorNotification } from '../../../services/notification'
 import './AddNonFungibleTokens.scss'
 
 export default function AddNonFungibleTokens() {
-  const { accounts, accountIndex, wallet, setAccountItems, setAccountItemsCount } = useContext(WalletContext)
+  const { accounts, accountIndex, wallet, setAccountItems, setAccountItemsCount, setAccountShares, setAccountSharesCount } = useContext(
+    WalletContext
+  )
 
   const [nftInput, setNftInput] = useState('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')
 
@@ -26,6 +28,12 @@ export default function AddNonFungibleTokens() {
         if (nfts.items.length > 0) {
           setAccountItems(nfts.items)
           setAccountItemsCount(nfts.count)
+        }
+
+        const fts = await wallet.listAccountShares(accounts[accountIndex], 0, 8)
+        if (fts.items.length > 0) {
+          setAccountShares(fts.items)
+          setAccountSharesCount(fts.count)
         }
       }
     }

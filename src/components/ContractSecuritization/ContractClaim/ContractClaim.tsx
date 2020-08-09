@@ -1,16 +1,20 @@
-import { Table } from 'antd'
+import { Button, Table } from 'antd'
 import React from 'react'
 import './ContractClaim.scss'
 
-export default function ContractClaim() {
+interface Props {
+  claim: () => void
+  shares: string
+  receive: string
+}
+
+export default function ContractClaim({ claim, shares, receive }: Props) {
   const columns = [
     {
-      title: 'Share Contract Name',
       dataIndex: 'label',
       key: 'label'
     },
     {
-      title: 'CK Genesis Nftfy',
       dataIndex: 'data',
       key: 'data'
     }
@@ -18,29 +22,28 @@ export default function ContractClaim() {
 
   const dataSource = [
     {
-      label: 'issued Share',
-      data: 32
+      label: 'Your Participation',
+      data: shares
     },
     {
-      label: 'Exit Price',
-      data: 42
-    },
-    {
-      label: 'Duration',
-      data: 42
-    },
-    {
-      label: 'Extractor Buyer',
-      data: 42
+      label: 'Share Balance',
+      data: receive
     }
   ]
 
+  const handleClaim = () => {
+    claim()
+  }
+
   return (
-    <div className='contract-claim'>
+    <div className='contract-redeem'>
       <div className='title'>
-        <h2>Claim ETH</h2>
+        <h2>Claim NFT</h2>
       </div>
       <Table dataSource={dataSource} columns={columns} pagination={false} rowKey='label' />
+      <Button onClick={handleClaim} type='primary' size='large'>
+        Claim
+      </Button>
     </div>
   )
 }
