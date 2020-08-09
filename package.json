@@ -58,5 +58,6 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "prettier": "^2.0.5"
-  }
+  },
+  "homepage": "https://nftfy.tk/dapp/v2"
 }
