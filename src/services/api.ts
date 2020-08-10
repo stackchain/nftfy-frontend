@@ -593,16 +593,16 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
         contracts.push(await newERC20('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2')) // WETH
         break
       case 'ropsten':
-        contracts.push(await newERC20('0xF0994F0C934d9e149A5673144059eEa79D547EBB')) // BUK
+        contracts.push(await newERC20('0x65628f950F79B3FaCE8d878d17D4221A27449acD')) // BUK
         break
       case 'rinkeby':
-        contracts.push(await newERC20('0xF0994F0C934d9e149A5673144059eEa79D547EBB')) // BUK
+        contracts.push(await newERC20('0x65628f950F79B3FaCE8d878d17D4221A27449acD')) // BUK
         break
       case 'kovan':
-        contracts.push(await newERC20('0xF0994F0C934d9e149A5673144059eEa79D547EBB')) // BUK
+        contracts.push(await newERC20('0x65628f950F79B3FaCE8d878d17D4221A27449acD')) // BUK
         break
       case 'goerli':
-        contracts.push(await newERC20('0xF0994F0C934d9e149A5673144059eEa79D547EBB')) // BUK
+        contracts.push(await newERC20('0x65628f950F79B3FaCE8d878d17D4221A27449acD')) // BUK
         break
     }
     return contracts
