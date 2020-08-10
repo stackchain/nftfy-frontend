@@ -164,8 +164,9 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
         const headers: { [key: string]: string } = {}
         // headers.Origin = 'https://nftfy.tk'
         const response = await axios.get(CORS_PREFIX + uri, { headers })
-        const { name, description, image } = response.data
-        const imageUri = image ? CORS_PREFIX + image : image
+        const { name, description, image, image_url } = response.data
+        const imageUrl = image || image_url
+        const imageUri = imageUrl ? CORS_PREFIX + imageUrl : imageUrl
         return { name, description, imageUri }
       } catch (e) {
         console.log('ERC721Item.loadMetadata', contract.address, tokenId, e.message)
