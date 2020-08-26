@@ -39,7 +39,7 @@ export default function ContractClaim({ claim, shares, receive, loading }: Props
   return (
     <div className='contract-redeem'>
       <div className='title'>
-        <h2>Claim NFT</h2>
+        <h2>Claim</h2>
       </div>
       <Table dataSource={dataSource} columns={columns} pagination={false} rowKey='label' loading={loading} />
       <Button onClick={handleClaim} type='primary' size='large'>
