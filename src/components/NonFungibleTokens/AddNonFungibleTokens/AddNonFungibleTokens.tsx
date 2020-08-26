@@ -46,7 +46,7 @@ export default function AddNonFungibleTokens() {
     <div className='add-non-fungible-form'>
       <Input placeholder='NFT Hash' disabled={!accounts[accountIndex]} onChange={handleInput} value={nftInput} />
       <Button type='primary' disabled={!accounts[accountIndex]} onClick={addNft} loading={loading}>
-        Set NFT
+        Add NFT
       </Button>
     </div>
   )
