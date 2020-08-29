@@ -1,4 +1,4 @@
-import { Button, Modal } from 'antd'
+import { Button, Modal, notification } from 'antd'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import metamask from '../../../../assets/metamask.svg'
 import portis from '../../../../assets/portis.svg'
@@ -26,20 +26,35 @@ export default function WalletManagerModal(props: Props) {
   }, [loadWallets])
 
   const selectWallet = (walletName: WalletName) => async () => {
-    setLoadingWallet(walletName)
 
-    const wallet = await initializeWallet(walletName)
-    const accounts = await wallet.getAccounts()
 
-    if (accounts[0]) {
-      wallet.selectAccount(accounts[0])
+    try {
+
+      setLoadingWallet(walletName)
+
+      const wallet = await initializeWallet(walletName)
+      const accounts = await wallet.getAccounts()
+
+      if (accounts[0]) {
+        wallet.selectAccount(accounts[0])
+      }
+
+      setWallet(wallet)
+      setWalletName(walletName)
+      setAccounts(accounts)
+
+      handleCancel()
+    } catch (error) {
+
+      setLoadingWallet(undefined)
+
+      notification.open({
+        message: 'Authorize nftfy in the wallet and connect again',
+        type: 'error',
+      })
+
     }
 
-    setWallet(wallet)
-    setWalletName(walletName)
-    setAccounts(accounts)
-
-    handleCancel()
   }
 
   const handleCancel = () => {
@@ -48,7 +63,7 @@ export default function WalletManagerModal(props: Props) {
   }
 
   return (
-    <Modal className='wallet-manager-modal' title='Wallet Manager' visible={visible} footer={null} onCancel={handleCancel} width={300}>
+    <Modal className='wallet-manager-modal' title='Wallet Manager' visible={visible} footer={null} onCancel={handleCancel} width={300} maskClosable={false}>
       {supportedWallets.includes('metamask') && (
         <Button
           className='metamask'

@@ -1,3 +1,4 @@
+import { notification } from 'antd'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ERC20, ERC721Item, initializeWallet, listSupportedWallets, Wallet, WalletName } from '../services/api'
 
@@ -68,19 +69,29 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
       const walletNameStorage = localStorage.getItem('walletName')
 
       if (walletNameStorage && supportedWallets.includes(walletNameStorage as WalletName)) {
-        const walletStorage = await initializeWallet(walletNameStorage as WalletName)
-        const accountsStorage = await walletStorage.getAccounts()
+        try {
 
-        if (accountsStorage[0]) {
-          walletStorage.selectAccount(accountsStorage[0])
+          const walletStorage = await initializeWallet(walletNameStorage as WalletName)
+          const accountsStorage = await walletStorage.getAccounts()
+
+          if (accountsStorage[0]) {
+            walletStorage.selectAccount(accountsStorage[0])
+          }
+
+          setWallet(walletStorage)
+          setWalletName(walletNameStorage as WalletName)
+          setAccounts(accountsStorage)
+
+          const accountIndexStorage = localStorage.getItem('accountIndex')
+          if (accountIndexStorage) setAccountIndex(Number(JSON.parse(accountIndexStorage)))
+        } catch (error) {
+          notification.open({
+            message: 'Reconnection with the wallet failed',
+            type: 'error',
+          })
+          localStorage.removeItem('walletName')
+          localStorage.removeItem('accountIndex')
         }
-
-        setWallet(walletStorage)
-        setWalletName(walletNameStorage as WalletName)
-        setAccounts(accountsStorage)
-
-        const accountIndexStorage = localStorage.getItem('accountIndex')
-        if (accountIndexStorage) setAccountIndex(Number(JSON.parse(accountIndexStorage)))
       }
 
       setRehydrate(false)
@@ -91,7 +102,6 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
     rehydrateOffline()
   }, [rehydrateOffline])
 
-  if (rehydrate) return null
 
   return (
     <WalletContext.Provider
