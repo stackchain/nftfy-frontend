@@ -18,9 +18,10 @@ export default function AddNonFungibleTokens() {
 
   const addNft = async () => {
     if (!nftInput.length) {
-      errorNotification('NFT Hash is empty')
+      errorNotification('Smart contract is empty')
+
     } else if (wallet && !(await wallet.validateAddress(nftInput))) {
-      errorNotification('NFT Hash is invalid')
+      errorNotification('Smart contract is invalid')
     } else if (wallet) {
       await wallet.registerERC721(nftInput)
 

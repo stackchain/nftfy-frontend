@@ -2,6 +2,7 @@ import { Card } from 'antd'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { WalletContext } from '../../../context/WalletContext'
+import { errorNotification, infoNotification } from '../../../services/notification'
 import ContractClaim from '../ContractClaim/ContractClaim'
 import ContractData from '../ContractData/ContractData'
 import ContractImage from '../ContractImage/ContractImage'
@@ -61,11 +62,20 @@ export default function ContractSecuritizationDetail() {
 
   const redeemContract = async () => {
     if (contract && redeemContract) {
-      setLoading(true)
-      await contract.redeem(accounts[accountIndex])
-      setIsRedeemable(false)
-      setLoading(false)
-      history.push('/')
+      infoNotification('Allow redeem transaction in the wallet')
+
+      try {
+        setLoading(true)
+        await contract.redeem(accounts[accountIndex])
+        setIsRedeemable(false)
+        setLoading(false)
+        history.push('/')
+      } catch (error) {
+        errorNotification('Redeem transaction failure, please check in the wallet')
+        setLoading(false)
+      }
+
+
     }
   }
 

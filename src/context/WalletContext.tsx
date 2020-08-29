@@ -1,6 +1,6 @@
-import { notification } from 'antd'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ERC20, ERC721Item, initializeWallet, listSupportedWallets, Wallet, WalletName } from '../services/api'
+import { errorNotification } from '../services/notification'
 
 export const WalletContext = React.createContext<{
   walletName: WalletName | undefined
@@ -85,10 +85,9 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
           const accountIndexStorage = localStorage.getItem('accountIndex')
           if (accountIndexStorage) setAccountIndex(Number(JSON.parse(accountIndexStorage)))
         } catch (error) {
-          notification.open({
-            message: 'Reconnection with the wallet failed',
-            type: 'error',
-          })
+
+          errorNotification('Reconnection with the wallet failed')
+
           localStorage.removeItem('walletName')
           localStorage.removeItem('accountIndex')
         }

@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { WalletContext } from '../../../context/WalletContext'
 import { ERC20 } from '../../../services/api'
-import { errorNotification } from '../../../services/notification'
+import { errorNotification, infoNotification } from '../../../services/notification'
 import ContractImage from '../ContractImage/ContractImage'
 import './ContractSecuritizationEdit.scss'
 
@@ -78,15 +78,23 @@ export default function ContractSecuritizationEdit() {
     }
   ]
   const securitize = async () => {
+
+    infoNotification('Allow securitization transaction in the wallet')
+
     if (Number(exitPrice) < 0) {
       errorNotification("Exit price can't no be negative")
     }
 
     if (contract && shares && exitPrice) {
-      setLoading(true)
-      await contract.securitize(shares, exitPrice, paymentTokens.find(payToken => payToken.symbol === paymentToken) || null)
-      setLoading(false)
-      history.push(`/`)
+      try {
+        setLoading(true)
+        await contract.securitize(shares, exitPrice, paymentTokens.find(payToken => payToken.symbol === paymentToken) || null)
+        setLoading(false)
+        history.push(`/`)
+      } catch (error) {
+        errorNotification('Securitization transaction failure, please check in the wallet')
+        setLoading(false)
+      }
     }
   }
 
@@ -106,7 +114,7 @@ export default function ContractSecuritizationEdit() {
             <h2>Securitize ERC721 Contract</h2>
           </div>
           <Table dataSource={dataSource} columns={columns} pagination={false} showHeader={false} rowKey='label' />
-          <Button onClick={securitize} type='primary' size='large' loading={loading}>
+          <Button onClick={securitize} type='primary' size='large' loading={loading} disabled={!exitPrice || Number(exitPrice) <= 0}>
             Securitize
           </Button>
         </div>

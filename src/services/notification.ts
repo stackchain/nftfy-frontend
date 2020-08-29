@@ -3,7 +3,16 @@ import { notification } from 'antd'
 export const errorNotification = (message: string) => {
   notification.error({
     message,
-    placement: 'bottomLeft',
+    placement: 'bottomRight',
     duration: 2
+  })
+}
+
+
+export const infoNotification = (message: string, duration?: number) => {
+  notification.info({
+    message,
+    placement: 'bottomRight',
+    duration: duration || 4.5
   })
 }

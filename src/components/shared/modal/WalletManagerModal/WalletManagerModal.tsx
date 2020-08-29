@@ -1,9 +1,10 @@
-import { Button, Modal, notification } from 'antd'
+import { Button, Modal } from 'antd'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import metamask from '../../../../assets/metamask.svg'
 import portis from '../../../../assets/portis.svg'
 import { WalletContext } from '../../../../context/WalletContext'
 import { initializeWallet, listSupportedWallets, WalletName } from '../../../../services/api'
+import { errorNotification } from '../../../../services/notification'
 import './WalletManagerModal.scss'
 
 interface Props {
@@ -47,11 +48,7 @@ export default function WalletManagerModal(props: Props) {
     } catch (error) {
 
       setLoadingWallet(undefined)
-
-      notification.open({
-        message: 'Authorize nftfy in the wallet and connect again',
-        type: 'error',
-      })
+      errorNotification('Authorize nftfy in the wallet and connect again')
 
     }
 
