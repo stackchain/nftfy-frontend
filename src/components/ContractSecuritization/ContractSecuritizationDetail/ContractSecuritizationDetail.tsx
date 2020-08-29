@@ -48,10 +48,10 @@ export default function ContractSecuritizationDetail() {
       setIsRedeemable(await contract.isRedeemable())
       setIsClaimable(await contract.isClaimable())
       setIssuedShare(await contract.getAccountBalance(accounts[accountIndex]))
-      setExitPrice(await contract.getExitPrice())
-      setTotalSupply(await contract.getTotalSupply())
+      setExitPrice(`${Number(await contract.getExitPrice()).toFixed(8)} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
+      setTotalSupply(`${Number(await contract.getTotalSupply()).toLocaleString()}`)
       setReceive(await contract.getVaultBalance())
-      setPay(`${await contract.getAccountRedeemAmount(accounts[accountIndex])} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
+      setPay(`${Number(await contract.getAccountRedeemAmount(accounts[accountIndex])).toFixed(8)} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
     }
   }, [contract, accounts, accountIndex])
 

@@ -56,7 +56,7 @@ export default function FungibleTokensList({ count, setPagination }: Props) {
               </div>
               <div>
                 <div className='ft-name'>{ft.name}</div>
-                <div className='ft-shares'>{`${ft.sharesCount} ${ft.symbol}`}</div>
+                <div className='ft-shares'>{`${Number(ft.sharesCount).toLocaleString()} ${ft.symbol}`}</div>
               </div>
             </div>
           </Link>

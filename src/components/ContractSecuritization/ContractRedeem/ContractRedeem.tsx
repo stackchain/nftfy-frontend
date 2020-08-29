@@ -1,6 +1,6 @@
-import { Button, Table } from 'antd'
-import React from 'react'
-import './ContractRedeem.scss'
+import { Button, Table } from 'antd';
+import React from 'react';
+import './ContractRedeem.scss';
 
 interface Props {
   redeem: () => void
@@ -29,7 +29,7 @@ export default function ContractRedeem({ redeem, participation, shareBalance, pa
     },
     {
       label: 'Share Balance',
-      data: shareBalance
+      data: Number(shareBalance).toLocaleString()
     },
     {
       label: 'Pay Amount',
