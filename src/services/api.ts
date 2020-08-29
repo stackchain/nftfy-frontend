@@ -80,11 +80,15 @@ export interface ERC721Item {
   securitize(sharesCount: string, exitPrice: string, paymentToken: ERC20 | null): Promise<void> // 1
 }
 
-async function getWeb3(walletName: WalletName): Promise<Web3> {
+async function getWeb3(walletName: WalletName, refreshHook?: () => void): Promise<Web3> {
   switch (walletName) {
     case 'metamask':
       if (window.ethereum) {
         await window.ethereum.enable()
+        if (refreshHook) {
+          window.ethereum.on('chainChanged', (chain) => refreshHook())
+          window.ethereum.on('accountsChanged', (accounts) => refreshHook())
+        }
         return new Web3(window.ethereum)
       }
       if (!window.web3) throw new Error('Unsupported wallet')
@@ -104,10 +108,10 @@ export async function listSupportedWallets(): Promise<WalletName[]> {
   return ['portis']
 }
 
-export async function initializeWallet(walletName: WalletName): Promise<Wallet> {
+export async function initializeWallet(walletName: WalletName, refreshHook?: () => void): Promise<Wallet> {
   let account = '0x0000000000000000000000000000000000000000'
 
-  const web3 = await getWeb3(walletName)
+  const web3 = await getWeb3(walletName, refreshHook)
   const network = await web3.eth.net.getNetworkType()
   const contracts: ERC721[] = await listNonFungibleTokens()
 
