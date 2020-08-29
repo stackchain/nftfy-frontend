@@ -43,7 +43,7 @@ export default function ContractData({ name, totalSupply, exitPrice, address }: 
   return (
     <div className='contract-data'>
       <div className='title'>
-        <h2>Contract Data</h2>
+        <h2>Smart Contract Data</h2>
       </div>
       <Table dataSource={dataSource} columns={columns} pagination={false} rowKey='label' />
     </div>
