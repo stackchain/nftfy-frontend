@@ -9,6 +9,7 @@ export default function FungibleTokens() {
   )
 
   const [offset, setOffset] = useState(0)
+  const [loading, setLoading] = useState(false)
 
   const setPagination = (offsetNumber: number) => {
     setOffset(offsetNumber)
@@ -16,7 +17,9 @@ export default function FungibleTokens() {
 
   const loadAccountShares = useCallback(async () => {
     if (wallet) {
+      setLoading(true)
       const fts = await wallet.listAccountShares(accounts[accountIndex], offset, 8)
+      setLoading(false)
 
       setAccountShares(fts.items)
       setAccountSharesCount(fts.count)
@@ -27,8 +30,8 @@ export default function FungibleTokens() {
   }, [loadAccountShares])
 
   if (!accountShares.length) {
-    return <FungibleTokensEmpty />
+    return <FungibleTokensEmpty loading={loading} />
   }
 
-  return <FungibleTokensList setPagination={setPagination} count={accountSharesCount} />
+  return <FungibleTokensList setPagination={setPagination} count={accountSharesCount} loading={loading} />
 }

@@ -3,14 +3,16 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { WalletContext } from '../../../context/WalletContext'
 import { ERC20 } from '../../../services/api'
+import Loading from '../../shared/layout/Loading/Loading'
 import './FungibleTokensList.scss'
 
 interface Props {
   count: number
   setPagination: (offset: number) => void
+  loading: boolean
 }
 
-export default function FungibleTokensList({ count, setPagination }: Props) {
+export default function FungibleTokensList({ count, setPagination, loading }: Props) {
   const { accountShares, accounts, accountIndex } = useContext(WalletContext)
 
   const [accountSharesCount, setAccountSharesCount] = useState<Array<ERC20 & { sharesCount: string; erc721ImageUri: string }>>([])
@@ -45,6 +47,7 @@ export default function FungibleTokensList({ count, setPagination }: Props) {
 
   return (
     <Card className='ft-list-container'>
+      {loading && <Loading />}
       <div className='ft-list'>
         {accountSharesCount.map(ft => (
           <Link key={ft.address} to={`/contract/detail/${ft.address}`}>

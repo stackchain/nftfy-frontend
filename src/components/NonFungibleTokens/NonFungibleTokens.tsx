@@ -9,6 +9,7 @@ export default function NonFungibleTokens() {
   )
 
   const [offset, setOffset] = useState(0)
+  const [loading, setLoading] = useState(false)
 
   const setPagination = (offsetNumber: number) => {
     setOffset(offsetNumber)
@@ -16,7 +17,10 @@ export default function NonFungibleTokens() {
 
   const loadAccountItems = useCallback(async () => {
     if (wallet) {
+      setLoading(true)
       const nfts = await wallet.listAccountItems(accounts[accountIndex], offset, 12)
+      setLoading(false)
+
       if (nfts.items.length > 0) {
         setAccountItems(nfts.items)
         setAccountItemsCount(nfts.count)
@@ -29,8 +33,8 @@ export default function NonFungibleTokens() {
   }, [loadAccountItems])
 
   if (!accountItems.length) {
-    return <NonFungibleTokensEmpty />
+    return <NonFungibleTokensEmpty loading={loading} />
   }
 
-  return <NonFungibleTokensList setPagination={setPagination} count={accountItemsCount} />
+  return <NonFungibleTokensList setPagination={setPagination} count={accountItemsCount} loading={loading} />
 }

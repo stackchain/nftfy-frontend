@@ -1,11 +1,17 @@
 import { Card } from 'antd'
 import React from 'react'
 import ft from '../../../assets/ft.svg'
+import Loading from '../../shared/layout/Loading/Loading'
 import './FungibleTokensEmpty.scss'
 
-export default function FungibleTokensEmpty() {
+interface Props {
+  loading: boolean
+}
+
+export default function FungibleTokensEmpty({ loading }: Props) {
   return (
     <Card className='fungible-tokens-empty'>
+      {loading && <Loading />}
       <img src={ft} alt='Fungible Token' />
       <p>You need to convert some Non-Fungible Token into Fungible Token</p>
     </Card>
