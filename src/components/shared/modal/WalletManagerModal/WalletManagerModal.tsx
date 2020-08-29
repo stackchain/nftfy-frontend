@@ -33,7 +33,7 @@ export default function WalletManagerModal(props: Props) {
 
       setLoadingWallet(walletName)
 
-      const wallet = await initializeWallet(walletName)
+      const wallet = await initializeWallet(walletName, () => document.location.reload())
       const accounts = await wallet.getAccounts()
 
       if (accounts[0]) {

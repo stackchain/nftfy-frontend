@@ -86,8 +86,8 @@ async function getWeb3(walletName: WalletName, refreshHook?: () => void): Promis
       if (window.ethereum) {
         await window.ethereum.enable()
         if (refreshHook) {
-          window.ethereum.on('chainChanged', (chain) => refreshHook())
-          window.ethereum.on('accountsChanged', (accounts) => refreshHook())
+          window.ethereum.on('chainChanged', (chain: any) => refreshHook())
+          window.ethereum.on('accountsChanged', (accounts: any) => refreshHook())
         }
         return new Web3(window.ethereum)
       }

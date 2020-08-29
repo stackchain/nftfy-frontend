@@ -71,7 +71,7 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
       if (walletNameStorage && supportedWallets.includes(walletNameStorage as WalletName)) {
         try {
 
-          const walletStorage = await initializeWallet(walletNameStorage as WalletName)
+          const walletStorage = await initializeWallet(walletNameStorage as WalletName, () => document.location.reload())
           const accountsStorage = await walletStorage.getAccounts()
 
           if (accountsStorage[0]) {
