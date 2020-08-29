@@ -1,3 +1,8 @@
-.loading-bar {
-  margin-bottom: 20px;
+.loading-spin {
+  display: flex;
+  justify-content: center;
+
+  > div {
+    position: absolute;
+  }
 }

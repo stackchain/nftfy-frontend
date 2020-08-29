@@ -23,7 +23,6 @@ export default function NonFungibleTokensList({ count, setPagination, loading }:
 
   return (
     <Card className='nft-list-container'>
-      {loading && <Loading />}
       <AddNonFungibleTokens />
       <div className='nft-list'>
         {accountItems.map(nft => (
@@ -41,6 +40,7 @@ export default function NonFungibleTokensList({ count, setPagination, loading }:
           <Pagination size='small' current={page} total={count} onChange={setPageNumber} />
         </div>
       )}
+      {loading && <Loading />}
     </Card>
   )
 }

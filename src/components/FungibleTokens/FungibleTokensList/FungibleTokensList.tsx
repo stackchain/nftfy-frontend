@@ -47,7 +47,6 @@ export default function FungibleTokensList({ count, setPagination, loading }: Pr
 
   return (
     <Card className='ft-list-container'>
-      {loading && <Loading />}
       <div className='ft-list'>
         {accountSharesCount.map(ft => (
           <Link key={ft.address} to={`/contract/detail/${ft.address}`}>
@@ -70,6 +69,7 @@ export default function FungibleTokensList({ count, setPagination, loading }: Pr
           <Pagination size='small' current={page} total={count} onChange={setPageNumber} />
         </div>
       )}
+      {loading && <Loading />}
     </Card>
   )
 }

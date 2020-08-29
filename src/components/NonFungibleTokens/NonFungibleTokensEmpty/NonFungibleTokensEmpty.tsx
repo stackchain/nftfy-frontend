@@ -15,14 +15,14 @@ export default function NonFungibleTokensEmpty({ loading }: Props) {
 
   return (
     <Card className='non-fungible-tokens-empty'>
-      {loading && <Loading />}
       <img src={nft} alt='Non Fungible Token' />
       {!accounts[accountIndex] ? (
         <p>Connect your Ethereum Wallet to set Non-Fungible Tokens</p>
       ) : (
-          <p>Input your Non Fungible Token Hash on the form</p>
-        )}
+        <p>Input your Non Fungible Token Hash on the form</p>
+      )}
       <AddNonFungibleTokens />
+      {loading && <Loading />}
     </Card>
   )
 }

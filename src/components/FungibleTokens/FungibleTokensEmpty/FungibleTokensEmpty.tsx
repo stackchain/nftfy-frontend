@@ -11,9 +11,9 @@ interface Props {
 export default function FungibleTokensEmpty({ loading }: Props) {
   return (
     <Card className='fungible-tokens-empty'>
-      {loading && <Loading />}
       <img src={ft} alt='Fungible Token' />
       <p>You need to convert some Non-Fungible Token into Fungible Token</p>
+      {loading && <Loading />}
     </Card>
   )
 }

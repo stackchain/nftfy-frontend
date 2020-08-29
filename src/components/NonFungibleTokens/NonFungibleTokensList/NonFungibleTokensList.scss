@@ -1,6 +1,8 @@
 @import '../../../variables.scss';
 
 .nft-list-container {
+  padding-bottom: 10px;
+
   .add-non-fungible-form input {
     flex: 1;
     margin-bottom: 20px;

@@ -1,6 +1,8 @@
 @import '../../../variables.scss';
 
 .ft-list-container {
+  padding-bottom: 10px;
+
   a {
     &:hover {
       opacity: 0.8;
