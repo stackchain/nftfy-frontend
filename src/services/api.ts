@@ -613,7 +613,7 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
     const contracts: ERC721[] = []
     switch (network) {
       case 'main':
-        contracts.push(await newERC721('0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')) // CK
+        // contracts.push(await newERC721('0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')) // CK
         contracts.push(await newERC721('0xc1Caf0C19A8AC28c41Fe59bA6c754e4b9bd54dE9')) // CriptoSkulls
         // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
         contracts.push(await newERC721('0x959e104E1a4dB6317fA58F8295F586e1A978c297')) // EST
@@ -624,37 +624,32 @@ export async function initializeWallet(walletName: WalletName): Promise<Wallet> 
         contracts.push(await newERC721('0x22C1f6050E56d2876009903609a2cC3fEf83B415')) // POAP
         contracts.push(await newERC721('0x60F80121C31A0d46B5279700f9DF786054aa5eE5')) // RARI
         contracts.push(await newERC721('0xb932a70A57673d89f4acfFBE830E8ed7f75Fb9e0')) // SUPR
-        contracts.push(await newERC721('0x0e3a2a1f2146d86a604adc220b4967a898d7fe07')) //  Gods Unchained Cards
-        contracts.push(await newERC721('0x8853b05833029e3cf8d3cbb592f9784fa43d2a79')) //  Codex Record
-        contracts.push(await newERC721('0x2c115fd47e9aa566176586a07847ccf2de678e28')) //  Mintbase
-        contracts.push(await newERC721('0x8cf3d6bbaead351bdd4533691855d08b2d814a2d')) //  BAEV
-        contracts.push(await newERC721('0xb77e25acbf8e75a91bf468120c5789534a4dce52')) //  Koda
-        contracts.push(await newERC721('0x629a673a8242c2ac4b7b8c5d8735fbeac21a6205')) //  SORARE
-        contracts.push(await newERC721('0xd1e5b0ff1287aa9f9a268759062e4ab08b9dacbe')) //  .CRYPTO
-        contracts.push(await newERC721('0x273f7f8e6489682df756151f5525576e322d51a3')) //  My Crypto Heros
-        contracts.push(await newERC721('0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85')) //  ENS
-        contracts.push(await newERC721('0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d')) //  Decentraland
-        contracts.push(await newERC721('0xc03844f07f86ad1d90a1c4a2a8204dcf00f3a991')) //  Brave Frontier Heros
-        contracts.push(await newERC721('0x22c1f6050e56d2876009903609a2cc3fef83b415')) //  Poap
-        contracts.push(await newERC721('0xd7431870ada2f9f0053180610974f63bf8e9f504')) //  Non Fungible Gerbils
-        contracts.push(await newERC721('0x67cbbb366a51fff9ad869d027e496ba49f5f6d55')) //  Crypto Spels
-        contracts.push(await newERC721('0x959e104e1a4db6317fa58f8295f586e1a978c297')) //  F1 Delta Time
-        contracts.push(await newERC721('0x1d963688fe2209a98db35c67a041524822cf04ff')) //  Marble
-        contracts.push(await newERC721('0xdf74156420bd57ab387b195ed81eca36f9fabaca')) //  Undefined
-        contracts.push(await newERC721('0xff488fd296c38a24cccc60b43dd7254810dab64e')) //  SUPER RARE
-        contracts.push(await newERC721('0xdc76a2de1861ea49e8b41a1de1e461085e8f369f')) //  TerraVirtuaNFT
-        contracts.push(await newERC721('0xdceaf1652a131F32a821468Dc03A92df0edd86Ea')) //  My Crypto Heroes Extension
-        contracts.push(await newERC721('0xff488fd296c38a24cccc60b43dd7254810dab64e')) //  Zed Token
-        contracts.push(await newERC721('0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a')) //  Sandbox's Lands
-        contracts.push(await newERC721('0xfbeef911dc5821886e1dda71586d90ed28174b7d')) //  KnownOriginDigitalAsset
-        contracts.push(await newERC721('0x6fa769eed284a94a73c15299e1d3719b29ae2f52')) //  BFH:Unit
-        contracts.push(await newERC721('0x25710b50e1db29d38e2e25e39eb4d7e6e22e81a1')) //  Whale Shark
-        contracts.push(await newERC721('0xa7f87e8d193e29bf1ed050fdd511b79fe0264d8b')) //  Crypto stampm Edition 2
-        contracts.push(await newERC721('0xf67f2b39652019c9a00d54540480ebb0fae593f2')) //  Ark Gallery
-        contracts.push(await newERC721('0xb6dae651468e9593e4581705a09c10a76ac1e0c8')) //  Async Art
-        contracts.push(await newERC721('0xf06059f01f6f08a603c939359a0a1186f7687685')) //  MCP Citizen
-        contracts.push(await newERC721('0xb33d6c9487d7445b1996be15d67883d16fbdce07')) //  DCL Plazas
 
+        contracts.push(await newERC721('0x0E3A2A1f2146d86A604adc220b4967A898D7Fe07')) // Gods Unchained Cards
+        contracts.push(await newERC721('0x8853B05833029e3Cf8d3Cbb592f9784FA43d2a79')) // Codex Record
+        contracts.push(await newERC721('0x2C115fD47e9aa566176586A07847CCF2dE678e28')) // Mintbase
+        contracts.push(await newERC721('0x8cF3D6bBaEad351BdD4533691855d08B2d814a2D')) // BAEV
+        contracts.push(await newERC721('0xb77e25AcBf8e75A91bf468120C5789534A4dCE52')) // Koda
+        contracts.push(await newERC721('0x629A673A8242c2AC4B7B8C5D8735fbeac21A6205')) // SORARE
+        contracts.push(await newERC721('0xD1E5b0FF1287aA9f9A268759062E4Ab08b9Dacbe')) // .CRYPTO
+        contracts.push(await newERC721('0x273f7F8E6489682Df756151F5525576E322d51A3')) // My Crypto Heros
+        contracts.push(await newERC721('0xC03844f07F86AD1D90a1c4A2A8204Dcf00F3a991')) // Brave Frontier Heros
+        contracts.push(await newERC721('0xd7431870AdA2F9F0053180610974f63bf8E9F504')) // Non Fungible Gerbils
+        contracts.push(await newERC721('0x67cBBb366a51FFf9ad869d027E496Ba49f5f6D55')) // Crypto Spels
+        contracts.push(await newERC721('0x959e104E1a4dB6317fA58F8295F586e1A978c297')) // F1 Delta Time
+        contracts.push(await newERC721('0x1d963688FE2209A98dB35C67A041524822Cf04ff')) // Marble
+        contracts.push(await newERC721('0xDF74156420Bd57ab387B195ed81EcA36F9fABAca')) // ExitNFT
+        contracts.push(await newERC721('0xFf488FD296c38a24CCcC60B43DD7254810dAb64e')) // Zed ZT Token
+        contracts.push(await newERC721('0xDC76a2DE1861Ea49E8b41A1De1E461085E8F369F')) // TerraVirtuaNFT
+        contracts.push(await newERC721('0xdceaf1652a131F32a821468Dc03A92df0edd86Ea')) // My Crypto Heroes Extension
+        contracts.push(await newERC721('0x50f5474724e0Ee42D9a4e711ccFB275809Fd6d4a')) // Sandbox's Lands
+        contracts.push(await newERC721('0x6Fa769EED284a94A73C15299e1D3719B29Ae2F52')) // BFH:Unit
+        contracts.push(await newERC721('0x25710B50E1Db29d38e2E25e39eb4d7e6e22E81A1')) // Whale Shark
+        contracts.push(await newERC721('0xa7f87E8D193E29bf1eD050Fdd511B79Fe0264d8B')) // Crypto stampm Edition 2
+        contracts.push(await newERC721('0xf67f2b39652019C9A00D54540480ebb0FAe593F2')) // Ark Gallery
+        contracts.push(await newERC721('0xb6dAe651468E9593E4581705a09c10A76AC1e0c8')) // Async Art
+        contracts.push(await newERC721('0xF06059F01F6f08a603c939359a0A1186F7687685')) // MCP Citizen
+        contracts.push(await newERC721('0xb33D6C9487d7445B1996be15D67883D16fBdcE07')) // DCL Plazas
         break
       case 'ropsten':
         // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
