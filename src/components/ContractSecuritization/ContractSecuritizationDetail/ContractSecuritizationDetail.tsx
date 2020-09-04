@@ -24,6 +24,7 @@ export default function ContractSecuritizationDetail() {
   const [exitPrice, setExitPrice] = useState('')
   const [pay, setPay] = useState('')
   const [receive, setReceive] = useState('')
+  const [vaultBalance, setVaultBalance] = useState('')
   const [loading, setLoading] = useState(false)
 
   const location = useLocation()
@@ -46,13 +47,18 @@ export default function ContractSecuritizationDetail() {
 
   const getContractData = useCallback(async () => {
     if (contract) {
+      const vaultBalance = await contract.getVaultBalance()
+      const totalSuply = await contract.getTotalSupply()
+      const shareBalance = await contract.getAccountBalance(accounts[accountIndex])
+
       setIsRedeemable(await contract.isRedeemable())
       setIsClaimable(await contract.isClaimable())
-      setIssuedShare(await contract.getAccountBalance(accounts[accountIndex]))
+      setIssuedShare(shareBalance)
       setExitPrice(`${Number(await contract.getExitPrice()).toFixed(8)} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
       setTotalSupply(`${Number(await contract.getTotalSupply()).toLocaleString()}`)
       setSharesCount(await contract.getSharesCount())
-      setReceive(await contract.getVaultBalance())
+      setReceive(String((Number(vaultBalance) / Number(totalSuply)) * Number(vaultBalance)))
+      setVaultBalance(`${Number(await contract.getVaultBalance()).toFixed(8)} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
       setPay(
         `${Number(await contract.getAccountRedeemAmount(accounts[accountIndex])).toFixed(8)} ${
           (await contract.getPaymentToken())?.symbol || 'ETH'
@@ -120,7 +126,13 @@ export default function ContractSecuritizationDetail() {
               </div>
             )}
             <div className='contract-data-item'>
-              <ContractData name={contract?.name || ''} totalSupply={totalSupply} exitPrice={exitPrice} address={contract.address} />
+              <ContractData
+                name={contract?.name || ''}
+                totalSupply={totalSupply}
+                exitPrice={exitPrice}
+                address={contract.address}
+                vaultBalance={vaultBalance}
+              />
             </div>
           </div>
         )}

@@ -7,9 +7,10 @@ interface Props {
   totalSupply: string
   exitPrice: string
   address: string
+  vaultBalance: string
 }
 
-export default function ContractData({ name, totalSupply, exitPrice, address }: Props) {
+export default function ContractData({ name, totalSupply, exitPrice, address, vaultBalance }: Props) {
   const columns = [
     {
       title: "Share's Contract Name",
@@ -38,7 +39,7 @@ export default function ContractData({ name, totalSupply, exitPrice, address }: 
     },
     {
       label: 'Vault Balance',
-      data: 0 // temp - read from contract
+      data: vaultBalance
     }
   ]
 
