@@ -44,7 +44,7 @@ export default function ContractSecuritizationEdit() {
   }
 
   const handlePaymentToken = (value: string) => {
-    setPaymentToken(value)
+    setPaymentToken(value.replace(/[^0-9.,]/g, ''))
   }
 
   const selectAfter = (
@@ -78,7 +78,6 @@ export default function ContractSecuritizationEdit() {
     }
   ]
   const securitize = async () => {
-
     infoNotification('Allow securitization transaction in the wallet')
 
     if (Number(exitPrice) < 0) {
