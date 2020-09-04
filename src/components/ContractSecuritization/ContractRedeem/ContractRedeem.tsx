@@ -25,7 +25,7 @@ export default function ContractRedeem({ redeem, participation, sharesCount, sha
 
   const dataSource = [
     {
-      label: 'Share Balance',
+      label: 'Your Participation',
       data: shareBalance && sharesCount ? `${((Number(shareBalance) / Number(sharesCount)) * 100).toFixed(0)}%` : ''
     },
     {
