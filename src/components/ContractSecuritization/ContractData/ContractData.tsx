@@ -10,10 +10,9 @@ interface Props {
 }
 
 export default function ContractData({ name, totalSupply, exitPrice, address }: Props) {
-
   const columns = [
     {
-      title: 'Share Contract Name',
+      title: "Share's Contract Name",
       dataIndex: 'label',
       key: 'label'
     },
@@ -23,7 +22,6 @@ export default function ContractData({ name, totalSupply, exitPrice, address }: 
       key: 'data'
     }
   ]
-
 
   const dataSource = [
     {
@@ -37,6 +35,10 @@ export default function ContractData({ name, totalSupply, exitPrice, address }: 
     {
       label: 'Exit Price',
       data: exitPrice
+    },
+    {
+      label: 'Vault Balance',
+      data: 0 // temp - read from contract
     }
   ]
 

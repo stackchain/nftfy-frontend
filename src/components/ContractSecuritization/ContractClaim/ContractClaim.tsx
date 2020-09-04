@@ -23,11 +23,11 @@ export default function ContractClaim({ claim, shares, receive, loading }: Props
 
   const dataSource = [
     {
-      label: 'Your Participation',
+      label: 'Share Balance',
       data: shares
     },
     {
-      label: 'Share Balance',
+      label: 'Claim Amount',
       data: receive
     }
   ]
