@@ -19,6 +19,7 @@ export default function ContractSecuritizationDetail() {
   const [isClaimable, setIsClaimable] = useState(false)
 
   const [totalSupply, setTotalSupply] = useState('')
+  const [sharesCount, setSharesCount] = useState('')
   const [issuedShare, setIssuedShare] = useState('')
   const [exitPrice, setExitPrice] = useState('')
   const [pay, setPay] = useState('')
@@ -50,8 +51,13 @@ export default function ContractSecuritizationDetail() {
       setIssuedShare(await contract.getAccountBalance(accounts[accountIndex]))
       setExitPrice(`${Number(await contract.getExitPrice()).toFixed(8)} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
       setTotalSupply(`${Number(await contract.getTotalSupply()).toLocaleString()}`)
+      setSharesCount(await contract.getSharesCount())
       setReceive(await contract.getVaultBalance())
-      setPay(`${Number(await contract.getAccountRedeemAmount(accounts[accountIndex])).toFixed(8)} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
+      setPay(
+        `${Number(await contract.getAccountRedeemAmount(accounts[accountIndex])).toFixed(8)} ${
+          (await contract.getPaymentToken())?.symbol || 'ETH'
+        }`
+      )
     }
   }, [contract, accounts, accountIndex])
 
@@ -74,8 +80,6 @@ export default function ContractSecuritizationDetail() {
         errorNotification('Redeem transaction failure, please check in the wallet')
         setLoading(false)
       }
-
-
     }
   }
 
@@ -100,6 +104,7 @@ export default function ContractSecuritizationDetail() {
             {isRedeemable && (
               <div className='contract-redeem-item'>
                 <ContractRedeem
+                  sharesCount={sharesCount}
                   redeem={redeemContract}
                   participation={`${(issuedShare && totalSupply && (Number(issuedShare) / Number(totalSupply)) * 100) || 100}%`}
                   shareBalance={issuedShare}

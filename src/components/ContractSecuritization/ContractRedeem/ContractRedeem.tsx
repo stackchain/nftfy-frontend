@@ -5,12 +5,13 @@ import './ContractRedeem.scss'
 interface Props {
   redeem: () => void
   participation: string
+  sharesCount: string
   shareBalance: string
   pay: string
   loading: boolean
 }
 
-export default function ContractRedeem({ redeem, participation, shareBalance, pay, loading }: Props) {
+export default function ContractRedeem({ redeem, participation, sharesCount, shareBalance, pay, loading }: Props) {
   const columns = [
     {
       dataIndex: 'label',
@@ -25,7 +26,7 @@ export default function ContractRedeem({ redeem, participation, shareBalance, pa
   const dataSource = [
     {
       label: 'Share Balance',
-      data: participation
+      data: shareBalance && sharesCount ? `${((Number(shareBalance) / Number(sharesCount)) * 100).toFixed(0)}%` : ''
     },
     {
       label: 'Share Balance',
