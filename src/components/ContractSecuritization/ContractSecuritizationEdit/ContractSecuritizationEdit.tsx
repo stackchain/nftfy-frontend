@@ -70,7 +70,7 @@ export default function ContractSecuritizationEdit() {
   const dataSource = [
     {
       label: 'Shares',
-      data: Number(shares).toLocaleString()
+      data: Number(shares).toLocaleString('en-US')
     },
     {
       label: 'Exit Price',

@@ -30,7 +30,7 @@ export default function ContractRedeem({ redeem, participation, sharesCount, sha
     },
     {
       label: 'Share Balance',
-      data: Number(shareBalance).toLocaleString()
+      data: Number(shareBalance).toLocaleString('en-US')
     },
     {
       label: 'Pay Amount',

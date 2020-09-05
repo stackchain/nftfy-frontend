@@ -58,7 +58,7 @@ export default function FungibleTokensList({ count, setPagination, loading }: Pr
               </div>
               <div>
                 <div className='ft-name'>{ft.name}</div>
-                <div className='ft-shares'>{`${Number(ft.sharesCount).toLocaleString()} ${ft.symbol}`}</div>
+                <div className='ft-shares'>{`${Number(ft.sharesCount).toLocaleString('en-US')} ${ft.symbol}`}</div>
               </div>
             </div>
           </Link>

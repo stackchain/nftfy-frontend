@@ -25,6 +25,7 @@ export default function ContractSecuritizationDetail() {
   const [pay, setPay] = useState('')
   const [receive, setReceive] = useState('')
   const [vaultBalance, setVaultBalance] = useState('')
+  const [paymentToken, setPaymentToken] = useState('')
   const [loading, setLoading] = useState(false)
 
   const location = useLocation()
@@ -47,17 +48,16 @@ export default function ContractSecuritizationDetail() {
 
   const getContractData = useCallback(async () => {
     if (contract) {
-      const vaultBalance = await contract.getVaultBalance()
-      const totalSuply = await contract.getTotalSupply()
-      const shareBalance = await contract.getAccountBalance(accounts[accountIndex])
-
       setIsRedeemable(await contract.isRedeemable())
       setIsClaimable(await contract.isClaimable())
-      setIssuedShare(shareBalance)
+      setIssuedShare(await contract.getAccountBalance(accounts[accountIndex]))
       setExitPrice(`${Number(await contract.getExitPrice()).toFixed(8)} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
-      setTotalSupply(`${Number(await contract.getTotalSupply()).toLocaleString()}`)
+      setTotalSupply(`${Number(await contract.getTotalSupply()).toLocaleString('en-US')}`)
       setSharesCount(await contract.getSharesCount())
-      setReceive(String((Number(vaultBalance) / Number(totalSuply)) * Number(vaultBalance)))
+      setPaymentToken(`${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
+
+      setReceive(await contract.getAccountVaultBalance(accounts[accountIndex]))
+
       setVaultBalance(`${Number(await contract.getVaultBalance()).toFixed(8)} ${(await contract.getPaymentToken())?.symbol || 'ETH'}`)
       setPay(
         `${Number(await contract.getAccountRedeemAmount(accounts[accountIndex])).toFixed(8)} ${
@@ -122,7 +122,7 @@ export default function ContractSecuritizationDetail() {
 
             {isClaimable && (
               <div className='contract-claim-item'>
-                <ContractClaim claim={claimContract} receive={receive} shares={issuedShare} loading={loading} />
+                <ContractClaim claim={claimContract} shares={issuedShare} receive={receive} paymentToken={paymentToken} loading={loading} />
               </div>
             )}
             <div className='contract-data-item'>

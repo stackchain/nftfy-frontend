@@ -7,9 +7,10 @@ interface Props {
   shares: string
   receive: string
   loading: boolean
+  paymentToken: string
 }
 
-export default function ContractClaim({ claim, shares, receive, loading }: Props) {
+export default function ContractClaim({ claim, shares, receive, paymentToken, loading }: Props) {
   const columns = [
     {
       dataIndex: 'label',
@@ -24,11 +25,11 @@ export default function ContractClaim({ claim, shares, receive, loading }: Props
   const dataSource = [
     {
       label: 'Share Balance',
-      data: shares
+      data: Number(shares).toLocaleString('en-US')
     },
     {
       label: 'Claim Amount',
-      data: receive
+      data: `${Number(receive).toFixed(8)} ${paymentToken}`
     }
   ]
 
