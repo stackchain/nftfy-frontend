@@ -2,6 +2,13 @@
 
 .contract-securitization-edit {
   margin-bottom: 40px;
+  padding-bottom: 20px;
+
+  .no-wallet {
+    margin-top: 40px;
+    text-align: center;
+  }
+
   .content {
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -31,6 +38,21 @@
 
     button {
       width: 100%;
+    }
+
+    .already-securitized {
+      text-align: center;
+      .title {
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  .invalid-contract {
+    padding: 80px 20px;
+    text-align: center;
+    h2 {
+      margin-bottom: 20px;
     }
   }
 }

@@ -26,7 +26,7 @@ export default function NonFungibleTokensList({ count, setPagination, loading }:
       <AddNonFungibleTokens />
       <div className='nft-list'>
         {accountItems.map(nft => (
-          <Link key={nft.tokenId} to={`/contract/securitize/${nft.tokenId}`}>
+          <Link key={nft.tokenId} to={`/contract/securitize/${nft.contract.address}/${nft.tokenId}`}>
             <div className='nft-item'>
               {nft.imageUri && <img src={nft.imageUri.split('https://cors-anywhere.herokuapp.com/')[1] || nft.imageUri} alt={nft.name} />}
               <div className='contract-name'>{nft.contract.name}</div>
