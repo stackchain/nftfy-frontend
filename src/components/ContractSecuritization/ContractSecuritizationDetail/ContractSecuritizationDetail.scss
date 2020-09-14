@@ -1,13 +1,14 @@
 @import '../../../styles.scss';
 .contract-securitization-detail {
   margin-bottom: 40px;
+  padding-bottom: 20px;
   .content {
     display: grid;
     grid-template-columns: 1fr 3fr;
     grid-gap: 1.5rem;
 
     .contract-item {
-      max-width: 400px;
+      max-width: 500px;
       justify-self: center;
 
       table {
@@ -18,6 +19,19 @@
         text-align: end;
       }
     }
+  }
+
+  .contract-not-found {
+    text-align: center;
+    .title {
+      margin-bottom: 20px;
+    }
+  }
+
+  .no-wallet {
+    margin-top: 40px;
+    text-align: center;
+    margin-bottom: 40px;
   }
 }
 

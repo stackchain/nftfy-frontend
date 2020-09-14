@@ -128,6 +128,20 @@ export default function ContractSecuritizationEdit() {
     )
   }
 
+  if (!contract?.name) {
+    return (
+      <Card className='contract-securitization-edit'>
+        <div className='contract-not-found'>
+          <h2>Contract not found</h2>
+
+          <Button type='primary' size='large' href={'/'}>
+            Go to Home
+          </Button>
+        </div>
+      </Card>
+    )
+  }
+
   return (
     <Card className='contract-securitization-edit'>
       <div className='content'>

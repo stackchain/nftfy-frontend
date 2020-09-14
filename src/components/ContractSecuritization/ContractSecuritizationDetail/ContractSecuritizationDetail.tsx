@@ -1,7 +1,8 @@
-import { Card } from 'antd'
+import { Button, Card } from 'antd'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { WalletContext } from '../../../context/WalletContext'
+import { ERC20 } from '../../../services/api'
 import { errorNotification, infoNotification } from '../../../services/notification'
 import ContractClaim from '../ContractClaim/ContractClaim'
 import ContractData from '../ContractData/ContractData'
@@ -10,7 +11,7 @@ import ContractRedeem from '../ContractRedeem/ContractRedeem'
 import './ContractSecuritizationDetail.scss'
 
 export default function ContractSecuritizationDetail() {
-  const { accountShares, accountIndex, accounts } = useContext(WalletContext)
+  const { accountIndex, accounts } = useContext(WalletContext)
   const [contractImg, setContractImg] = useState<string>('')
   const [contractName, setContractName] = useState<string>('')
   const [contractDescription, setContractDescription] = useState('')
@@ -29,12 +30,21 @@ export default function ContractSecuritizationDetail() {
   const [loading, setLoading] = useState(false)
 
   const location = useLocation()
-  const history = useHistory()
   const contractId = location.pathname.split('/contract/detail/')[1]
 
-  const contract = accountShares.find(accountShare => accountShare.address === contractId)
+  const { wallet } = useContext(WalletContext)
+  const [contract, setcontract] = useState<ERC20 | undefined>(undefined)
 
-  if (!contract) history.push('/')
+  const getcontract = useCallback(async () => {
+    if (wallet) {
+      const contractShares = await wallet.retrieveShares(contractId)
+      setcontract(contractShares)
+    }
+  }, [wallet, contractId])
+
+  useEffect(() => {
+    getcontract()
+  }, [getcontract])
 
   const getContractImg = useCallback(async () => {
     if (contract) {
@@ -81,7 +91,7 @@ export default function ContractSecuritizationDetail() {
         await contract.redeem(accounts[accountIndex])
         setIsRedeemable(false)
         setLoading(false)
-        history.push('/')
+        // apontar pro contrato ao contrario
       } catch (error) {
         errorNotification('Redeem transaction failure, please check in the wallet')
         setLoading(false)
@@ -95,8 +105,33 @@ export default function ContractSecuritizationDetail() {
       await contract.claim(accounts[accountIndex])
       setIsClaimable(false)
       setLoading(false)
-      history.push('/')
+      // apontar pro contrato ao contrario
     }
+  }
+
+  if (!wallet) {
+    return (
+      <Card className='contract-securitization-detail'>
+        <div className='no-wallet'>
+          <h2>Please connect the wallet to access the contract</h2>
+        </div>
+      </Card>
+    )
+  }
+
+  if (!contract?.name) {
+    return (
+      <Card className='contract-securitization-detail'>
+        <div className='contract-not-found'>
+          <div className='title'>
+            <h2>Contract not found</h2>
+          </div>
+          <Button type='primary' size='large' href='/'>
+            Go to Home
+          </Button>
+        </div>
+      </Card>
+    )
   }
 
   return (

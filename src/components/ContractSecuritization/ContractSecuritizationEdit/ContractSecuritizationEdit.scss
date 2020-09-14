@@ -4,11 +4,6 @@
   margin-bottom: 40px;
   padding-bottom: 20px;
 
-  .no-wallet {
-    margin-top: 40px;
-    text-align: center;
-  }
-
   .content {
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -22,7 +17,7 @@
   }
 
   .securitization-form {
-    max-width: 400px;
+    max-width: 500px;
     justify-self: center;
 
     .ant-input-group-addon:last-child {
@@ -41,11 +36,26 @@
     }
 
     .already-securitized {
-      text-align: center;
       .title {
         margin-bottom: 20px;
       }
+      a {
+        text-align: center;
+      }
     }
+  }
+
+  .contract-not-found {
+    text-align: center;
+    .title {
+      margin-bottom: 20px;
+    }
+  }
+
+  .no-wallet {
+    margin-top: 40px;
+    text-align: center;
+    margin-bottom: 40px;
   }
 
   .invalid-contract {
