@@ -19,8 +19,8 @@ export default function ContractSecuritizationEdit() {
 
   const location = useLocation()
   const history = useHistory()
-  const contractAddress = location.pathname.split('/')[3]
-  const tokenId = location.pathname.split('/')[4]
+  const contractAddress = location.pathname.split('/')[4]
+  const tokenId = location.pathname.split('/')[5]
 
   const [contract, setcontract] = useState<ERC721Item | undefined>(undefined)
   const [contractIsSecuritized, setContractIsSecuritized] = useState<boolean | undefined>(undefined)
@@ -134,7 +134,7 @@ export default function ContractSecuritizationEdit() {
         <div className='contract-not-found'>
           <h2>Contract not found</h2>
 
-          <Button type='primary' size='large' href={'/'}>
+          <Button type='primary' size='large' href='/dapp'>
             Go to Home
           </Button>
         </div>
@@ -159,7 +159,7 @@ export default function ContractSecuritizationEdit() {
               <div className='title'>
                 <h2>Contract is already securitized</h2>
               </div>
-              <Button type='primary' size='large' href={'/'}>
+              <Button type='primary' size='large' href='/dapp'>
                 Go to Home
               </Button>
             </div>

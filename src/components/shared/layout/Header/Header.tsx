@@ -32,7 +32,7 @@ export default function Header(props: Props) {
   return (
     <header className='header'>
       <div className='logo'>
-        <Link to='/'>
+        <Link to='/dapp'>
           <img src={ntfy} alt='NTFFY' />
         </Link>
       </div>

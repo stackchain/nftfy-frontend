@@ -7,9 +7,9 @@ export default function Routes() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path='/' exact component={Home} />
-        <Route path='/contract/securitize/:contract/:id' component={ContractSecuritization} />
-        <Route path='/contract/detail/:id' component={ContractSecuritization} />
+        <Route path='/dapp' exact component={Home} />
+        <Route path='/dapp/contract/securitize/:contract/:id' component={ContractSecuritization} />
+        <Route path='/dapp/contract/detail/:id' component={ContractSecuritization} />
         <Route path='*' component={Home} />
       </Switch>
     </BrowserRouter>
