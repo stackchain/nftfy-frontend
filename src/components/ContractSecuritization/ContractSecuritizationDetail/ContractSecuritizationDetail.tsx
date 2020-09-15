@@ -1,9 +1,10 @@
 import { Button, Card } from 'antd'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { WalletContext } from '../../../context/WalletContext'
 import { ERC20 } from '../../../services/api'
 import { errorNotification, infoNotification } from '../../../services/notification'
+import Loading from '../../shared/layout/Loading/Loading'
 import ContractClaim from '../ContractClaim/ContractClaim'
 import ContractData from '../ContractData/ContractData'
 import ContractImage from '../ContractImage/ContractImage'
@@ -11,6 +12,7 @@ import ContractRedeem from '../ContractRedeem/ContractRedeem'
 import './ContractSecuritizationDetail.scss'
 
 export default function ContractSecuritizationDetail() {
+  const history = useHistory()
   const { accountIndex, accounts } = useContext(WalletContext)
   const [contractImg, setContractImg] = useState<string>('')
   const [contractName, setContractName] = useState<string>('')
@@ -36,10 +38,12 @@ export default function ContractSecuritizationDetail() {
   const [contract, setcontract] = useState<ERC20 | undefined>(undefined)
 
   const getcontract = useCallback(async () => {
+    setLoading(true)
     if (wallet) {
       const contractShares = await wallet.retrieveShares(contractId)
       setcontract(contractShares)
     }
+    setLoading(false)
   }, [wallet, contractId])
 
   useEffect(() => {
@@ -91,7 +95,7 @@ export default function ContractSecuritizationDetail() {
         await contract.redeem(accounts[accountIndex])
         setIsRedeemable(false)
         setLoading(false)
-        // apontar pro contrato ao contrario
+        history.push(`/`)
       } catch (error) {
         errorNotification('Redeem transaction failure, please check in the wallet')
         setLoading(false)
@@ -105,7 +109,7 @@ export default function ContractSecuritizationDetail() {
       await contract.claim(accounts[accountIndex])
       setIsClaimable(false)
       setLoading(false)
-      // apontar pro contrato ao contrario
+      history.push(`/`)
     }
   }
 
@@ -119,7 +123,15 @@ export default function ContractSecuritizationDetail() {
     )
   }
 
-  if (!contract?.name) {
+  if (loading) {
+    return (
+      <Card className='contract-securitization-edit'>
+        <Loading />
+      </Card>
+    )
+  }
+
+  if (!contract?.address) {
     return (
       <Card className='contract-securitization-detail'>
         <div className='contract-not-found'>
@@ -133,7 +145,6 @@ export default function ContractSecuritizationDetail() {
       </Card>
     )
   }
-
   return (
     <Card className='contract-securitization-detail'>
       <div className='content'>
