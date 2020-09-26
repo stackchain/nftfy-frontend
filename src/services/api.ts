@@ -16,13 +16,13 @@ export interface Wallet {
   network: string
   getAccounts(): Promise<string[]>
   selectAccount(address: string): Promise<void>
-  validateAddress(address: string): Promise<boolean>
+  validateAddress(address: string, tokenId?: string): Promise<boolean>
   getEtherBalance(address: string): Promise<string>
   listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
   listAccountItems(address: string, offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }>
   retrieveItem(address: string, tokenId: string): Promise<ERC721Item>
   retrieveShares(address: string): Promise<ERC20>
-  registerERC721(address: string): Promise<boolean>
+  registerERC721(address: string, tokenId?: string): Promise<boolean>
   listPaymentTokens(): Promise<ERC20[]>
 }
 

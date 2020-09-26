@@ -10,20 +10,24 @@ export default function AddNonFungibleTokens() {
     WalletContext
   )
 
-  const [nftInput, setNftInput] = useState('')
+  const [nftContract, setNftContract] = useState('')
+  const [nftTokenId, setNftTokenId] = useState('')
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNftInput(event.target.value)
+  const handleContract = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNftContract(event.target.value)
+  }
+
+  const handleTokenId = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNftTokenId(event.target.value)
   }
 
   const addNft = async () => {
-    if (!nftInput.length) {
+    if (!nftContract.length) {
       errorNotification('Smart contract is empty')
-
-    } else if (wallet && !(await wallet.validateAddress(nftInput))) {
+    } else if (wallet && !(await wallet.validateAddress(nftContract, nftTokenId))) {
       errorNotification('Smart contract is invalid')
     } else if (wallet) {
-      await wallet.registerERC721(nftInput)
+      await wallet.registerERC721(nftContract, nftTokenId)
 
       if (wallet) {
         setLoading(false)
@@ -45,7 +49,8 @@ export default function AddNonFungibleTokens() {
 
   return (
     <div className='add-non-fungible-form'>
-      <Input placeholder='0x0000000000000000000000000000000000000000' disabled={!accounts[accountIndex]} onChange={handleInput} value={nftInput} />
+      <Input placeholder='Contract (required)' disabled={!accounts[accountIndex]} onChange={handleContract} value={nftContract} />
+      <Input placeholder='Token ID (optional)' disabled={!accounts[accountIndex]} onChange={handleTokenId} value={nftTokenId} />
       <Button type='primary' disabled={!accounts[accountIndex]} onClick={addNft} loading={loading}>
         Add NFT
       </Button>
