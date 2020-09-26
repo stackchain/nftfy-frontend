@@ -109,3 +109,7 @@ html {
 .ant-pagination-prev:hover .ant-pagination-item-link {
   color: $orange;
 }
+
+.ant-table-tbody > tr > td:first-of-type {
+  font-weight: bold;
+}

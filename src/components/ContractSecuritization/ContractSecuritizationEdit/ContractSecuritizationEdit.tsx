@@ -11,7 +11,7 @@ import './ContractSecuritizationEdit.scss'
 const { Option } = Select
 
 export default function ContractSecuritizationEdit() {
-  const { wallet } = useContext(WalletContext)
+  const { wallet, accounts, accountIndex } = useContext(WalletContext)
   const [loading, setLoading] = useState(false)
   const [paymentTokens, setPaymentTokens] = useState<ERC20[]>([])
   const [exitPrice, setExitPrice] = useState<string | undefined>(undefined)
@@ -24,6 +24,8 @@ export default function ContractSecuritizationEdit() {
 
   const [contract, setcontract] = useState<ERC721Item | undefined>(undefined)
   const [contractIsSecuritized, setContractIsSecuritized] = useState<boolean | undefined>(undefined)
+  const [contractOwner, setContractOwner] = useState<string | undefined>(undefined)
+  const isOwner = contractOwner && accounts[accountIndex] && contractOwner === accounts[accountIndex]
 
   const shares = '1000000'
 
@@ -35,9 +37,19 @@ export default function ContractSecuritizationEdit() {
     }
   }, [wallet, contractAddress, tokenId])
 
+  const getContractOwner = useCallback(async () => {
+    if (contract) {
+      setContractOwner(await contract?.getTokenOwner())
+    }
+  }, [contract])
+
   useEffect(() => {
     getcontract()
   }, [getcontract])
+
+  useEffect(() => {
+    getContractOwner()
+  }, [getContractOwner])
 
   const listPaymentTokens = useCallback(async () => {
     if (wallet) {
@@ -68,7 +80,7 @@ export default function ContractSecuritizationEdit() {
       ))}
     </Select>
   )
-  const columns = [
+  const columnsOwner = [
     {
       dataIndex: 'label',
       key: 'label'
@@ -78,7 +90,7 @@ export default function ContractSecuritizationEdit() {
       key: 'data'
     }
   ]
-  const dataSource = [
+  const dataSourceOwner = [
     {
       label: 'Shares',
       data: Number(shares).toLocaleString('en-US')
@@ -86,6 +98,31 @@ export default function ContractSecuritizationEdit() {
     {
       label: 'Exit Price',
       data: <Input placeholder='0.00000000' addonAfter={selectAfter} type='number' value={exitPrice} onChange={handleExitPrice} />
+    }
+  ]
+
+  const columnsNotOwner = [
+    {
+      dataIndex: 'label',
+      key: 'label'
+    },
+    {
+      dataIndex: 'data',
+      key: 'data'
+    }
+  ]
+  const dataSourceNotOwner = [
+    {
+      label: 'Contract',
+      data: contractAddress
+    },
+    {
+      label: 'ID',
+      data: contract?.tokenId
+    },
+    {
+      label: 'Owner',
+      data: contractOwner
     }
   ]
   const securitize = async () => {
@@ -107,8 +144,6 @@ export default function ContractSecuritizationEdit() {
       }
     }
   }
-
-  console.log(contractIsSecuritized)
 
   if (!wallet) {
     return (
@@ -154,7 +189,7 @@ export default function ContractSecuritizationEdit() {
           />
         </div>
         <div className='securitization-form'>
-          {contractIsSecuritized && (
+          {isOwner && contractIsSecuritized && (
             <div className='already-securitized'>
               <div className='title'>
                 <h2>Contract is already securitized</h2>
@@ -164,15 +199,23 @@ export default function ContractSecuritizationEdit() {
               </Button>
             </div>
           )}
-          {!contractIsSecuritized && (
+          {isOwner && !contractIsSecuritized && (
             <>
               <div className='title'>
                 <h2>Securitize ERC721 Contract</h2>
               </div>
-              <Table dataSource={dataSource} columns={columns} pagination={false} showHeader={false} rowKey='label' />
+              <Table dataSource={dataSourceOwner} columns={columnsOwner} pagination={false} showHeader={false} rowKey='label' />
               <Button onClick={securitize} type='primary' size='large' loading={loading} disabled={!exitPrice || Number(exitPrice) <= 0}>
                 Securitize
               </Button>
+            </>
+          )}
+          {!isOwner && (
+            <>
+              <div className='title'>
+                <h2>{contract.name}</h2>
+              </div>
+              <Table dataSource={dataSourceNotOwner} columns={columnsNotOwner} pagination={false} showHeader={false} rowKey='label' />
             </>
           )}
         </div>
