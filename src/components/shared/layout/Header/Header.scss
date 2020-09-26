@@ -26,6 +26,12 @@
 
     .walletName.ant-btn {
       color: $black !important;
+      padding-left: 44px;
+
+      .wallet-icon {
+        position: absolute;
+        margin-left: -32px;
+      }
     }
 
     .walletName.ant-btn[disabled] {

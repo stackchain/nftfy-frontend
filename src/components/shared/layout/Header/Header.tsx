@@ -1,6 +1,7 @@
 import { DownOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Menu } from 'antd'
 import React, { useContext } from 'react'
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import { Link } from 'react-router-dom'
 import ntfy from '../../../../assets/nftfy.svg'
 import { WalletContext } from '../../../../context/WalletContext'
@@ -38,14 +39,19 @@ export default function Header(props: Props) {
       </div>
       <div className='wallet'>
         {accounts.length > 0 && (
-          <Dropdown overlay={dropdownMenu} placement='bottomRight' disabled={accounts.length === 1}>
-            <Button className='walletName'>
-              {accounts[accountIndex].substring(0, 6)}
-              ...
-              {accounts[accountIndex].substring(accounts[accountIndex].length - 4, accounts[accountIndex].length)}
-              {accounts.length > 1 && <DownOutlined />}
-            </Button>
-          </Dropdown>
+          <>
+            <Dropdown overlay={dropdownMenu} placement='bottomRight' disabled={accounts.length === 1}>
+              <Button className='walletName'>
+                <div className='wallet-icon'>
+                  <Jazzicon diameter={22} seed={jsNumberForAddress(accounts[accountIndex])} />
+                </div>
+                {accounts[accountIndex].substring(0, 6)}
+                ...
+                {accounts[accountIndex].substring(accounts[accountIndex].length - 4, accounts[accountIndex].length)}
+                {accounts.length > 1 && <DownOutlined />}
+              </Button>
+            </Dropdown>
+          </>
         )}
         {!accounts.length && (
           <Button onClick={buttonAction} type='primary' size='large'>
