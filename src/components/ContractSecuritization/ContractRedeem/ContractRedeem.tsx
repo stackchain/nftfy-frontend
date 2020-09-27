@@ -1,17 +1,17 @@
-import { Button, Table } from 'antd'
-import React from 'react'
+import { Button, Modal, Table } from 'antd'
+import React, { useState } from 'react'
 import './ContractRedeem.scss'
 
 interface Props {
   redeem: () => void
-  participation: string
   sharesCount: string
   shareBalance: string
   pay: string
   loading: boolean
 }
 
-export default function ContractRedeem({ redeem, participation, sharesCount, shareBalance, pay, loading }: Props) {
+export default function ContractRedeem({ redeem, sharesCount, shareBalance, pay, loading }: Props) {
+  const [modalOpen, setModalOpen] = useState(false)
   const columns = [
     {
       dataIndex: 'label',
@@ -38,8 +38,17 @@ export default function ContractRedeem({ redeem, participation, sharesCount, sha
     }
   ]
 
-  const handleRedeem = () => {
+  const handleModal = () => {
+    setModalOpen(true)
+  }
+
+  const handleModalOk = () => {
     redeem()
+    setModalOpen(false)
+  }
+
+  const handleModalCancel = () => {
+    setModalOpen(false)
   }
 
   return (
@@ -48,9 +57,13 @@ export default function ContractRedeem({ redeem, participation, sharesCount, sha
         <h2>Redeem NFT</h2>
       </div>
       <Table dataSource={dataSource} columns={columns} pagination={false} rowKey='label' />
-      <Button onClick={handleRedeem} type='primary' size='large' loading={loading}>
+      <Button onClick={handleModal} type='primary' size='large' loading={loading}>
         Redeem
       </Button>
+      <Modal title='Redeem NFT' visible={modalOpen} onOk={handleModalOk} onCancel={handleModalCancel}>
+        <p>{`You will pay ${Number(shareBalance).toLocaleString('en-US')} shares and receive ${pay}`}</p>
+        <p>Do you want continue?</p>
+      </Modal>
     </div>
   )
 }

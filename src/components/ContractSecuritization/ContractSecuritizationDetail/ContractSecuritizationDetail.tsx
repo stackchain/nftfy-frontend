@@ -155,14 +155,7 @@ export default function ContractSecuritizationDetail() {
           <div className='contract-item'>
             {isRedeemable && (
               <div className='contract-redeem-item'>
-                <ContractRedeem
-                  sharesCount={sharesCount}
-                  redeem={redeemContract}
-                  participation={`${(issuedShare && totalSupply && (Number(issuedShare) / Number(totalSupply)) * 100) || 100}%`}
-                  shareBalance={issuedShare}
-                  pay={pay}
-                  loading={loading}
-                />
+                <ContractRedeem sharesCount={sharesCount} redeem={redeemContract} shareBalance={issuedShare} pay={pay} loading={loading} />
               </div>
             )}
 
