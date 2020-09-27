@@ -22,7 +22,7 @@ export interface Wallet {
   listAccountItems(address: string, offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }>
   retrieveItem(address: string, tokenId: string): Promise<ERC721Item>
   retrieveShares(address: string): Promise<ERC20>
-  registerERC721(address: string, tokenId?: string): Promise<boolean>
+  registerERC721(address: string, tokenId?: string): Promise<boolean> // TODO RODRIGO - implementar
   listPaymentTokens(): Promise<ERC20[]>
 }
 
@@ -32,16 +32,16 @@ export interface ERC20 {
   symbol: string
   decimals: number
   getTotalSupply(): Promise<string>
-  getAccountBalance(address: string): Promise<string> // pegar numero de shares
+  getAccountBalance(address: string): Promise<string>
   validateAmount(amount: string): Promise<boolean>
 
   // Nftfy extensions
   getERC721Item(): Promise<ERC721Item>
 
-  getPaymentToken(): Promise<ERC20 | null> // pegar saldo da carteira (getAccountBalance),  se for null getEtherBalance da interface wallet
+  getPaymentToken(): Promise<ERC20 | null>
   getExitPrice(): Promise<string>
   getSharePrice(): Promise<string>
-  getSharesCount(): Promise<string> // total de shares  (fazer calculo percentual )
+  getSharesCount(): Promise<string>
 
   isRedeemable(): Promise<boolean>
   getAccountRedeemAmount(address: string): Promise<string>
@@ -75,9 +75,10 @@ export interface ERC721Item {
   getTokenOwner(): Promise<string>
 
   // Nftfy extensions
-  isSecuritized(): Promise<boolean> // 1
+  isSecuritized(): Promise<boolean>
+  isRedeemed(): Promise<boolean> // TODO RODRIGO - implementar
   listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
-  securitize(sharesCount: string, exitPrice: string, paymentToken: ERC20 | null): Promise<void> // 1
+  securitize(sharesCount: string, exitPrice: string, paymentToken: ERC20 | null): Promise<void>
 }
 
 async function getWeb3(walletName: WalletName, refreshHook?: () => void): Promise<Web3> {
@@ -190,6 +191,11 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       return abi.methods.securitized(tokenId).call()
     }
 
+    async function isRedeemed(): Promise<boolean> {
+      // TODO RODRIGO - implementar
+      return false
+    }
+
     async function listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }> {
       if (offset < 0) throw new Error('Invalid offset')
       if (limit < 0) throw new Error('Invalid limit')
@@ -256,6 +262,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       imageUri,
       getTokenOwner,
       isSecuritized,
+      isRedeemed,
       listAccountShares,
       securitize
     })
@@ -370,9 +377,9 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     }
 
     async function getAccountBalance(address: string): Promise<string> {
+      // TODO RODRIGO - Estourando erro
       return coins(await abi.methods.balanceOf(address).call(), decimals)
     }
-
     async function validateAmount(amount: string): Promise<boolean> {
       return valid(amount, decimals)
     }
@@ -555,6 +562,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   }
 
   async function listAccountItems(address: string, offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }> {
+    // TODO RODRIGO - estourando erro
     if (offset < 0) throw new Error('Invalid offset')
     if (limit < 0) throw new Error('Invalid limit')
     let items: ERC721Item[] = []
@@ -570,7 +578,6 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     }
     return { items, count }
   }
-
   async function retrieveItem(address: string, tokenId: string): Promise<ERC721Item> {
     const contract = await newERC721(address)
     return newERC721Item(contract, tokenId)
