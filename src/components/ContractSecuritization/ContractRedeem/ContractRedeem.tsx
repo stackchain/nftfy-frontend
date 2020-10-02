@@ -61,7 +61,7 @@ export default function ContractRedeem({ redeem, sharesCount, shareBalance, pay,
         Redeem
       </Button>
       <Modal title='Redeem NFT' visible={modalOpen} onOk={handleModalOk} onCancel={handleModalCancel}>
-        <p>{`You will pay ${Number(shareBalance).toLocaleString('en-US')} shares and receive ${pay}`}</p>
+        <p>{`You will pay ${Number(shareBalance).toLocaleString('en-US')} shares and ${pay} to receive the NFT`}</p>
         <p>Do you want continue?</p>
       </Modal>
     </div>
