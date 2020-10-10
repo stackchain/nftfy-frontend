@@ -101,32 +101,40 @@ async function getWeb3(walletName: WalletName, refreshHook?: () => void): Promis
 }
 
 interface Cache {
-  load(name: string, exec: () => Promise<string>): Promise<string>
+  load(name: string, computeValue: () => Promise<string>): Promise<string>
+  store(name: string, value: string): Promise<void>
   remove(name: string): Promise<void>
 }
 
 function newCache(path: string[] = []): Cache {
   const prefix = path.join('/')
 
-  async function load(name: string, exec: () => Promise<string>): Promise<string> {
-    if (!window.localStorage) return await exec();
+  async function load(name: string, computeValue: () => Promise<string>): Promise<string> {
+    if (!window.localStorage) return await computeValue();
     const key = prefix + '/' + name
-    let data = window.localStorage.getItem(key)
-    if (typeof data != 'string') {
-      data = await exec()
-      window.localStorage.setItem(key, data)
+    let value = window.localStorage.getItem(key)
+    if (typeof value != 'string') {
+      value = await computeValue()
+      window.localStorage.setItem(key, value)
     }
-    return data
+    return value
+  }
+
+  async function store(name: string, value: string): Promise<void> {
+    if (!window.localStorage) return
+    const key = prefix + '/' + name
+    window.localStorage.setItem(key, value)
   }
 
   async function remove(name: string): Promise<void> {
-    if (!window.localStorage) return;
+    if (!window.localStorage) return
     const key = prefix + '/' + name
-    window.localStorage.removeItem(key);
+    window.localStorage.removeItem(key)
   }
 
   return {
     load,
+    store,
     remove,
   }
 }
@@ -146,7 +154,9 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   const web3 = await getWeb3(walletName, refreshHook)
   const network = await web3.eth.net.getNetworkType()
   const contracts: ERC721[] = await listNonFungibleTokens()
-  const collection: { [address: string]: ERC721Item[] } = {};
+  const collection: { [address: string]: ERC721Item[] } = await listCollection();
+
+  const cache = newCache([network, 'wallet']);
 
   async function nftfy(): Promise<string> {
     switch (network) {
@@ -645,6 +655,9 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       if (address == contract.address) return false
     }
     contracts.push(await newERC721(address))
+    const addresses = JSON.parse(await cache.load('contracts', async () => JSON.stringify([])))
+    addresses.push(address);
+    await cache.store('contracts', JSON.stringify(addresses))
     return true
   }
 
@@ -654,8 +667,13 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       if (address == item.contract.address && tokenId == item.tokenId) return false
     }
     registerERC721(address);
-    items.push(await newERC721Item(await newERC721(address), tokenId))
+    items.push(await retrieveItem(address, tokenId))
     collection[address] = items;
+    const _collection: { [address: string]: string[] } = {}
+    for (const address in collection) {
+      _collection[address] = collection[address].map((item) => item.tokenId);
+    }
+    await cache.store('collection', JSON.stringify(_collection))
     return true
   }
 
@@ -749,7 +767,24 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         break
     }
+    const addresses = JSON.parse(await cache.load('contracts', async () => JSON.stringify([])))
+    for (const address in addresses) {
+        contracts.push(await newERC721(address))
+    }
     return contracts
+  }
+
+  async function listCollection(): Promise<{ [address: string]: ERC721Item[] }> {
+    const collection: { [address: string]: ERC721Item[] } = {}
+    const data: { [address: string]: string[] } = JSON.parse(await cache.load('collection', async () => JSON.stringify({})))
+    for (const address in data) {
+      const items: ERC721Item[] = []
+      for (const tokenId of data[address]) {
+        items.push(await retrieveItem(address, tokenId))
+      }
+      collection[address] = items
+    }
+    return collection
   }
 
   return {
