@@ -101,20 +101,21 @@ async function getWeb3(walletName: WalletName, refreshHook?: () => void): Promis
 }
 
 interface Cache {
-  load(name: string, exec: () => Promise<string>): Promise<string>;
+  load(name: string, exec: () => Promise<string>): Promise<string>
 }
 
 function newCache(path: string[] = []): Cache {
-  const prefix = path.join('/');
+  const prefix = path.join('/')
 
   async function load(name: string, exec: () => Promise<string>): Promise<string> {
-    const key = prefix + '/' + name;
-    let data = window.localStorage.getItem(key);
+    if (!window.localStorage) return await exec();
+    const key = prefix + '/' + name
+    let data = window.localStorage.getItem(key)
     if (typeof data != 'string') {
-      data = await exec();
-      window.localStorage.setItem(key, data);
+      data = await exec()
+      window.localStorage.setItem(key, data)
     }
-    return data;
+    return data
   }
 
   return {
@@ -177,7 +178,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC721Item(contract: ERC721, tokenId: string): Promise<ERC721Item> {
     let self: ERC721Item
 
-    const cache = newCache(['erc721', contract.address, 'item', tokenId]);
+    const cache = newCache(['erc721', contract.address, 'item', tokenId])
 
     const { name, description, imageUri } = JSON.parse(await cache.load('metadata', async () => JSON.stringify(await loadMetadata())))
 
@@ -295,7 +296,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC721(address: string, defaultName = '', defaultSymbol = ''): Promise<ERC721> {
     let self: ERC721
 
-    const cache = newCache(['erc721', address]);
+    const cache = newCache(['erc721', address])
 
     const abi = new web3.eth.Contract(ERC721_ABI, address)
     const name = await (async () => {
@@ -375,7 +376,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC20(address: string, defaultName = '', defaultSymbol = '', defaultDecimals = 18): Promise<ERC20> {
     let self: ERC20
 
-    const cache = newCache(['erc20', address]);
+    const cache = newCache(['erc20', address])
 
     const abi = new web3.eth.Contract(ERC20_ABI, address)
     const name = await (async () => {
