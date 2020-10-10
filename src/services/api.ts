@@ -345,7 +345,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         const items: ERC721Item[] = []
         const count = Number(await abi.methods.totalSupply().call())
         for (let i = offset; i < Math.min(offset + limit, count); i++) {
-          const tokenId = await abi.methods.tokenByIndex(i).call()
+          const tokenId = await cache.load<string>('tokenByIndex(' + i + ')', () => abi.methods.tokenByIndex(i).call())
           items.push(await newERC721Item(self, tokenId))
         }
         return { items, count }
@@ -363,8 +363,12 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       try {
         const items: ERC721Item[] = []
         const count = Number(await abi.methods.balanceOf(address).call())
+        const cachedCount = Number(await cache.load<string>('balanceOf(' + address + ')', async () => String(count)))
+        const fresh = count != cachedCount;
         for (let i = offset; i < Math.min(offset + limit, count); i++) {
-          const tokenId = await abi.methods.tokenOfOwnerByIndex(address, i).call()
+          const name = 'tokenOfOwnerByIndex(' + address + ',' + i + ')'
+          if (fresh) cache.remove(name);
+          const tokenId = await cache.load<string>(name, () => abi.methods.tokenOfOwnerByIndex(address, i).call())
           items.push(await newERC721Item(self, tokenId))
         }
         return { items, count }
