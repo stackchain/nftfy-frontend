@@ -27,7 +27,11 @@ export default function AddNonFungibleTokens() {
     } else if (wallet && !(await wallet.validateAddress(nftContract, nftTokenId))) {
       errorNotification('Smart contract is invalid')
     } else if (wallet) {
-      await wallet.registerERC721(nftContract, nftTokenId)
+      if (nftTokenId) {
+        await wallet.registerERC721Item(nftContract, nftTokenId)
+      } else {
+        await wallet.registerERC721(nftContract)
+      }
 
       if (wallet) {
         setLoading(false)
