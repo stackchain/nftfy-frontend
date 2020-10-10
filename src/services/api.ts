@@ -102,6 +102,7 @@ async function getWeb3(walletName: WalletName, refreshHook?: () => void): Promis
 
 interface Cache {
   load(name: string, exec: () => Promise<string>): Promise<string>
+  remove(name: string): Promise<void>
 }
 
 function newCache(path: string[] = []): Cache {
@@ -118,8 +119,15 @@ function newCache(path: string[] = []): Cache {
     return data
   }
 
+  async function remove(name: string): Promise<void> {
+    if (!window.localStorage) return;
+    const key = prefix + '/' + name
+    window.localStorage.removeItem(key);
+  }
+
   return {
     load,
+    remove,
   }
 }
 
@@ -321,31 +329,42 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     async function listAllItems(offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }> {
       if (offset < 0) throw new Error('Invalid offset')
       if (limit < 0) throw new Error('Invalid limit')
-      const items: ERC721Item[] = []
-      const count = Number(await abi.methods.totalSupply().call())
-      for (let i = offset; i < Math.min(offset + limit, count); i++) {
-        const tokenId = await abi.methods.tokenByIndex(i).call()
-        items.push(await newERC721Item(self, tokenId))
+      try {
+        const items: ERC721Item[] = []
+        const count = Number(await abi.methods.totalSupply().call())
+        for (let i = offset; i < Math.min(offset + limit, count); i++) {
+          const tokenId = await abi.methods.tokenByIndex(i).call()
+          items.push(await newERC721Item(self, tokenId))
+        }
+        return { items, count }
+      } catch (e) {
+        return { items: [], count: 0 };
       }
-      return { items, count }
     }
 
     async function listAccountItems(address: string, offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }> {
       if (offset < 0) throw new Error('Invalid offset')
       if (limit < 0) throw new Error('Invalid limit')
-      const items: ERC721Item[] = []
-      const count = Number(await abi.methods.balanceOf(address).call())
-      for (let i = offset; i < Math.min(offset + limit, count); i++) {
-        const tokenId = await abi.methods.tokenOfOwnerByIndex(address, i).call()
-        items.push(await newERC721Item(self, tokenId))
+      try {
+        const items: ERC721Item[] = []
+        const count = Number(await abi.methods.balanceOf(address).call())
+        for (let i = offset; i < Math.min(offset + limit, count); i++) {
+          const tokenId = await abi.methods.tokenOfOwnerByIndex(address, i).call()
+          items.push(await newERC721Item(self, tokenId))
+        }
+        return { items, count }
+      } catch (e) {
+        return { items: [], count: 0 };
       }
-      return { items, count }
     }
 
     async function getWrapper(): Promise<ERC721 | null> {
       const abi = new web3.eth.Contract(NFTFY_ABI, await nftfy())
-      const _address = await abi.methods.wrappers(address).call()
-      if (_address == '0x0000000000000000000000000000000000000000') return null
+      const _address = await cache.load('wrapper', () => abi.methods.wrappers(address).call())
+      if (_address == '0x0000000000000000000000000000000000000000') {
+        await cache.remove('wrapper');
+        return null
+      }
       return newERC721(_address)
     }
 
