@@ -100,6 +100,28 @@ async function getWeb3(walletName: WalletName, refreshHook?: () => void): Promis
   }
 }
 
+interface Cache {
+  load(name: string, exec: () => Promise<string>): Promise<string>;
+}
+
+function newCache(path: string[] = []): Cache {
+  const prefix = path.join('/');
+
+  async function load(name: string, exec: () => Promise<string>): Promise<string> {
+    const key = prefix + '/' + name;
+    let data = window.localStorage.getItem(key);
+    if (typeof data != 'string') {
+      data = await exec();
+      window.localStorage.setItem(key, data);
+    }
+    return data;
+  }
+
+  return {
+    load,
+  }
+}
+
 const NFTFY_ABI = require('../contracts/Nftfy.json').abi
 const ERC721_ABI = require('../contracts/ERC721Wrapper.json').abi
 const ERC20_ABI = require('../contracts/ERC721Shares.json').abi
@@ -155,11 +177,13 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC721Item(contract: ERC721, tokenId: string): Promise<ERC721Item> {
     let self: ERC721Item
 
-    const { name, description, imageUri } = await loadMetadata()
+    const cache = newCache(['erc721', contract.address, 'item', tokenId]);
+
+    const { name, description, imageUri } = JSON.parse(await cache.load('metadata', async () => JSON.stringify(await loadMetadata())))
 
     function getTokenURI(): Promise<string> {
       const abi = new web3.eth.Contract(ERC721_ABI, contract.address)
-      return abi.methods.tokenURI(tokenId).call()
+      return cache.load('tokenURI', () => abi.methods.tokenURI(tokenId).call())
     }
 
     async function loadMetadata(): Promise<{ name?: string; description?: string; imageUri?: string }> {
@@ -271,17 +295,19 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC721(address: string, defaultName = '', defaultSymbol = ''): Promise<ERC721> {
     let self: ERC721
 
+    const cache = newCache(['erc721', address]);
+
     const abi = new web3.eth.Contract(ERC721_ABI, address)
     const name = await (async () => {
       try {
-        return await abi.methods.name().call()
+        return await cache.load('name', () => abi.methods.name().call())
       } catch (e) {
         return defaultName
       }
     })()
     const symbol = await (async () => {
       try {
-        return await abi.methods.symbol().call()
+        return await cache.load('symbol', () => abi.methods.symbol().call())
       } catch (e) {
         return defaultSymbol
       }
@@ -349,24 +375,26 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC20(address: string, defaultName = '', defaultSymbol = '', defaultDecimals = 18): Promise<ERC20> {
     let self: ERC20
 
+    const cache = newCache(['erc20', address]);
+
     const abi = new web3.eth.Contract(ERC20_ABI, address)
     const name = await (async () => {
       try {
-        return await abi.methods.name().call()
+        return await cache.load('name', () => abi.methods.name().call())
       } catch (e) {
         return defaultName
       }
     })()
     const symbol = await (async () => {
       try {
-        return await abi.methods.symbol().call()
+        return await cache.load('symbol', () => abi.methods.symbol().call())
       } catch (e) {
         return defaultSymbol
       }
     })()
     const decimals = await (async () => {
       try {
-        return Number(await abi.methods.decimals().call())
+        return Number(await cache.load('decimals', () => abi.methods.decimals().call()))
       } catch (e) {
         return defaultDecimals
       }
@@ -380,21 +408,22 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       // TODO RODRIGO - Estourando erro
       return coins(await abi.methods.balanceOf(address).call(), decimals)
     }
+
     async function validateAmount(amount: string): Promise<boolean> {
       return valid(amount, decimals)
     }
 
     async function getERC721Item(): Promise<ERC721Item> {
-      const address = await abi.methods.wrapper().call()
-      const tokenId = await abi.methods.tokenId().call()
+      const address = await cache.load('wrapper', () => abi.methods.wrapper().call())
+      const tokenId = await cache.load('tokenId', () => abi.methods.tokenId().call())
       const _abi = new web3.eth.Contract(ERC721_ABI, address)
-      const _address = await _abi.methods.target().call()
+      const _address = await cache.load('target', () => _abi.methods.target().call())
       const contract = await newERC721(_address)
       return newERC721Item(contract, tokenId)
     }
 
     async function getPaymentToken(): Promise<ERC20 | null> {
-      const address = await abi.methods.paymentToken().call()
+      const address = await cache.load('paymentToken', () => abi.methods.paymentToken().call())
       if (address == '0x0000000000000000000000000000000000000000') return null
       return newERC20(address)
     }
@@ -402,18 +431,18 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     async function getExitPrice(): Promise<string> {
       const paymentToken = await getPaymentToken()
       const decimals = paymentToken ? paymentToken.decimals : 18
-      return coins(await abi.methods.exitPrice().call(), decimals)
+      return coins(await cache.load('exitPrice', () => abi.methods.exitPrice().call()), decimals)
     }
 
     async function getSharePrice(): Promise<string> {
       const paymentToken = await getPaymentToken()
       const decimals = paymentToken ? paymentToken.decimals : 18
-      return coins(await abi.methods.sharePrice().call(), decimals)
+      return coins(await cache.load('sharePrice', () => abi.methods.sharePrice().call()), decimals)
     }
 
     async function getSharesCount(): Promise<string> {
       const paymentToken = await getPaymentToken()
-      return coins(await abi.methods.sharesCount().call(), decimals)
+      return coins(await cache.load('sharesCount', () => abi.methods.sharesCount().call()), decimals)
     }
 
     async function isRedeemable(): Promise<boolean> {
