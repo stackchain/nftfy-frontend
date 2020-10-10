@@ -186,7 +186,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC721Item(contract: ERC721, tokenId: string): Promise<ERC721Item> {
     let self: ERC721Item
 
-    const cache = newCache(['erc721', contract.address, 'item', tokenId])
+    const cache = newCache([network, 'erc721', contract.address, 'item', tokenId])
 
     const { name, description, imageUri } = JSON.parse(await cache.load('metadata', async () => JSON.stringify(await loadMetadata())))
 
@@ -304,7 +304,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC721(address: string, defaultName = '', defaultSymbol = ''): Promise<ERC721> {
     let self: ERC721
 
-    const cache = newCache(['erc721', address])
+    const cache = newCache([network, 'erc721', address])
 
     const abi = new web3.eth.Contract(ERC721_ABI, address)
     const name = await (async () => {
@@ -395,7 +395,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC20(address: string, defaultName = '', defaultSymbol = '', defaultDecimals = 18): Promise<ERC20> {
     let self: ERC20
 
-    const cache = newCache(['erc20', address])
+    const cache = newCache([network, 'erc20', address])
 
     const abi = new web3.eth.Contract(ERC20_ABI, address)
     const name = await (async () => {
