@@ -191,8 +191,9 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
 
     const { name, description, imageUri } = JSON.parse(await cache.load('metadata', async () => JSON.stringify(await loadMetadata())))
 
-    function getTokenURI(): Promise<string> {
+    async function getTokenURI(): Promise<string> {
       const abi = new web3.eth.Contract(ERC721_ABI, contract.address)
+      if (contract.address == '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d') return 'https://public.api.cryptokitties.co/v1/kitties/' + tokenId
       return cache.load('tokenURI', () => abi.methods.tokenURI(tokenId).call())
     }
 
@@ -201,9 +202,10 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         const CORS_PREFIX = 'https://cors-anywhere.herokuapp.com/'
         const uri = await getTokenURI()
         const headers: { [key: string]: string } = {}
-        // headers.Origin = 'https://nftfy.tk'
+        if (contract.address == '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d') headers['x-api-token'] = 'WDw4c2VBIWDy_G_JQkdxWa5s-ubEA5zPxPfHOr5hqj0'
         const response = await axios.get(CORS_PREFIX + uri, { headers })
-        const { name, description, image, image_url } = response.data
+        const { name, description: desc, bio, image, image_url } = response.data
+        const description = desc || bio
         const imageUrl = image || image_url
         const imageUri = imageUrl ? CORS_PREFIX + imageUrl : imageUrl
         return { name, description, imageUri }
