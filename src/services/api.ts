@@ -338,6 +338,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         }
         return { items, count }
       } catch (e) {
+        console.log('ERC721.listAllItems', contract.address, e.message)
         return { items: [], count: 0 };
       }
     }
@@ -354,6 +355,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         }
         return { items, count }
       } catch (e) {
+        console.log('ERC721.listAccountItems', contract.address, address, e.message)
         return { items: [], count: 0 };
       }
     }
