@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { useWalletAddressMock } from '../hooks/WalletHooks'
 import { ERC20, ERC721Item, initializeWallet, listSupportedWallets, Wallet, WalletName } from '../services/api'
 import { errorNotification } from '../services/notification'
 
@@ -41,6 +42,8 @@ export const WalletContext = React.createContext<{
 export default function WalletContextWrapper(props: React.PropsWithChildren<{}>) {
   const { children } = props
 
+  const walletAddressMock = useWalletAddressMock()
+
   const [walletName, setWalletName] = useState<WalletName | undefined>(undefined)
   const [wallet, setWallet] = useState<Wallet | undefined>(undefined)
   const [accounts, setAccounts] = useState<string[]>([])
@@ -70,9 +73,11 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
 
       if (walletNameStorage && supportedWallets.includes(walletNameStorage as WalletName)) {
         try {
-
           const walletStorage = await initializeWallet(walletNameStorage as WalletName, () => document.location.reload())
-          const accountsStorage = await walletStorage.getAccounts()
+          const accountsStorage =
+            walletAddressMock && (await walletStorage.validateAddress(walletAddressMock))
+              ? [walletAddressMock]
+              : await walletStorage.getAccounts()
 
           if (accountsStorage[0]) {
             walletStorage.selectAccount(accountsStorage[0])
@@ -85,7 +90,6 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
           const accountIndexStorage = localStorage.getItem('accountIndex')
           if (accountIndexStorage) setAccountIndex(Number(JSON.parse(accountIndexStorage)))
         } catch (error) {
-
           errorNotification('Reconnection with the wallet failed')
 
           localStorage.removeItem('walletName')
@@ -95,13 +99,11 @@ export default function WalletContextWrapper(props: React.PropsWithChildren<{}>)
 
       setRehydrate(false)
     }
-  }, [rehydrate])
+  }, [rehydrate, walletAddressMock])
 
   useEffect(() => {
     rehydrateOffline()
   }, [rehydrateOffline])
-
-
   return (
     <WalletContext.Provider
       value={{

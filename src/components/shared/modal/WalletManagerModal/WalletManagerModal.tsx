@@ -3,6 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import metamask from '../../../../assets/metamask.svg'
 import portis from '../../../../assets/portis.svg'
 import { WalletContext } from '../../../../context/WalletContext'
+import { useWalletAddressMock } from '../../../../hooks/WalletHooks'
 import { initializeWallet, listSupportedWallets, WalletName } from '../../../../services/api'
 import { errorNotification } from '../../../../services/notification'
 import './WalletManagerModal.scss'
@@ -12,6 +13,7 @@ interface Props {
   setVisible: (visible: boolean) => void
 }
 export default function WalletManagerModal(props: Props) {
+  const walletAddressMock = useWalletAddressMock()
   const { visible, setVisible } = props
   const { setAccounts, setWalletName, setWallet } = useContext(WalletContext)
 
@@ -31,7 +33,8 @@ export default function WalletManagerModal(props: Props) {
       setLoadingWallet(walletName)
 
       const wallet = await initializeWallet(walletName, () => document.location.reload())
-      const accounts = await wallet.getAccounts()
+      const accounts =
+        walletAddressMock && (await wallet.validateAddress(walletAddressMock)) ? [walletAddressMock] : await wallet.getAccounts()
 
       if (accounts[0]) {
         wallet.selectAccount(accounts[0])

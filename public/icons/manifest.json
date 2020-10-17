@@ -1,5 +1,6 @@
 {
-  "name": "App",
+  "background_color": "#ffffff",
+  "name": "NFTFY",
   "icons": [
     {
       "src": "/icons/android-icon-36x36.png",
