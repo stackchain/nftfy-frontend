@@ -43,9 +43,8 @@ export default function WalletManagerModal(props: Props) {
 
       handleCancel()
     } catch (error) {
-      console.error(error)
       setLoadingWallet(undefined)
-      errorNotification('Authorize nftfy in the wallet and connect again')
+      errorNotification('Authorize nftfy in the wallet and connect again', error)
     }
   }
 
