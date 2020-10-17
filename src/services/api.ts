@@ -216,7 +216,8 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
 
     async function loadMetadata(): Promise<{ name?: string; description?: string; imageUri?: string }> {
       try {
-        const CORS_PREFIX = 'https://cors-anywhere.herokuapp.com/'
+        // const CORS_PREFIX = 'https://cors-anywhere.herokuapp.com/'
+        const CORS_PREFIX = ''
         const uri = await getTokenURI()
         const headers: { [key: string]: string } = {}
         if (network == 'main' && contract.address == '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')
@@ -226,6 +227,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         const description = desc || bio
         const imageUrl = image || image_url
         const imageUri = imageUrl ? CORS_PREFIX + imageUrl : imageUrl
+        if (imageUri.subst(0, 4) != 'http') delete imageUri
         return { name, description, imageUri }
       } catch (e) {
         console.log('ERC721Item.loadMetadata', contract.address, tokenId, e.message)
