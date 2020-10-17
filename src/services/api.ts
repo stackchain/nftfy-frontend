@@ -110,7 +110,7 @@ function newCache(path: string[] = []): Cache {
   const prefix = path.join('/')
 
   async function load<T>(name: string, computeData: () => Promise<T>): Promise<T> {
-    if (!window.localStorage) return await computeData();
+    if (!window.localStorage) return await computeData()
     const key = prefix + '/' + name
     let value = window.localStorage.getItem(key)
     let data: T
@@ -140,7 +140,7 @@ function newCache(path: string[] = []): Cache {
   return {
     load,
     store,
-    remove,
+    remove
   }
 }
 
@@ -158,10 +158,11 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
 
   const web3 = await getWeb3(walletName, refreshHook)
   const network = await web3.eth.net.getNetworkType()
-  const contracts: ERC721[] = await listNonFungibleTokens()
-  const collection: { [address: string]: ERC721Item[] } = await listCollection();
 
-  const cache = newCache([network, 'wallet']);
+  const cache = newCache([network, 'wallet'])
+
+  const contracts: ERC721[] = await listNonFungibleTokens()
+  const collection: { [address: string]: ERC721Item[] } = await listCollection()
 
   async function nftfy(): Promise<string> {
     switch (network) {
@@ -208,7 +209,8 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
 
     async function getTokenURI(): Promise<string> {
       const abi = new web3.eth.Contract(ERC721_ABI, contract.address)
-      if (network == 'main' && contract.address == '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d') return 'https://public.api.cryptokitties.co/v1/kitties/' + tokenId
+      if (network == 'main' && contract.address == '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')
+        return 'https://public.api.cryptokitties.co/v1/kitties/' + tokenId
       return cache.load<string>('tokenURI', () => abi.methods.tokenURI(tokenId).call())
     }
 
@@ -217,7 +219,8 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         const CORS_PREFIX = 'https://cors-anywhere.herokuapp.com/'
         const uri = await getTokenURI()
         const headers: { [key: string]: string } = {}
-        if (network == 'main' && contract.address == '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d') headers['x-api-token'] = 'WDw4c2VBIWDy_G_JQkdxWa5s-ubEA5zPxPfHOr5hqj0'
+        if (network == 'main' && contract.address == '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')
+          headers['x-api-token'] = 'WDw4c2VBIWDy_G_JQkdxWa5s-ubEA5zPxPfHOr5hqj0'
         const response = await axios.get(CORS_PREFIX + uri, { headers })
         const { name, description: desc, bio, image, image_url } = response.data
         const description = desc || bio
@@ -363,11 +366,13 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       try {
         const items: ERC721Item[] = []
         const count = Number(await abi.methods.balanceOf(address).call())
-        const cachedCount = Number(await cache.load<string>('balanceOf(' + address + ')', async () => String(count)))
-        const fresh = count != cachedCount;
+        const cachedCount = Number(
+          await cache.load<string>('balanceOf(' + address + ')', async () => String(count))
+        )
+        const fresh = count != cachedCount
         for (let i = offset; i < Math.min(offset + limit, count); i++) {
           const name = 'tokenOfOwnerByIndex(' + address + ',' + i + ')'
-          if (fresh) cache.remove(name);
+          if (fresh) cache.remove(name)
           const tokenId = await cache.load<string>(name, () => abi.methods.tokenOfOwnerByIndex(address, i).call())
           items.push(await newERC721Item(self, tokenId))
         }
@@ -376,7 +381,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         console.log('ERC721.listAccountItems', self.address, address, e.message)
         const items = []
         for (const item of collection[self.address] || []) {
-          if (await item.getTokenOwner() == address) items.push(item);
+          if ((await item.getTokenOwner()) == address) items.push(item)
         }
         const count = items.length
         return { items, count }
@@ -387,7 +392,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       const abi = new web3.eth.Contract(NFTFY_ABI, await nftfy())
       const _address = await cache.load<string>('wrapper', () => abi.methods.wrappers(address).call())
       if (_address == '0x0000000000000000000000000000000000000000') {
-        await cache.remove('wrapper');
+        await cache.remove('wrapper')
         return null
       }
       return newERC721(_address)
@@ -439,7 +444,9 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     })()
     const decimals = await (async () => {
       try {
-        return Number(await cache.load<string>('decimals', () => abi.methods.decimals().call()))
+        return Number(
+          await cache.load<string>('decimals', () => abi.methods.decimals().call())
+        )
       } catch (e) {
         return defaultDecimals
       }
@@ -475,18 +482,27 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     async function getExitPrice(): Promise<string> {
       const paymentToken = await getPaymentToken()
       const decimals = paymentToken ? paymentToken.decimals : 18
-      return coins(await cache.load<string>('exitPrice', () => abi.methods.exitPrice().call()), decimals)
+      return coins(
+        await cache.load<string>('exitPrice', () => abi.methods.exitPrice().call()),
+        decimals
+      )
     }
 
     async function getSharePrice(): Promise<string> {
       const paymentToken = await getPaymentToken()
       const decimals = paymentToken ? paymentToken.decimals : 18
-      return coins(await cache.load<string>('sharePrice', () => abi.methods.sharePrice().call()), decimals)
+      return coins(
+        await cache.load<string>('sharePrice', () => abi.methods.sharePrice().call()),
+        decimals
+      )
     }
 
     async function getSharesCount(): Promise<string> {
       const paymentToken = await getPaymentToken()
-      return coins(await cache.load<string>('sharesCount', () => abi.methods.sharesCount().call()), decimals)
+      return coins(
+        await cache.load<string>('sharesCount', () => abi.methods.sharesCount().call()),
+        decimals
+      )
     }
 
     async function isRedeemable(): Promise<boolean> {
@@ -671,15 +687,15 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   }
 
   async function registerERC721Item(address: string, tokenId: string): Promise<boolean> {
-    const items = collection[address] || [];
+    const items = collection[address] || []
     for (const item of items) {
       if (address == item.contract.address && tokenId == item.tokenId) return false
     }
-    registerERC721(address);
+    registerERC721(address)
     items.push(await retrieveItem(address, tokenId))
-    collection[address] = items;
+    collection[address] = items
     const _collection: { [address: string]: string[] } = {}
-    for (const address in collection) _collection[address] = collection[address].map((item) => item.tokenId);
+    for (const address in collection) _collection[address] = collection[address].map(item => item.tokenId)
     await cache.store('collection', _collection)
     return true
   }
@@ -776,7 +792,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     }
     const addresses = await cache.load<string[]>('contracts', async () => [])
     for (const address in addresses) {
-        contracts.push(await newERC721(address))
+      contracts.push(await newERC721(address))
     }
     return contracts
   }
