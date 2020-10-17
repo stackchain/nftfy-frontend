@@ -183,7 +183,7 @@ export default function ContractSecuritizationEdit() {
         <div className='contract-image'>
           <ContractImage
             name={contract?.name || ''}
-            src={contract?.imageUri?.split('https://cors-anywhere.herokuapp.com/')[1] || ''}
+            src={contract?.imageUri || ''}
             description={contract?.description || ''}
             meta={`#${contract?.tokenId}`}
           />
