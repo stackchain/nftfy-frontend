@@ -33,7 +33,7 @@ export default function AddNonFungibleTokens() {
         await wallet.registerERC721(nftContract)
       }
 
-      if (wallet) {
+      if (wallet && accounts[accountIndex]) {
         setLoading(false)
         const nfts = await wallet.listAccountItems(accounts[accountIndex], 0, 12)
         if (nfts.items.length > 0) {

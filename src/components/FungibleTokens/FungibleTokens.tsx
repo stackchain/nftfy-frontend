@@ -16,7 +16,7 @@ export default function FungibleTokens() {
   }
 
   const loadAccountShares = useCallback(async () => {
-    if (wallet) {
+    if (wallet && accounts[accountIndex]) {
       setLoading(true)
       const fts = await wallet.listAccountShares(accounts[accountIndex], offset, 8)
       setLoading(false)

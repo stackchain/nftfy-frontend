@@ -27,10 +27,7 @@ export default function WalletManagerModal(props: Props) {
   }, [loadWallets])
 
   const selectWallet = (walletName: WalletName) => async () => {
-
-
     try {
-
       setLoadingWallet(walletName)
 
       const wallet = await initializeWallet(walletName, () => document.location.reload())
@@ -46,12 +43,10 @@ export default function WalletManagerModal(props: Props) {
 
       handleCancel()
     } catch (error) {
-
+      console.error(error)
       setLoadingWallet(undefined)
       errorNotification('Authorize nftfy in the wallet and connect again')
-
     }
-
   }
 
   const handleCancel = () => {
@@ -60,7 +55,14 @@ export default function WalletManagerModal(props: Props) {
   }
 
   return (
-    <Modal className='wallet-manager-modal' title='Wallet Manager' visible={visible} footer={null} onCancel={handleCancel} width={300} maskClosable={false}>
+    <Modal
+      className='wallet-manager-modal'
+      title='Wallet Manager'
+      visible={visible}
+      footer={null}
+      onCancel={handleCancel}
+      width={300}
+      maskClosable={false}>
       {supportedWallets.includes('metamask') && (
         <Button
           className='metamask'
