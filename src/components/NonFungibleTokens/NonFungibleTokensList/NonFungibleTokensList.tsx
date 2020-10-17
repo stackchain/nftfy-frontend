@@ -1,6 +1,7 @@
 import { Card, Pagination } from 'antd'
 import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
+import nftImage from '../../../assets/nft.svg'
 import { WalletContext } from '../../../context/WalletContext'
 import Loading from '../../shared/layout/Loading/Loading'
 import AddNonFungibleTokens from '../AddNonFungibleTokens/AddNonFungibleTokens'
@@ -28,7 +29,7 @@ export default function NonFungibleTokensList({ count, setPagination, loading }:
         {accountItems.map(nft => (
           <Link key={nft.tokenId} to={`/dapp/contract/securitize/${nft.contract.address}/${nft.tokenId}`}>
             <div className='nft-item'>
-              {nft.imageUri && <img src={nft.imageUri.split('https://cors-anywhere.herokuapp.com/')[1] || nft.imageUri} alt={nft.name} />}
+              {nft.imageUri && <img src={nft.imageUri.includes('ipfs://') ? nftImage : nft.imageUri || nftImage} alt={nft.name} />}
               <div className='contract-name'>{nft.contract.name}</div>
               <div className='nft-name'>{nft.name}</div>
             </div>

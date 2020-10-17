@@ -1,6 +1,7 @@
 import { Card, Pagination } from 'antd'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import ftImage from '../../../assets/ft.svg'
 import { WalletContext } from '../../../context/WalletContext'
 import { ERC20 } from '../../../services/api'
 import Loading from '../../shared/layout/Loading/Loading'
@@ -53,7 +54,7 @@ export default function FungibleTokensList({ count, setPagination, loading }: Pr
             <div className='ft-item'>
               <div>
                 {ft.erc721ImageUri && (
-                  <img src={ft.erc721ImageUri.split('https://cors-anywhere.herokuapp.com/')[1] || ft.erc721ImageUri} alt={ft.name} />
+                  <img src={ft.erc721ImageUri.includes('ipfs://') ? ftImage : ft.erc721ImageUri || ftImage} alt={ft.name} />
                 )}
               </div>
               <div>
