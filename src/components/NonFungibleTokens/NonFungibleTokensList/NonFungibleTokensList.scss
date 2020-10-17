@@ -30,10 +30,15 @@
       .contract-name {
         font-size: 1rem;
         color: $orange;
+        word-break: break-all;
+        line-height: 1rem;
+        margin-bottom: 0.25rem;
       }
 
       .nft-name {
         color: $black;
+        word-break: break-all;
+        line-height: 1rem;
       }
 
       img {
