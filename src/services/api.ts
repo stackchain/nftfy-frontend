@@ -227,8 +227,8 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         const description = desc || bio
         const imageUrl = image || image_url
         const imageUri = imageUrl ? CORS_PREFIX + imageUrl : imageUrl
-        if (imageUri.subst(0, 4) != 'http') delete imageUri
-        return { name, description, imageUri }
+
+        return { name, description, imageUri: imageUri.subst(0, 4) !== 'http' ? undefined : imageUri }
       } catch (e) {
         console.log('ERC721Item.loadMetadata', contract.address, tokenId, e.message)
         return {}
