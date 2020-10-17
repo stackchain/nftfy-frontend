@@ -226,9 +226,8 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         const { name, description: desc, bio, image, image_url } = response.data
         const description = desc || bio
         const imageUrl = image || image_url
-        const imageUri = imageUrl ? CORS_PREFIX + imageUrl : imageUrl
-
-        return { name, description, imageUri: imageUri.subst(0, 4) !== 'http' ? undefined : imageUri }
+        const imageUri = imageUrl && imageUri.substr(0, 4) == 'http' ? CORS_PREFIX + imageUrl : imageUrl
+        return { name, description, imageUri }
       } catch (e) {
         console.log('ERC721Item.loadMetadata', contract.address, tokenId, e.message)
         return {}
@@ -391,13 +390,17 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     }
 
     async function getWrapper(): Promise<ERC721 | null> {
-      const abi = new web3.eth.Contract(NFTFY_ABI, await nftfy())
-      const _address = await cache.load<string>('wrapper', () => abi.methods.wrappers(address).call())
-      if (_address == '0x0000000000000000000000000000000000000000') {
-        await cache.remove('wrapper')
-        return null
+      try {
+        const abi = new web3.eth.Contract(NFTFY_ABI, await nftfy())
+        const _address = await cache.load<string>('wrapper', () => abi.methods.wrappers(address).call())
+        if (_address == '0x0000000000000000000000000000000000000000') {
+          await cache.remove('wrapper')
+          return null
+        }
+        return newERC721(_address)
+      } catch (e) {
+	return null; // TODO remove once contracts are published to mainnet
       }
-      return newERC721(_address)
     }
 
     async function listAllShares(offset: number, limit: number): Promise<{ items: ERC20[]; count: number }> {
