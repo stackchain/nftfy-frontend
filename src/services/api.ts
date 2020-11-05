@@ -77,7 +77,6 @@ export interface ERC721Item {
 
   // Nftfy extensions
   isSecuritized(): Promise<boolean>
-  isRedeemed(): Promise<boolean> // TODO RODRIGO - implementar
   listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }>
   securitize(sharesCount: string, exitPrice: string, paymentToken: ERC20 | null): Promise<void>
 }
@@ -101,6 +100,50 @@ async function getWeb3(walletName: WalletName, refreshHook?: () => void): Promis
   }
 }
 
+interface Cache {
+  load<T>(name: string, computeData: () => Promise<T>): Promise<T>
+  store<T>(name: string, data: T): Promise<void>
+  remove(name: string): Promise<void>
+}
+
+function newCache(path: string[] = []): Cache {
+  const prefix = path.join('/')
+
+  async function load<T>(name: string, computeData: () => Promise<T>): Promise<T> {
+    if (!window.localStorage) return await computeData()
+    const key = prefix + '/' + name
+    let value = window.localStorage.getItem(key)
+    let data: T
+    if (typeof value == 'string') {
+      data = JSON.parse(value)
+    } else {
+      data = await computeData()
+      value = JSON.stringify(data)
+      window.localStorage.setItem(key, value)
+    }
+    return data
+  }
+
+  async function store<T>(name: string, data: T): Promise<void> {
+    if (!window.localStorage) return
+    const key = prefix + '/' + name
+    const value = JSON.stringify(data)
+    window.localStorage.setItem(key, value)
+  }
+
+  async function remove(name: string): Promise<void> {
+    if (!window.localStorage) return
+    const key = prefix + '/' + name
+    window.localStorage.removeItem(key)
+  }
+
+  return {
+    load,
+    store,
+    remove
+  }
+}
+
 const NFTFY_ABI = require('../contracts/Nftfy.json').abi
 const ERC721_ABI = require('../contracts/ERC721Wrapper.json').abi
 const ERC20_ABI = require('../contracts/ERC721Shares.json').abi
@@ -115,6 +158,9 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
 
   const web3 = await getWeb3(walletName, refreshHook)
   const network = await web3.eth.net.getNetworkType()
+
+  const cache = newCache([network, 'wallet'])
+
   const contracts: ERC721[] = await listNonFungibleTokens()
   const collection: { [address: string]: ERC721Item[] } = await listCollection()
 
@@ -157,11 +203,15 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC721Item(contract: ERC721, tokenId: string): Promise<ERC721Item> {
     let self: ERC721Item
 
-    const { name, description, imageUri } = await loadMetadata()
+    const cache = newCache([network, 'erc721', contract.address, 'items', tokenId])
 
-    function getTokenURI(): Promise<string> {
+    const { name, description, imageUri } = await cache.load('metadata', loadMetadata)
+
+    async function getTokenURI(): Promise<string> {
       const abi = new web3.eth.Contract(ERC721_ABI, contract.address)
-      return abi.methods.tokenURI(tokenId).call()
+      if (network == 'main' && contract.address == '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')
+        return 'https://public.api.cryptokitties.co/v1/kitties/' + tokenId
+      return cache.load<string>('tokenURI', () => abi.methods.tokenURI(tokenId).call())
     }
 
     async function loadMetadata(): Promise<{ name?: string; description?: string; imageUri?: string }> {
@@ -192,11 +242,6 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       if (wrapper == null) return false
       const abi = new web3.eth.Contract(ERC721_ABI, wrapper.address)
       return abi.methods.securitized(tokenId).call()
-    }
-
-    async function isRedeemed(): Promise<boolean> {
-      // TODO RODRIGO - implementar
-      return false
     }
 
     async function listAccountShares(address: string, offset: number, limit: number): Promise<{ items: ERC20[]; count: number }> {
@@ -265,7 +310,6 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       imageUri,
       getTokenOwner,
       isSecuritized,
-      isRedeemed,
       listAccountShares,
       securitize
     })
@@ -274,17 +318,19 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC721(address: string, defaultName = '', defaultSymbol = ''): Promise<ERC721> {
     let self: ERC721
 
+    const cache = newCache([network, 'erc721', address])
+
     const abi = new web3.eth.Contract(ERC721_ABI, address)
     const name = await (async () => {
       try {
-        return await abi.methods.name().call()
+        return await cache.load<string>('name', () => abi.methods.name().call())
       } catch (e) {
         return defaultName
       }
     })()
     const symbol = await (async () => {
       try {
-        return await abi.methods.symbol().call()
+        return await cache.load<string>('symbol', () => abi.methods.symbol().call())
       } catch (e) {
         return defaultSymbol
       }
@@ -297,32 +343,62 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     async function listAllItems(offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }> {
       if (offset < 0) throw new Error('Invalid offset')
       if (limit < 0) throw new Error('Invalid limit')
-      const items: ERC721Item[] = []
-      const count = Number(await abi.methods.totalSupply().call())
-      for (let i = offset; i < Math.min(offset + limit, count); i++) {
-        const tokenId = await abi.methods.tokenByIndex(i).call()
-        items.push(await newERC721Item(self, tokenId))
+      try {
+        const items: ERC721Item[] = []
+        const count = Number(await abi.methods.totalSupply().call())
+        for (let i = offset; i < Math.min(offset + limit, count); i++) {
+          const tokenId = await cache.load<string>('tokenByIndex(' + i + ')', () => abi.methods.tokenByIndex(i).call())
+          items.push(await newERC721Item(self, tokenId))
+        }
+        return { items, count }
+      } catch (e) {
+        console.log('ERC721.listAllItems', self.address, e.message)
+        const items = collection[self.address] || []
+        const count = items.length
+        return { items, count }
       }
-      return { items, count }
     }
 
     async function listAccountItems(address: string, offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }> {
       if (offset < 0) throw new Error('Invalid offset')
       if (limit < 0) throw new Error('Invalid limit')
-      const items: ERC721Item[] = []
-      const count = Number(await abi.methods.balanceOf(address).call())
-      for (let i = offset; i < Math.min(offset + limit, count); i++) {
-        const tokenId = await abi.methods.tokenOfOwnerByIndex(address, i).call()
-        items.push(await newERC721Item(self, tokenId))
+      try {
+        const items: ERC721Item[] = []
+        const count = Number(await abi.methods.balanceOf(address).call())
+        const cachedCount = Number(
+          await cache.load<string>('balanceOf(' + address + ')', async () => String(count))
+        )
+        const fresh = count != cachedCount
+        for (let i = offset; i < Math.min(offset + limit, count); i++) {
+          const name = 'tokenOfOwnerByIndex(' + address + ',' + i + ')'
+          if (fresh) cache.remove(name)
+          const tokenId = await cache.load<string>(name, () => abi.methods.tokenOfOwnerByIndex(address, i).call())
+          items.push(await newERC721Item(self, tokenId))
+        }
+        return { items, count }
+      } catch (e) {
+        console.log('ERC721.listAccountItems', self.address, address, e.message)
+        const items = []
+        for (const item of collection[self.address] || []) {
+          if ((await item.getTokenOwner()) == address) items.push(item)
+        }
+        const count = items.length
+        return { items, count }
       }
-      return { items, count }
     }
 
     async function getWrapper(): Promise<ERC721 | null> {
-      const abi = new web3.eth.Contract(NFTFY_ABI, await nftfy())
-      const _address = await abi.methods.wrappers(address).call()
-      if (_address == '0x0000000000000000000000000000000000000000') return null
-      return newERC721(_address)
+      try {
+        const abi = new web3.eth.Contract(NFTFY_ABI, await nftfy())
+        const _address = await cache.load<string>('wrapper', () => abi.methods.wrappers(address).call())
+        if (_address == '0x0000000000000000000000000000000000000000') {
+          await cache.remove('wrapper')
+          return null
+        }
+        return newERC721(_address)
+      } catch (e) {
+        return null // TODO remove once contracts are published to mainnet
+      }
     }
 
     async function listAllShares(offset: number, limit: number): Promise<{ items: ERC20[]; count: number }> {
@@ -352,24 +428,28 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   async function newERC20(address: string, defaultName = '', defaultSymbol = '', defaultDecimals = 18): Promise<ERC20> {
     let self: ERC20
 
+    const cache = newCache([network, 'erc20', address])
+
     const abi = new web3.eth.Contract(ERC20_ABI, address)
     const name = await (async () => {
       try {
-        return await abi.methods.name().call()
+        return await cache.load<string>('name', () => abi.methods.name().call())
       } catch (e) {
         return defaultName
       }
     })()
     const symbol = await (async () => {
       try {
-        return await abi.methods.symbol().call()
+        return await cache.load<string>('symbol', () => abi.methods.symbol().call())
       } catch (e) {
         return defaultSymbol
       }
     })()
     const decimals = await (async () => {
       try {
-        return Number(await abi.methods.decimals().call())
+        return Number(
+          await cache.load<string>('decimals', () => abi.methods.decimals().call())
+        )
       } catch (e) {
         return defaultDecimals
       }
@@ -380,24 +460,24 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     }
 
     async function getAccountBalance(address: string): Promise<string> {
-      // TODO RODRIGO - Estourando erro
       return coins(await abi.methods.balanceOf(address).call(), decimals)
     }
+
     async function validateAmount(amount: string): Promise<boolean> {
       return valid(amount, decimals)
     }
 
     async function getERC721Item(): Promise<ERC721Item> {
-      const address = await abi.methods.wrapper().call()
-      const tokenId = await abi.methods.tokenId().call()
+      const address = await cache.load<string>('wrapper', () => abi.methods.wrapper().call())
+      const tokenId = await cache.load<string>('tokenId', () => abi.methods.tokenId().call())
       const _abi = new web3.eth.Contract(ERC721_ABI, address)
-      const _address = await _abi.methods.target().call()
+      const _address = await cache.load<string>('target', () => _abi.methods.target().call())
       const contract = await newERC721(_address)
       return newERC721Item(contract, tokenId)
     }
 
     async function getPaymentToken(): Promise<ERC20 | null> {
-      const address = await abi.methods.paymentToken().call()
+      const address = await cache.load<string>('paymentToken', () => abi.methods.paymentToken().call())
       if (address == '0x0000000000000000000000000000000000000000') return null
       return newERC20(address)
     }
@@ -405,18 +485,27 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     async function getExitPrice(): Promise<string> {
       const paymentToken = await getPaymentToken()
       const decimals = paymentToken ? paymentToken.decimals : 18
-      return coins(await abi.methods.exitPrice().call(), decimals)
+      return coins(
+        await cache.load<string>('exitPrice', () => abi.methods.exitPrice().call()),
+        decimals
+      )
     }
 
     async function getSharePrice(): Promise<string> {
       const paymentToken = await getPaymentToken()
       const decimals = paymentToken ? paymentToken.decimals : 18
-      return coins(await abi.methods.sharePrice().call(), decimals)
+      return coins(
+        await cache.load<string>('sharePrice', () => abi.methods.sharePrice().call()),
+        decimals
+      )
     }
 
     async function getSharesCount(): Promise<string> {
       const paymentToken = await getPaymentToken()
-      return coins(await abi.methods.sharesCount().call(), decimals)
+      return coins(
+        await cache.load<string>('sharesCount', () => abi.methods.sharesCount().call()),
+        decimals
+      )
     }
 
     async function isRedeemable(): Promise<boolean> {
@@ -565,7 +654,6 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
   }
 
   async function listAccountItems(address: string, offset: number, limit: number): Promise<{ items: ERC721Item[]; count: number }> {
-    // TODO RODRIGO - estourando erro
     if (offset < 0) throw new Error('Invalid offset')
     if (limit < 0) throw new Error('Invalid limit')
     let items: ERC721Item[] = []
@@ -595,9 +683,9 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
       if (address == contract.address) return false
     }
     contracts.push(await newERC721(address))
-    const addresses = []
+    const addresses = await cache.load<string[]>('contracts', async () => [])
     addresses.push(address)
-
+    await cache.store('contracts', addresses)
     return true
   }
 
@@ -611,6 +699,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     collection[address] = items
     const _collection: { [address: string]: string[] } = {}
     for (const address in collection) _collection[address] = collection[address].map(item => item.tokenId)
+    await cache.store('collection', _collection)
     return true
   }
 
@@ -643,12 +732,12 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     const contracts: ERC721[] = []
     switch (network) {
       case 'main':
-        // contracts.push(await newERC721('0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')) // CK
+        contracts.push(await newERC721('0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')) // CK
         contracts.push(await newERC721('0xc1Caf0C19A8AC28c41Fe59bA6c754e4b9bd54dE9')) // CriptoSkulls
-        // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
+        contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
         contracts.push(await newERC721('0x959e104E1a4dB6317fA58F8295F586e1A978c297')) // EST
         contracts.push(await newERC721('0x4F41d10F7E67fD16bDe916b4A6DC3Dd101C57394')) // FLOWER
-        // contracts.push(await newERC721('0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d')) // LAND
+        contracts.push(await newERC721('0xF87E31492Faf9A91B02Ee0dEAAd50d51d56D5d4d')) // LAND
         contracts.push(await newERC721('0xFBeef911Dc5821886e1dda71586d90eD28174B7d')) // KODA
         contracts.push(await newERC721('0x913ae503153d9A335398D0785Ba60A2d63dDB4e2')) // PARCEL
         contracts.push(await newERC721('0x22C1f6050E56d2876009903609a2cC3fEf83B415')) // POAP
@@ -682,34 +771,38 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         contracts.push(await newERC721('0xb33D6C9487d7445B1996be15D67883D16fBdcE07')) // DCL Plazas
         break
       case 'ropsten':
-        // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
+        contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
         contracts.push(await newERC721('0x124bf28A423B2CA80B3846c3AA0eB944FE7EbB95')) // EST
-        // contracts.push(await newERC721('0x7A73483784ab79257bB11B96Fd62A2C3AE4Fb75B')) // LAND
+        contracts.push(await newERC721('0x7A73483784ab79257bB11B96Fd62A2C3AE4Fb75B')) // LAND
         contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         contracts.push(await newERC721('0x29a3f97E9AC395E2E1BFa789bbBbb5468E6022af')) // KODA
         break
       case 'rinkeby':
-        // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
-        // contracts.push(await newERC721('0x28bEf22DF3e2040A4bE64A9Ca0e8b5Ae2B91462D')) // LAND
+        contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
+        contracts.push(await newERC721('0x28bEf22DF3e2040A4bE64A9Ca0e8b5Ae2B91462D')) // LAND
         contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         contracts.push(await newERC721('0x2Df6816286c583A7EF8637CD4b7Cc1CC62F6161E')) // KODA
         contracts.push(await newERC721('0x913ae503153d9A335398D0785Ba60A2d63dDB4e2')) // PARCEL
         break
       case 'kovan':
-        // contracts.push(await newERC721('0x537263c440943f6a6808bCb8CcB3fe03EE838aD1')) // LAND
+        contracts.push(await newERC721('0x537263c440943f6a6808bCb8CcB3fe03EE838aD1')) // LAND
         contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         break
       case 'goerli':
-        // contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
+        contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
         contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         break
+    }
+    const addresses = await cache.load<string[]>('contracts', async () => [])
+    for (const address in addresses) {
+      contracts.push(await newERC721(address))
     }
     return contracts
   }
 
   async function listCollection(): Promise<{ [address: string]: ERC721Item[] }> {
     const collection: { [address: string]: ERC721Item[] } = {}
-    const _collection: any = () => {}
+    const _collection = await cache.load<{ [address: string]: string[] }>('collection', async () => ({}))
     for (const address in _collection) {
       const items: ERC721Item[] = []
       for (const tokenId of _collection[address]) {
