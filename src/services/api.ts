@@ -769,6 +769,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         contracts.push(await newERC721('0xb6dAe651468E9593E4581705a09c10A76AC1e0c8')) // Async Art
         contracts.push(await newERC721('0xF06059F01F6f08a603c939359a0A1186F7687685')) // MCP Citizen
         contracts.push(await newERC721('0xb33D6C9487d7445B1996be15D67883D16fBdcE07')) // DCL Plazas
+        contracts.push(await newERC721('0xFBeef911Dc5821886e1dda71586d90eD28174B7d')) // KODA
         break
       case 'ropsten':
         contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
