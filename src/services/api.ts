@@ -779,7 +779,8 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
         contracts.push(await newERC721('0x29a3f97E9AC395E2E1BFa789bbBbb5468E6022af')) // KODA
         break
       case 'rinkeby':
-        contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
+        contracts.push(await newERC721('0x16baf0de678e52367adc69fd067e5edd1d33e3bf')), // CK
+          contracts.push(await newERC721('0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85', 'Ethereum Name Service', 'ENS')) // ENS
         contracts.push(await newERC721('0x28bEf22DF3e2040A4bE64A9Ca0e8b5Ae2B91462D')) // LAND
         contracts.push(await newERC721('0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3')) // KIE
         contracts.push(await newERC721('0x2Df6816286c583A7EF8637CD4b7Cc1CC62F6161E')) // KODA
