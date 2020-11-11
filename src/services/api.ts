@@ -207,25 +207,18 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
 
     const { name, description, imageUri } = await cache.load('metadata', loadMetadata)
 
-    async function getTokenURI(): Promise<string> {
-      const abi = new web3.eth.Contract(ERC721_ABI, contract.address)
-      if (network == 'main' && contract.address == '0x06012c8cf97BEaD5deAe237070F9587f8E7A266d')
-        return 'https://public.api.cryptokitties.co/v1/kitties/' + tokenId
-      return cache.load<string>('tokenURI', () => abi.methods.tokenURI(tokenId).call())
-    }
-
     async function loadMetadata(): Promise<{ name?: string; description?: string; imageUri?: string }> {
       try {
         const url =
           network === 'main' ? 'https://api.opensea.io/api/v1' : network === 'rinkeby' ? 'https://rinkeby-api.opensea.io/api/v1' : ''
 
-        const opensea = await axios.get<{ name: string; description: string; image_url: string }>(
+        const opensea = await axios.get<{ name: string; description: string; image_url: string; token_id: string }>(
           `${url}/asset/${contract.address}/${tokenId}`
         )
 
-        const { name, description, image_url } = opensea.data
+        const { name, token_id, description, image_url } = opensea.data
 
-        return { name, description, imageUri: image_url }
+        return { name: name || token_id, description, imageUri: image_url }
       } catch (e) {
         console.log('ERC721Item.loadMetadata', contract.address, tokenId, e.message)
         return {}
