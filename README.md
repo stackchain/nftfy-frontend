@@ -1,3 +1,3 @@
-## nftfy-frontend
+## nftfy-dapp
 
 An open-source frontend for Nftfy.
