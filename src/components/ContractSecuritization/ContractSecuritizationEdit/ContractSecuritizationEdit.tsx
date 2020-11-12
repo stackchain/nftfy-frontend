@@ -67,12 +67,12 @@ export default function ContractSecuritizationEdit() {
   }
 
   const handlePaymentToken = (value: string) => {
-    setPaymentToken(value.replace(/[^0-9.,]/g, ''))
+    setPaymentToken(value)
   }
 
   const selectAfter = (
-    <Select defaultValue='ETH' className='select-after' value={paymentToken} onChange={handlePaymentToken}>
-      <Option value=''>ETH</Option>
+    <Select defaultValue='ETH' className='select-after' onChange={handlePaymentToken}>
+      <Option value='ETH'>ETH</Option>
       {paymentTokens.map(paymentTokenItem => (
         <Option key={paymentTokenItem.symbol} value={paymentTokenItem.symbol}>
           {paymentTokenItem.symbol}
