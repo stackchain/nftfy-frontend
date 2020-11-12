@@ -1,8 +1,8 @@
-name: Development
+name: Production
 
 on:
   push:
-    branches: '*'
+    branches: [main]
 
 jobs:
   build_development:
@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.18.3'
+          node-version: 12
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -29,18 +29,25 @@ jobs:
       - name: Check Branch
         run: echo ${GITHUB_REF#refs/heads/}
 
-      - name: React Install Dependencies
+      - name: Install Depedencies
         run: yarn
 
-      - name: React Prettier
-        run: node_modules/prettier/bin-prettier.js --check "./src/**/*.{ts,tsx,js,jsx,css,scss,json}"
+      - name: Prettier (Check Style)
+        run: yarn prettier
 
-      - name: React Lint
+      - name: ESLint (Check Code Pattern)
         run: yarn lint
 
-      - name: React Build
+      - name: Jest (Check Unit and Component Tests)
+        run: yarn test
+
+      - name: Build React Application
         run: yarn build
-      # - name: Firebase Deploy
-      #   run: node_modules/.bin/firebase use azai-development --token "$FIREBASE_TOKEN" && node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
-      #   env:
-      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+      - name: Deploy Application into Github Pages
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build
+          CLEAN: true
