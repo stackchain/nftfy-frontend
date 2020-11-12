@@ -27,7 +27,7 @@ export default function NonFungibleTokensList({ count, setPagination, loading }:
       <AddNonFungibleTokens />
       <div className='nft-list'>
         {accountItems.map(nft => (
-          <Link key={nft.tokenId} to={`/dapp/contract/securitize/${nft.contract.address}/${nft.tokenId}`}>
+          <Link key={nft.tokenId} to={`/contract/securitize/${nft.contract.address}/${nft.tokenId}`}>
             <div className='nft-item'>
               {nft.imageUri && <img src={nft.imageUri.includes('ipfs://') ? nftImage : nft.imageUri || nftImage} alt={nft.name} />}
               <div className='contract-name'>{nft.contract.name}</div>

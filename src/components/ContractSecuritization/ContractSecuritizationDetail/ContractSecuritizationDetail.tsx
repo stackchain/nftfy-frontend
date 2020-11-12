@@ -32,7 +32,7 @@ export default function ContractSecuritizationDetail() {
   const [loading, setLoading] = useState(false)
 
   const location = useLocation()
-  const contractId = location.pathname.split('/dapp/contract/detail/')[1]
+  const contractId = location.pathname.split('/contract/detail/')[1]
 
   const { wallet } = useContext(WalletContext)
   const [contract, setcontract] = useState<ERC20 | undefined>(undefined)
@@ -138,7 +138,7 @@ export default function ContractSecuritizationDetail() {
           <div className='title'>
             <h2>Contract not found</h2>
           </div>
-          <Button type='primary' size='large' href='/dapp'>
+          <Button type='primary' size='large' href='/'>
             Go to Home
           </Button>
         </div>

@@ -169,7 +169,7 @@ export default function ContractSecuritizationEdit() {
         <div className='contract-not-found'>
           <h2>Contract not found</h2>
 
-          <Button type='primary' size='large' href='/dapp'>
+          <Button type='primary' size='large' href='/'>
             Go to Home
           </Button>
         </div>
@@ -194,7 +194,7 @@ export default function ContractSecuritizationEdit() {
               <div className='title'>
                 <h2>Contract is already securitized</h2>
               </div>
-              <Button type='primary' size='large' href='/dapp'>
+              <Button type='primary' size='large' href='/'>
                 Go to Home
               </Button>
             </div>
