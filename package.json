@@ -28,8 +28,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage",
     "eject": "react-scripts eject",
-    "prettier": "./node_modules/prettier/bin-prettier.js --write ./src/**/*.{ts,tsx}",
+    "prettier:write": "./node_modules/prettier/bin-prettier.js --write ./src/**/*.{ts,tsx}",
+    "prettier": "./node_modules/prettier/bin-prettier.js --check './src/**/*.{ts,tsx}'",
     "lint": "./node_modules/.bin/eslint src/**/*.{ts,tsx}"
   },
   "eslintConfig": {
