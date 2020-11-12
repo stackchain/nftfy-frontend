@@ -19,8 +19,8 @@ export default function ContractSecuritizationEdit() {
 
   const location = useLocation()
   const history = useHistory()
-  const contractAddress = location.pathname.split('/')[4]
-  const tokenId = location.pathname.split('/')[5]
+  const contractAddress = location.pathname.split('/')[3]
+  const tokenId = location.pathname.split('/')[4]
 
   const [contract, setcontract] = useState<ERC721Item | undefined>(undefined)
   const [contractIsSecuritized, setContractIsSecuritized] = useState<boolean | undefined>(undefined)
