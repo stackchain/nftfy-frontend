@@ -38,8 +38,8 @@ jobs:
       - name: ESLint (Check Code Pattern)
         run: yarn lint
 
-      - name: Jest (Check Unit and Component Tests)
-        run: yarn test
+      # - name: Jest (Check Unit and Component Tests)
+      #   run: yarn test
 
       - name: Build React Application
         run: yarn build
