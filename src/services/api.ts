@@ -700,6 +700,7 @@ export async function initializeWallet(walletName: WalletName, refreshHook?: () 
     const contracts: ERC20[] = []
     switch (network) {
       case 'main':
+        contracts.push(await newERC20('0xc633baf9fde99800226c74328024525192294d2b')) // NFY
         contracts.push(await newERC20('0x6B175474E89094C44Da98b954EedeAC495271d0F')) // DAI
         contracts.push(await newERC20('0xdAC17F958D2ee523a2206206994597C13D831ec7')) // USDT
         contracts.push(await newERC20('0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599')) // WBTC
