@@ -13,7 +13,6 @@ export default function ContractImage({ name, meta, description, src }: Props) {
   return (
     <div className='contract-image-item'>
       <div>
-        {console.log('src', src)}
         <img src={src.includes('ipfs://') ? nftImage : src || nftImage} alt={name} />
         <div className='contract-name'>{name}</div>
         <div className='contract-meta'>{meta}</div>
