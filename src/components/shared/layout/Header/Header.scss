@@ -27,6 +27,8 @@
     .walletName.ant-btn {
       color: $black !important;
       padding-left: 44px;
+      padding-top: 10px;
+      padding-bottom: 30px;
 
       .wallet-icon {
         position: absolute;
@@ -40,5 +42,11 @@
       box-shadow: $box-shadow;
       cursor: default !important;
     }
+  }
+
+  .navigate-button {
+    margin-right: 10px;
+    background-color: transparent;
+    margin-left: 10px;
   }
 }

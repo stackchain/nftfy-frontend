@@ -13,7 +13,7 @@ import './ContractSecuritizationDetail.scss'
 
 export default function ContractSecuritizationDetail() {
   const history = useHistory()
-  const { accountIndex, accounts } = useContext(WalletContext)
+  const { accountIndex, accounts, wallet } = useContext(WalletContext)
   const [contractImg, setContractImg] = useState<string>('')
   const [contractName, setContractName] = useState<string>('')
   const [contractDescription, setContractDescription] = useState('')
@@ -34,7 +34,6 @@ export default function ContractSecuritizationDetail() {
   const location = useLocation()
   const contractId = location.pathname.split('/contract/detail/')[1]
 
-  const { wallet } = useContext(WalletContext)
   const [contract, setcontract] = useState<ERC20 | undefined>(undefined)
 
   const getcontract = useCallback(async () => {

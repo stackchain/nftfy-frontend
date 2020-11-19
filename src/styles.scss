@@ -113,3 +113,7 @@ html {
 .ant-table-tbody > tr > td:first-of-type {
   font-weight: bold;
 }
+
+.ant-table-thead > tr > th {
+  background-color: $white;
+}
