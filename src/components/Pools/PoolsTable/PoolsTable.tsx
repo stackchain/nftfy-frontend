@@ -57,7 +57,7 @@ export default function PoolsTable() {
             usdLiquidity: number
           }>(`https://data-api.defipulse.com/api/v1/blocklytics/pools/v1/exchange/${contract.pool.contract}`, {
             params: {
-              'api-key': '6d783620aadc300fc7ed7be33ea02ec60ac0aa45658fd93c6fbef8487d7d'
+              'api-key': '7518c74bf7d279f167278c849d2faca0a983c9edce78a94205d3cf693204'
             }
           })
         ).data
