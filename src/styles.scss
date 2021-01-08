@@ -23,7 +23,8 @@ html {
 
 .ant-btn,
 .ant-dropdown-trigger,
-.ant-card {
+.ant-card,
+.ant-image-preview-img {
   border: none;
   border-radius: 3px;
   box-shadow: $box-shadow;
@@ -139,7 +140,7 @@ html {
 .ant-image-preview-img {
   max-width: 90%;
   max-height: 90%;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .ant-image-mask:hover {
