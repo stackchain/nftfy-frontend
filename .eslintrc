@@ -63,7 +63,9 @@
     "react/jsx-closing-bracket-location": "off",
     "class-methods-use-this": "off",
     "no-useless-constructor": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   },
   "settings": {
     "import/resolver": {
