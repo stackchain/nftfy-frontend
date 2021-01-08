@@ -2,7 +2,7 @@ import { DownOutlined } from '@ant-design/icons'
 import { Button, Dropdown, Menu } from 'antd'
 import React, { useContext } from 'react'
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ntfy from '../../../../assets/nftfy.svg'
 import { WalletContext } from '../../../../context/WalletContext'
 import './Header.scss'
@@ -14,9 +14,6 @@ interface Props {
 export default function Header(props: Props) {
   const { buttonAction } = props
   const { accounts, accountIndex, setAccountIndex, wallet } = useContext(WalletContext)
-  const location = useLocation()
-  const history = useHistory()
-
   const selectAccount = (index: number) => {
     if (wallet) {
       wallet.selectAccount(accounts[index])
@@ -41,19 +38,6 @@ export default function Header(props: Props) {
         </Link>
       </div>
       <div className='wallet'>
-        {accounts.length > 0 && (
-          <>
-            {location.pathname === '/nest' ? (
-              <Button onClick={() => history.push('/')} type='primary' size='large' className='navigate-button'>
-                Wallet
-              </Button>
-            ) : (
-              <Button onClick={() => history.push('/nest')} type='primary' size='large' className='navigate-button'>
-                Nest
-              </Button>
-            )}
-          </>
-        )}
         {accounts.length > 0 && (
           <>
             <Dropdown overlay={dropdownMenu} placement='bottomRight' disabled={accounts.length === 1}>

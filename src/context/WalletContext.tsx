@@ -39,7 +39,7 @@ export const WalletContext = React.createContext<{
   setAccountSharesCount: () => null
 })
 
-export default function WalletContextWrapper(props: React.PropsWithChildren<{}>) {
+export default function WalletContextWrapper(props: React.PropsWithChildren<Record<string, unknown>>) {
   const { children } = props
 
   const walletAddressMock = useWalletAddressMock()
