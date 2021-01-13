@@ -1,11 +1,15 @@
-name: Production
+name: Development
 
 on:
   push:
-    branches: [main]
+    branches:
+      - '*'
+      - '*/*'
+      - '**'
+      - '!main'
 
 jobs:
-  build_production:
+  build_development:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +33,7 @@ jobs:
       - name: Check Branch
         run: echo ${GITHUB_REF#refs/heads/}
 
-      - name: Install Depedencies
+      - name: Install Dependencies
         run: yarn
 
       - name: Prettier (Check Style)
@@ -43,11 +47,3 @@ jobs:
 
       - name: Build React Application
         run: yarn build
-
-      - name: Deploy Application into Github Pages
-        uses: JamesIves/github-pages-deploy-action@3.7.1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: build
-          CLEAN: true

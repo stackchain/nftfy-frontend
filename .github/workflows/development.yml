@@ -1,15 +1,11 @@
-name: Development
+name: Production
 
 on:
   push:
-    branches:
-      - '*'
-      - '*/*'
-      - '**'
-      - '!main'
+    branches: [main]
 
 jobs:
-  build_development:
+  build_production:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,7 +29,7 @@ jobs:
       - name: Check Branch
         run: echo ${GITHUB_REF#refs/heads/}
 
-      - name: Install Depedencies
+      - name: Install Dependencies
         run: yarn
 
       - name: Prettier (Check Style)
@@ -47,3 +43,6 @@ jobs:
 
       - name: Build React Application
         run: yarn build
+
+      - name: Firebase Deploy
+        run: firebase use nftfy-dev && firebase deploy --only=hosting --token "$FIREBASE_TOKEN"
