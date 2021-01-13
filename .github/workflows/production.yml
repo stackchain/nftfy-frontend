@@ -6,7 +6,7 @@ on:
       - v/*
 
 jobs:
-  build_staging:
+  build_production:
     runs-on: ubuntu-latest
 
     steps:
