@@ -1,11 +1,11 @@
-name: Production
+name: Development
 
 on:
   push:
     branches: [main]
 
 jobs:
-  build_production:
+  build_development:
     runs-on: ubuntu-latest
 
     steps:
