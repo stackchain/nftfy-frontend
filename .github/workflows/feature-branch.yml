@@ -1,4 +1,4 @@
-name: Development
+name: Feature Branch
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - '!main'
 
 jobs:
-  build_development:
+  build_feature_branch:
     runs-on: ubuntu-latest
 
     steps:
