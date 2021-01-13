@@ -10,7 +10,8 @@
     "eject": "react-scripts eject",
     "prettier:write": "./node_modules/prettier/bin-prettier.js --write ./src/**/*.{ts,tsx}",
     "prettier": "./node_modules/prettier/bin-prettier.js --check './src/**/*.{ts,tsx}'",
-    "lint": "./node_modules/.bin/eslint src/**/*.{ts,tsx}"
+    "lint": "./node_modules/.bin/eslint src/**/*.{ts,tsx}",
+    "firebase": "firebase"
   },
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
