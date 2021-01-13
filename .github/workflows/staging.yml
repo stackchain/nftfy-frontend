@@ -1,0 +1,51 @@
+name: Staging
+
+on:
+  create:
+    tags:
+      - staging/v/*
+
+jobs:
+  build_staging:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Check Branch
+        run: echo ${GITHUB_REF#refs/heads/}
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Prettier (Check Style)
+        run: yarn prettier
+
+      - name: ESLint (Check Code Pattern)
+        run: yarn lint
+
+      # - name: Jest (Check Unit and Component Tests)
+      #   run: yarn test
+
+      - name: Build React Application
+        run: yarn build
+
+      - name: Firebase Deploy
+        run: yarn firebase use nftfy-stg --token "$FIREBASE_TOKEN" && yarn firebase deploy --token "$FIREBASE_TOKEN" --only=hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
