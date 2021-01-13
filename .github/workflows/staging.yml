@@ -1,9 +1,8 @@
 name: Staging
 
 on:
-  create:
-    tags:
-      - staging/v/*
+  push:
+    branches: [staging]
 
 jobs:
   build_staging:
