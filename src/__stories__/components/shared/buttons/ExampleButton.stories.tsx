@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
-import { ExampleButton, ExampleButtonProps } from '../components/shared/buttons'
+import { ExampleButton, ExampleButtonProps } from '../../../../components/shared/buttons'
 
 export default {
   title: 'components/shared/buttons/ExampleButton',
