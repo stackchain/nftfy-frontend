@@ -1,19 +1,13 @@
 export const colors = {
+  orange: '#FE8367',
   white: '#ffffff',
   white1: '#f5f5f5',
-  white2: '#fafafa',
   gray1: '#8C8C8C',
   gray2: '#595959 ',
   gray3: '#E8E8E8',
   gray4: '#747474',
-  black: '#000000',
-  orange: '#FE8367'
+  black: '#000000'
 }
-
-export const fonts = {
-  montserrat: 'Montserrat'
-}
-
 export const viewport = {
   xs: 0,
   sm: '576px',

@@ -26,7 +26,7 @@ const S = {
     font-family: ${fonts.montserrat};
     font-weight: 500;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 1.2rem;
     line-height: 20px;
     display: flex;
     align-items: center;

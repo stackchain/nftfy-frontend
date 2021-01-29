@@ -32,7 +32,7 @@ const S = {
     font-family: ${fonts.montserrat};
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 1.4rem;
     line-height: 22px;
 
     display: flex;

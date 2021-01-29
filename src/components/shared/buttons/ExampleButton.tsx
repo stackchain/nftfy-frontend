@@ -67,15 +67,15 @@ const S = {
       box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
     }
     &.storybook-button--small {
-      font-size: 12px;
+      font-size: 1.2rem;
       padding: 10px 16px;
     }
     &.storybook-button--medium {
-      font-size: 14px;
+      font-size: 1.4rem;
       padding: 11px 20px;
     }
     &.storybook-button--large {
-      font-size: 16px;
+      font-size: 1.6rem;
       padding: 12px 24px;
     }
   `

@@ -45,7 +45,7 @@ const S = {
     font-family: Montserrat;
     font-style: normal;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1.6rem;
     line-height: 24px;
     color: ${colors.gray2};
     white-space: nowrap;
@@ -84,7 +84,7 @@ const S = {
         font-family: Montserrat;
         font-style: normal;
         font-weight: 500;
-        font-size: 14px;
+        font-size: 1.4rem;
         line-height: 22px;
 
         display: flex;

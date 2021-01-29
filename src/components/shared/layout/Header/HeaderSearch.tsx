@@ -31,7 +31,7 @@ const S = {
     outline: none;
     font-family: ${fonts.montserrat};
     font-weight: 500;
-    font-size: 16px;
+    font-size: 1.6rem;
     line-height: 24px;
     padding-left: 48px;
     padding-right: 8px;
