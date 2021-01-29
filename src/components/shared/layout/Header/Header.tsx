@@ -72,7 +72,7 @@ const S = {
     border-radius: 8px;
     border: none;
     font-style: normal;
-    font-weight: bold;
+    font-weight: 500;
     font-size: 16px;
     line-height: 24px;
     color: ${colors.gray2};
