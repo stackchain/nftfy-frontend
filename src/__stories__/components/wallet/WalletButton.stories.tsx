@@ -5,7 +5,7 @@ import React from 'react'
 import { WalletButton } from '../../../components/Wallet/WalletButton'
 
 export default {
-  title: 'components/Wallet/WalletButton.tsx',
+  title: 'components/wallet/WalletButton.tsx',
   component: WalletButton
 } as Meta
 

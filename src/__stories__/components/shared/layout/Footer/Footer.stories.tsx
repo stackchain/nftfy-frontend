@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { Footer } from '../../../../../components/shared/layout/Footer/Footer'
 
 export default {
-  title: 'components/shared/Footer/Footer.tsx',
+  title: 'components/shared/layout/Footer/Footer.tsx',
   component: Footer
 } as Meta
 

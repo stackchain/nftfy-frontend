@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { Header } from '../../../../../components/shared/layout/Header/Header'
 
 export default {
-  title: 'components/shared/Header/Header.tsx',
+  title: 'components/shared/layout/Header/Header.tsx',
   component: Header
 } as Meta
 

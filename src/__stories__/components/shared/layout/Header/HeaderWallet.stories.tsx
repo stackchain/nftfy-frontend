@@ -5,7 +5,7 @@ import React from 'react'
 import { HeaderWallet } from '../../../../../components/shared/layout/Header/HeaderWallet'
 
 export default {
-  title: 'components/shared/Header/Wallet.tsx',
+  title: 'components/shared/layout/Header/Wallet.tsx',
   component: HeaderWallet
 } as Meta
 

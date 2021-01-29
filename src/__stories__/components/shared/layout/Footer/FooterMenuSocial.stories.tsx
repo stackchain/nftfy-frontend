@@ -5,7 +5,7 @@ import React from 'react'
 import { FooterMenuSocial } from '../../../../../components/shared/layout/Footer/FooterMenuSocial'
 
 export default {
-  title: 'components/shared/Footer/FooterMenuSocial.tsx',
+  title: 'components/shared/layout/Footer/FooterMenuSocial.tsx',
   component: FooterMenuSocial
 } as Meta
 

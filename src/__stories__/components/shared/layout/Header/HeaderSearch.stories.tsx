@@ -5,7 +5,7 @@ import React from 'react'
 import { HeaderSearch } from '../../../../../components/shared/layout/Header/HeaderSearch'
 
 export default {
-  title: 'components/shared/Header/HeaderSearch.tsx',
+  title: 'components/shared/layout/Header/HeaderSearch.tsx',
   component: HeaderSearch
 } as Meta
 
