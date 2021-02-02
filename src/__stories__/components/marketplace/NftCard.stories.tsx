@@ -1,9 +1,9 @@
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
-import randomImg from '../../../assets/nftCard/random.png'
-import rectangle from '../../../assets/nftCard/rectangle.png'
-import square from '../../../assets/nftCard/square.png'
+import randomImg from '../../../assets/nft-card/random.png'
+import rectangle from '../../../assets/nft-card/rectangle.png'
+import square from '../../../assets/nft-card/square.png'
 import { NftCard, NftCardProps } from '../../../components/marketplace/NftCard'
 
 export default {

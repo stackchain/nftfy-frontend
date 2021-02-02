@@ -3,16 +3,16 @@
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { Footer } from '../../../../../components/shared/layout/Footer/Footer'
+import MarketplacePage from '../../pages/MarketplacePage'
 
 export default {
-  title: 'components/shared/layout/Footer/Footer.tsx',
-  component: Footer
+  title: 'pages/MarketplacePage',
+  component: MarketplacePage
 } as Meta
 
 const Template: Story = args => (
   <MemoryRouter>
-    <Footer {...args} />
+    <MarketplacePage {...args} />
   </MemoryRouter>
 )
 

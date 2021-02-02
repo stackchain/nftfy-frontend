@@ -2,14 +2,14 @@
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
-import { ConnectWallet } from '../../../components/wallet/ConnectWallet'
+import { FooterMenuSocial } from '../../../../../components/shared/layout/footer/FooterMenuSocial'
 
 export default {
-  title: 'components/wallet/ConnectWallet.tsx',
-  component: ConnectWallet
+  title: 'components/shared/layout/footer/FooterMenuSocial.tsx',
+  component: FooterMenuSocial
 } as Meta
 
-const Template: Story = args => <ConnectWallet {...args} />
+const Template: Story = args => <FooterMenuSocial {...args} />
 
 export const Default = Template.bind({})
 Default.args = {}

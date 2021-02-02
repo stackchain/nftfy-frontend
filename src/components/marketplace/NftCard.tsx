@@ -7,16 +7,18 @@ import notFound from '../../assets/notfound.svg'
 import { colors, fonts, viewport } from '../../styles/variables'
 
 export interface NftCardProps {
+  id: string
   image: string
   name: string
   price: number
   loading: boolean
+  className?: string
 }
 
-export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading }) => {
+export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, className }) => {
   const Spinner = <LoadingOutlined spin />
   return (
-    <S.Card>
+    <S.Card className={className}>
       <S.BoxImg className={image === '' ? 'bg-fail' : ''}>
         <S.Img src={image || notFound} alt={name || 'not found'} hidden={loading} />
         <Spin indicator={Spinner} spinning={loading} />
@@ -47,7 +49,7 @@ const S = {
   Card: styled.div`
     width: 100%;
     height: auto;
-    max-width: 300px;
+    max-width: 576px;
 
     border: 1px solid ${colors.gray3};
     box-sizing: border-box;
@@ -73,24 +75,26 @@ const S = {
     }
   `,
   BoxImg: styled.div`
-    width: auto;
-    height: 100%;
-    max-width: 300px;
-    min-height: 300px;
+    width: 100%;
+    height: 240px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 16px;
 
-    @media (max-width: ${viewport.sm}) {
-      width: 100%;
+    @media (max-width: ${viewport.xxl}) {
+      height: 220px;
+    }
+
+    @media (max-width: ${viewport.lg}) {
+      height: 320px;
     }
   `,
   Img: styled.img`
     width: auto;
     height: auto;
-    max-width: 268px;
-    max-height: 268px;
+    padding: 16px;
+    max-height: 100%;
+    max-width: 100%;
     -webkit-user-drag: none;
   `,
   BoxInfo: styled.div`

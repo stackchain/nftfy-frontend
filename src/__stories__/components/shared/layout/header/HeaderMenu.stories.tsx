@@ -3,18 +3,17 @@
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { Header } from '../../../../../components/shared/layout/Header/Header'
+import { HeaderMenu } from '../../../../../components/shared/layout/header/HeaderMenu'
 
 export default {
-  title: 'components/shared/layout/Header/Header.tsx',
-  component: Header
+  title: 'components/shared/layout/header/HeaderNav.tsx',
+  component: HeaderMenu
 } as Meta
 
 const Template: Story = args => (
   <MemoryRouter>
-    <Header {...args} />
+    <HeaderMenu {...args} />
   </MemoryRouter>
 )
 
 export const Default = Template.bind({})
-Default.args = {}

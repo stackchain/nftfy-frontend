@@ -38,6 +38,7 @@ const S = {
     justify-content: flex-end;
     padding: 0px 48px;
     background: ${colors.white};
+    border-bottom: 1px solid ${colors.gray3};
     @media (max-width: ${viewport.xl}) {
       display: none;
     }
@@ -57,7 +58,7 @@ const S = {
     }
 
     @media (max-width: ${viewport.sm}) {
-      padding: 4px;
+      padding: 8px;
     }
   `,
   Logo: styled.img`

@@ -4,9 +4,13 @@ import { colors, fonts, viewport } from '../../../../styles/variables'
 import { FooterMenu } from './FooterMenu'
 import { FooterMenuSocial } from './FooterMenuSocial'
 
-export const Footer: React.FC = () => {
+export interface FooterProps {
+  className?: string
+}
+
+export const Footer: React.FC<FooterProps> = ({ className }: FooterProps) => {
   return (
-    <S.Footer>
+    <S.Footer className={className}>
       <S.Span>© Nftfy 2021, All rights reserved.</S.Span>
       <FooterMenu />
       <FooterMenuSocial />
@@ -18,11 +22,11 @@ const S = {
   Footer: styled.footer`
     width: 100%;
     height: 48px;
-    padding: 0 48px;
     background: ${colors.white};
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding: 0 48px;
     @media (max-width: ${viewport.xl}) {
       padding: 0;
       justify-content: center;

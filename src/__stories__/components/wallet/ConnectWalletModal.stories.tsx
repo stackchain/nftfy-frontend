@@ -2,10 +2,10 @@
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
-import { ConnectWalletModal } from '../../../components/Wallet/ConnectWalletModal'
+import { ConnectWalletModal } from '../../../components/wallet/ConnectWalletModal'
 
 export default {
-  title: 'components/Wallet/ConnectWalletModal.tsx',
+  title: 'components/wallet/ConnectWalletModal.tsx',
   component: ConnectWalletModal
 } as Meta
 

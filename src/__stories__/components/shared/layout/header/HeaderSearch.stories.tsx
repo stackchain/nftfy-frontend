@@ -2,10 +2,10 @@
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
-import { HeaderSearch } from '../../../../../components/shared/layout/Header/HeaderSearch'
+import { HeaderSearch } from '../../../../../components/shared/layout/header/HeaderSearch'
 
 export default {
-  title: 'components/shared/layout/Header/HeaderSearch.tsx',
+  title: 'components/shared/layout/header/HeaderSearch.tsx',
   component: HeaderSearch
 } as Meta
 

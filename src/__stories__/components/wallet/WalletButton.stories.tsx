@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
-import { WalletButton } from '../../../components/Wallet/WalletButton'
+import { WalletButton } from '../../../components/wallet/WalletButton'
 
 export default {
   title: 'components/wallet/WalletButton.tsx',

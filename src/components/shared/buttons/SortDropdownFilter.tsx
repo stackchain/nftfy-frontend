@@ -1,71 +1,68 @@
 import { Dropdown, Menu } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
-import tokenWallet from '../../assets/walletImage.svg'
-import { colors } from '../../styles/variables'
+import filterIcon from '../../../assets/filterIcon.svg'
+import { colors } from '../../../styles/variables'
 
-export const WalletButton: React.FC = () => {
-  const WalletMenuItens = (
+export interface SortDropdownFilterProps {
+  className?: string
+}
+
+export const SortDropdownFilter: React.FC<SortDropdownFilterProps> = ({ className }: SortDropdownFilterProps) => {
+  const SortMenuItems = (
     <S.StyledMenu>
       <Menu.Item key='0'>
-        <S.Link href='http://www.google.com/'>Wallet</S.Link>
+        <span>Recently added</span>
       </Menu.Item>
       <Menu.Item key='1'>
-        <S.Link href='http://www.google.com/'>Buy NFY</S.Link>
+        <span>Cheapest</span>
       </Menu.Item>
       <Menu.Item key='3'>
-        <S.Link href='http://www.google.com/'>What is NFY</S.Link>
+        <span>Highest price</span>
+      </Menu.Item>
+      <Menu.Item key='4'>
+        <span>Best sellers</span>
       </Menu.Item>
     </S.StyledMenu>
   )
   return (
-    <Dropdown overlay={WalletMenuItens} trigger={['click']}>
-      <S.WalletButtonArea>
-        <S.WalletButton type='button'>1.000.00 NFY</S.WalletButton>
-        <S.TokenWallet src={tokenWallet} alt='wallet token' />
-      </S.WalletButtonArea>
+    <Dropdown overlay={SortMenuItems} trigger={['click']}>
+      <S.SortButton className={className} type='button'>
+        Sort by
+        <img src={filterIcon} alt='wallet token' />
+      </S.SortButton>
     </Dropdown>
   )
 }
 
 const S = {
-  WalletButtonArea: styled.div`
-    display: flex;
-    flex-direction: row;
-    width: auto;
-  `,
-  WalletButton: styled.button`
-    width: 100%;
-    padding: 0 24px;
-    min-width: 120px;
-    height: 40px;
-    background: ${colors.white1};
+  SortButton: styled.button`
+    width: 136px;
+    height: 32px;
+    padding: 8px 16px;
+    background: ${colors.white};
     border-radius: 8px;
-    border: none;
+    border: 1px solid ${colors.gray3};
     font-family: Montserrat;
     font-style: normal;
     font-weight: 500;
-    font-size: 1.6rem;
-    line-height: 24px;
-    color: ${colors.gray2};
+    font-size: 1.4rem;
+    line-height: 22px;
+    color: ${colors.gray5};
     white-space: nowrap;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     transition: background-color 0.5s;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
     &:hover {
       background: ${colors.gray3};
     }
     &:focus {
-      border: none;
       outline: none;
     }
-  `,
-  TokenWallet: styled.img`
-    width: 40px;
-    height: 40px;
-    margin-left: -18px;
-  `,
-  Link: styled.a`
-    color: red;
   `,
   StyledMenu: styled(Menu)`
     width: 192px;
@@ -77,10 +74,11 @@ const S = {
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     .ant-dropdown-menu-item {
+      height: 40px;
       &:hover {
         background: ${colors.white};
       }
-      & > a {
+      & > span {
         font-family: Montserrat;
         font-style: normal;
         font-weight: 500;
@@ -89,7 +87,6 @@ const S = {
 
         display: flex;
         align-items: center;
-
         color: ${colors.gray4};
       }
     }

@@ -37,6 +37,13 @@ const customViewports = {
       width: '1024px',
       height: '1366px'
     }
+  },
+  'imac-27': {
+    name: 'iMac 27',
+    styles: {
+      width: '1280px',
+      height: '720px'
+    }
   }
 }
 export const parameters = {
