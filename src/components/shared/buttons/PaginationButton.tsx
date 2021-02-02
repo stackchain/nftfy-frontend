@@ -22,8 +22,15 @@ export const S = {
     color: ${colors.gray2};
 
     li {
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 8px;
       margin: 0px 8px !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
     li:first-child {
       display: none;
     }
@@ -34,19 +41,24 @@ export const S = {
     li.ant-pagination-item.ant-pagination-item-active {
       background: ${colors.gray3};
       box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
-      border-radius: 8px;
-      width: 32px;
-      height: 32px;
       border: 1px solid ${colors.gray3};
       display: flex;
       align-items: center;
       justify-content: center;
     }
+
+    .ant-pagination-item a,
     .ant-pagination-item-active a {
       color: ${colors.gray2};
-    }
-    .ant-pagination-item a:hover {
-      color: ${colors.gray2};
+      &:hover,
+      &:link,
+      &:focus {
+        color: ${colors.gray2};
+      }
+
+      &:hover {
+        color: ${colors.gray1};
+      }
     }
   `
 }
