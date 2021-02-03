@@ -27,7 +27,10 @@ export const S = {
     align-items: center;
     justify-content: center;
     background: ${colors.white};
+    padding: 0 48px;
+    flex-wrap: wrap-reverse;
     @media (max-width: ${viewport.xl}) {
+      flex-wrap: nowrap;
       flex-flow: column-reverse;
     }
     @media (max-width: ${viewport.md}) {
