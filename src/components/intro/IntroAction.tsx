@@ -13,7 +13,7 @@ export const IntroAction: React.FC<ActionIntroProps> = ({ className }: ActionInt
       <S.H2>Welcome to Nftfy</S.H2>
       <S.AreaActionButtons>
         <S.ButtonExplore>Explore</S.ButtonExplore>
-        <S.ButtonSecuritiza>Securitize</S.ButtonSecuritiza>
+        <S.ButtonSecuritize>Securitize</S.ButtonSecuritize>
       </S.AreaActionButtons>
     </S.ContentInfoPage>
   )
@@ -21,11 +21,9 @@ export const IntroAction: React.FC<ActionIntroProps> = ({ className }: ActionInt
 
 const S = {
   ContentInfoPage: styled.section`
-    width: 560px;
+    max-width: 592px;
+    max-height: 242px;
     background: ${colors.white};
-    @media (max-width: ${viewport.sm}) {
-      width: 100%;
-    }
   `,
   H1: styled.h1`
     font-family: Montserrat;
@@ -63,7 +61,8 @@ const S = {
     flex-direction: row;
   `,
   ButtonExplore: styled.button`
-    width: 190px;
+    flex: 1;
+    max-width: 190px;
     height: 40px;
     cursor: pointer;
 
@@ -82,12 +81,10 @@ const S = {
       border: none;
       outline: none;
     }
-    @media (max-width: ${viewport.sm}) {
-      width: 160px;
-    }
   `,
-  ButtonSecuritiza: styled.button`
-    width: 190px;
+  ButtonSecuritize: styled.button`
+    flex: 1;
+    max-width: 190px;
     height: 40px;
     cursor: pointer;
 
@@ -104,9 +101,6 @@ const S = {
     color: ${colors.gray2};
     &:focus {
       outline: none;
-    }
-    @media (max-width: ${viewport.sm}) {
-      width: 160px;
     }
   `
 }

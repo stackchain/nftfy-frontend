@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import comunityDefy from '../assets/comunityDefy.svg'
+import communityDefy from '../assets/communityDefy.svg'
 import { IntroAction } from '../components/intro/IntroAction'
 import { Footer, Header } from '../components/shared/layout'
 import { colors, viewport } from '../styles/variables'
@@ -10,8 +10,12 @@ export default function IntroPage() {
     <>
       <Header />
       <S.Main>
-        <S.ActionIntro />
-        <S.AreaVideo src={comunityDefy} />
+        <S.BoxActionIntro>
+          <IntroAction />
+        </S.BoxActionIntro>
+        <S.AreaDivVideo>
+          <S.AreaVideo src={communityDefy} />
+        </S.AreaDivVideo>
       </S.Main>
       <Footer />
     </>
@@ -21,37 +25,47 @@ export default function IntroPage() {
 export const S = {
   Main: styled.main`
     display: flex;
-    height: 100vh;
+    flex: 1;
     width: 100%;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     background: ${colors.white};
-    padding: 0 48px;
-    flex-wrap: wrap-reverse;
-    @media (max-width: ${viewport.xl}) {
-      flex-wrap: nowrap;
-      flex-flow: column-reverse;
+    padding: 230px 48px;
+    @media (max-width: ${viewport.xxl}) {
+      padding: 100px 48px;
     }
-    @media (max-width: ${viewport.md}) {
-      padding: 0 24px;
+    @media (max-width: ${viewport.xl}) {
+      flex-direction: column-reverse;
+      padding: 100px 24px;
     }
     @media (max-width: ${viewport.sm}) {
-      padding: 0 8px;
+      padding: 40px 8px;
     }
   `,
-
-  ActionIntro: styled(IntroAction)`
-    margin-right: 32px;
+  BoxActionIntro: styled.div`
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 16px;
     @media (max-width: ${viewport.xl}) {
       margin-right: 0;
-      margin-top: 32px;
+      margin-top: 16px;
+    }
+  `,
+  AreaDivVideo: styled.div`
+    flex: 1;
+    display: flex;
+    margin-left: 16px;
+    @media (max-width: ${viewport.xl}) {
+      align-items: flex-end;
+      margin-bottom: 16px;
     }
   `,
   AreaVideo: styled.img`
-    @media (max-width: ${viewport.lg}) {
-      width: 100%;
-      height: auto;
-    }
+    max-width: 764px;
+    max-height: 524px;
+    width: 100%;
+    height: auto;
   `
 }

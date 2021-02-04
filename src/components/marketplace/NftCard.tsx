@@ -67,12 +67,6 @@ const S = {
       cursor: pointer;
       box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
     }
-    .anticon-loading {
-      font-size: 7.8rem;
-      svg {
-        fill: ${colors.orange};
-      }
-    }
   `,
   BoxImg: styled.div`
     width: 100%;
