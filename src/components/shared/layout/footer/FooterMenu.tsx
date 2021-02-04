@@ -7,7 +7,7 @@ export const FooterMenu: React.FC = () => {
   return (
     <S.Menu>
       <S.LinkItem to='/#'>Terms</S.LinkItem>
-      <S.LinkItem to='/#'>Pricavy policy</S.LinkItem>
+      <S.LinkItem to='/#'>Privacy policy</S.LinkItem>
     </S.Menu>
   )
 }
