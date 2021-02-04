@@ -36,6 +36,9 @@ jobs:
       - name: Prettier (Check Style)
         run: yarn prettier
 
+      - name: Spell (Check Dictionary Language)
+        run: yarn cspell
+
       - name: ESLint (Check Code Pattern)
         run: yarn lint
 
