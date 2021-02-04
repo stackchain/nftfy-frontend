@@ -8,10 +8,10 @@ import { colors, viewport } from '../../styles/variables'
 export const ConnectWallet: React.FC = () => {
   return (
     <S.ConnectWallet>
-      <S.BackArror>
+      <S.BackArrow>
         <S.ArrowIcon src={shape} alt='go back' />
         <S.Span>Go back</S.Span>
-      </S.BackArror>
+      </S.BackArrow>
       <S.Title>Connect your wallet</S.Title>
       <S.ButtonConnect>
         <S.ConnectIcon src={metaMask} alt='Metamask' />
@@ -38,7 +38,7 @@ const S = {
       margin-bottom: 118px;
     }
   `,
-  BackArror: styled.div`
+  BackArrow: styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
