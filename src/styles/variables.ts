@@ -6,10 +6,14 @@ export const colors = {
   gray2: '#595959 ',
   gray3: '#E8E8E8',
   gray4: '#747474',
-  gray5: '#5A5A5A',
-  gray6: '#c4c4c4',
+  gray5: '#c4c4c4',
+  gray6: '#262626',
   black: '#000000',
-  orange: '#FE8367'
+  orange: '#FE8367',
+  blue1: '#226AED',
+  blue2: '#0A4EC9',
+  green1: '#3AB338',
+  red: '#DB4444'
 }
 
 export const fonts = {

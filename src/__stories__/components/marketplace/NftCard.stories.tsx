@@ -12,7 +12,11 @@ export default {
   argTypes: {}
 } as Meta
 
-const Template: Story<NftCardProps> = args => <NftCard {...args} />
+const Template: Story<NftCardProps> = args => (
+  <div style={{ width: '260px' }}>
+    <NftCard {...args} />
+  </div>
+)
 
 export const Square = Template.bind({})
 Square.args = {
