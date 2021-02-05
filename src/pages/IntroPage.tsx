@@ -60,6 +60,7 @@ export const S = {
     @media (max-width: ${viewport.xl}) {
       align-items: flex-end;
       margin-bottom: 16px;
+      margin-left: 0px;
     }
   `,
   AreaVideo: styled.img`
