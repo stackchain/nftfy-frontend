@@ -6,8 +6,8 @@ import { colors, fonts, viewport } from '../../../../styles/variables'
 export const FooterMenu: React.FC = () => {
   return (
     <S.Menu>
-      <S.LinkItem to='/#'>Terms</S.LinkItem>
-      <S.LinkItem to='/#'>Privacy policy</S.LinkItem>
+      <S.LinkItem to='/terms'>Terms</S.LinkItem>
+      <S.LinkItem to='/privacy-policy'>Privacy Policy</S.LinkItem>
     </S.Menu>
   )
 }

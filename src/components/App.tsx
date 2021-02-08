@@ -5,6 +5,8 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { graphQlClient } from '../graphql/ClientGraphql'
 import FallbackPage from '../pages/FallbackPage'
 import Routes from '../routes/Routes'
+import '../styles/fonts.css'
+import '../styles/reset.css'
 
 export default function App() {
   return (

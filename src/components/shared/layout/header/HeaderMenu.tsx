@@ -6,11 +6,12 @@ import { colors, fonts } from '../../../../styles/variables'
 export const HeaderMenu: React.FC = () => {
   return (
     <S.Menu>
-      <S.LinkItem to='/#' className='active'>
+      <S.LinkItem to='/marketplace/1' className='active'>
         Explore
       </S.LinkItem>
-      <S.LinkItem to='/#'>Securitize</S.LinkItem>
-      <S.LinkItem to='/#'>How it works</S.LinkItem>
+      <S.LinkItem to='/securitize'>Securitize</S.LinkItem>
+      <S.LinkItem to='/portfolio'>Portfolio</S.LinkItem>
+      <S.LinkItem to='/tutorial'>How it works</S.LinkItem>
     </S.Menu>
   )
 }
@@ -22,7 +23,7 @@ const S = {
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 330px;
+    max-width: 480px;
     margin: 0 24px;
     height: 40px;
   `,
@@ -36,14 +37,17 @@ const S = {
     align-items: center;
     color: ${colors.gray1};
     margin: 0 24px;
+
     &:hover {
       color: ${colors.gray2};
     }
 
     &:nth-last-child(2) {
-      margin: 0;
+      margin-left: 24px;
+      margin-right: 0;
       &::after {
         margin-left: 24px;
+        margin-right: 0;
         content: '|';
         font-family: ${fonts.montserrat};
         font-weight: 300;

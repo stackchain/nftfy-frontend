@@ -10,19 +10,19 @@ import { viewport } from '../../../../styles/variables'
 export const FooterMenuSocial: React.FC = () => {
   return (
     <S.FooterMenu>
-      <S.LinkItem>
+      <S.LinkItem href='https://www.linkedin.com/company/nftfy/' target='_blank'>
         <img src={linkedInIcon} alt='linkedIn' />
       </S.LinkItem>
-      <S.LinkItem>
+      <S.LinkItem href='https://discord.gg/jjuRnvSJ' target='_blank'>
         <img src={discordIcon} alt='discord' />
       </S.LinkItem>
-      <S.LinkItem>
+      <S.LinkItem href='https://twitter.com/nftfysec' target='_blank'>
         <img src={twitterIcon} alt='twitter' />
       </S.LinkItem>
-      <S.LinkItem>
+      <S.LinkItem href='https://github.com/nftfy' target='_blank'>
         <img src={githubIcon} alt='github' />
       </S.LinkItem>
-      <S.LinkItem>
+      <S.LinkItem href='https://t.me/nftfySec' target='_blank'>
         <img src={telegramIcon} alt='telegram' />
       </S.LinkItem>
     </S.FooterMenu>

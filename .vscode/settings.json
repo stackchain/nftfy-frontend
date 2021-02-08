@@ -1,4 +1,5 @@
 {
+  "typescript.preferences.importModuleSpecifier": "relative",
   "editor.formatOnSave": true,
   "editor.codeLens": true,
   "typescript.tsdk": "node_modules/typescript/lib",

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import menuIcon from '../../../../assets/menuIcon.svg'
 import nftfyHeaderLogo from '../../../../assets/nftfyHeaderLogo.svg'
@@ -13,7 +14,9 @@ export const Header: React.FC = () => {
   return (
     <>
       <S.Header>
-        <S.Logo src={nftfyHeaderLogo} alt='Nftfy' />
+        <Link to='/'>
+          <S.Logo src={nftfyHeaderLogo} alt='Nftfy' />
+        </Link>
         <HeaderSearch />
         <HeaderMenu />
         <HeaderWallet />
@@ -65,6 +68,7 @@ const S = {
     width: 128px;
     height: 40px;
     margin-right: 24px;
+    cursor: pointer;
   `,
   ButtonConnectWallet: styled.button`
     width: 250.25px;

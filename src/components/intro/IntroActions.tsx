@@ -1,3 +1,4 @@
+import { Button } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 import { colors, viewport } from '../../styles/variables'
@@ -6,14 +7,14 @@ export interface ActionIntroProps {
   className?: string
 }
 
-export const IntroAction: React.FC<ActionIntroProps> = ({ className }: ActionIntroProps) => {
+export const IntroActions: React.FC<ActionIntroProps> = ({ className }: ActionIntroProps) => {
   return (
     <S.ContentInfoPage className={className}>
       <S.H1>Explore and discovery a world of NFT securitization</S.H1>
       <S.H2>Welcome to Nftfy</S.H2>
       <S.AreaActionButtons>
-        <S.ButtonExplore>Explore</S.ButtonExplore>
-        <S.ButtonSecuritize>Securitize</S.ButtonSecuritize>
+        <S.ButtonExplore href='/marketplace/1'>Explore</S.ButtonExplore>
+        <S.ButtonSecuritize href='/securitize'>Securitize</S.ButtonSecuritize>
       </S.AreaActionButtons>
     </S.ContentInfoPage>
   )
@@ -60,7 +61,7 @@ const S = {
     display: flex;
     flex-direction: row;
   `,
-  ButtonExplore: styled.button`
+  ButtonExplore: styled(Button)`
     flex: 1;
     max-width: 190px;
     height: 40px;
@@ -82,7 +83,7 @@ const S = {
       outline: none;
     }
   `,
-  ButtonSecuritize: styled.button`
+  ButtonSecuritize: styled(Button)`
     flex: 1;
     max-width: 190px;
     height: 40px;

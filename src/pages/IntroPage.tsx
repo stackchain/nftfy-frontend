@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import communityDefy from '../assets/communityDefy.svg'
-import { IntroAction } from '../components/intro/IntroAction'
+import { IntroActions } from '../components/intro/IntroActions'
 import { Footer, Header } from '../components/shared/layout'
 import { colors, viewport } from '../styles/variables'
 
@@ -11,7 +11,7 @@ export default function IntroPage() {
       <Header />
       <S.Main>
         <S.BoxActionIntro>
-          <IntroAction />
+          <IntroActions />
         </S.BoxActionIntro>
         <S.AreaDivVideo>
           <S.AreaVideo src={communityDefy} />
