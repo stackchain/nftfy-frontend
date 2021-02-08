@@ -3,17 +3,27 @@ import styled from 'styled-components'
 import exclamationIcon from '../../assets/exclamationIcon.svg'
 import metaMask from '../../assets/metaMask.svg'
 import shape from '../../assets/shape.svg'
+import { connectWalletModalVar } from '../../graphql/variables/GlobalVariables'
+import { initializeWallet } from '../../services/WalletService'
 import { colors, viewport } from '../../styles/variables'
 
 export const ConnectWallet: React.FC = () => {
+  const closeModal = () => {
+    connectWalletModalVar(false)
+  }
+
+  const connectMetaMask = () => {
+    initializeWallet()
+  }
+
   return (
     <S.ConnectWallet>
-      <S.BackArrow>
+      <S.BackArrow onClick={closeModal}>
         <S.ArrowIcon src={shape} alt='go back' />
         <S.Span>Go back</S.Span>
       </S.BackArrow>
       <S.Title>Connect your wallet</S.Title>
-      <S.ButtonConnect>
+      <S.ButtonConnect onClick={connectMetaMask}>
         <S.ConnectIcon src={metaMask} alt='Metamask' />
         <S.ConnectSpan>Metamask</S.ConnectSpan>
       </S.ButtonConnect>

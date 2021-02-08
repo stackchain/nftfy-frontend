@@ -1,13 +1,19 @@
+import { Button } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
+import { connectWalletModalVar } from '../../../../graphql/variables/GlobalVariables'
 import { colors, fonts, viewport } from '../../../../styles/variables'
 
 export const HeaderWallet: React.FC = () => {
-  return <S.Button type='button'>Connect Wallet</S.Button>
+  const openConnectWalletModal = () => {
+    connectWalletModalVar(true)
+  }
+
+  return <S.Button onClick={openConnectWalletModal}>Connect Wallet</S.Button>
 }
 
 const S = {
-  Button: styled.button`
+  Button: styled(Button)`
     width: 100%;
     max-width: 192px;
     height: 40px;

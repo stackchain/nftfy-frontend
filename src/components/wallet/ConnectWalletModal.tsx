@@ -1,13 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 import nftfyHeaderLogo from '../../assets/nftfyHeaderLogo.svg'
+import { connectWalletModalVar } from '../../graphql/variables/GlobalVariables'
 import { colors, viewport } from '../../styles/variables'
 import { ConnectWallet } from './ConnectWallet'
 
 export const ConnectWalletModal: React.FC = () => {
+  const closeModal = () => {
+    connectWalletModalVar(false)
+  }
+
   return (
     <S.ConnectWalletModal>
-      <S.Logo src={nftfyHeaderLogo} />
+      <S.Logo src={nftfyHeaderLogo} onClick={closeModal} />
       <ConnectWallet />
     </S.ConnectWalletModal>
   )
