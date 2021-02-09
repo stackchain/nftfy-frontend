@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import exclamationIcon from '../../assets/exclamationIcon.svg'
 import metaMask from '../../assets/metaMask.svg'
 import shape from '../../assets/shape.svg'
-import { connectWalletModalVar } from '../../graphql/variables/GlobalVariables'
-import { initializeWallet } from '../../services/WalletService'
+import { connectWalletModalVar } from '../../graphql/variables/WalletVariable'
+import { initializeMetamaskWallet } from '../../services/WalletService'
 import { colors, viewport } from '../../styles/variables'
 
 export const ConnectWallet: React.FC = () => {
@@ -13,7 +13,7 @@ export const ConnectWallet: React.FC = () => {
   }
 
   const connectMetaMask = () => {
-    initializeWallet()
+    initializeMetamaskWallet()
   }
 
   return (

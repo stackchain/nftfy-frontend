@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import nftfyHeaderLogo from '../../assets/nftfyHeaderLogo.svg'
-import { connectWalletModalVar } from '../../graphql/variables/GlobalVariables'
+import { connectWalletModalVar } from '../../graphql/variables/WalletVariable'
 import { colors, viewport } from '../../styles/variables'
 import { ConnectWallet } from './ConnectWallet'
 

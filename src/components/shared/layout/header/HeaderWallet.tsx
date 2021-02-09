@@ -1,7 +1,7 @@
 import { Button } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
-import { connectWalletModalVar } from '../../../../graphql/variables/GlobalVariables'
+import { connectWalletModalVar } from '../../../../graphql/variables/WalletVariable'
 import { colors, fonts, viewport } from '../../../../styles/variables'
 
 export const HeaderWallet: React.FC = () => {
