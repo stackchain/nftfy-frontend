@@ -4,6 +4,7 @@ import { LazyLoading } from '../components/shared/loading'
 
 export const IntroPage = lazy(() => import('../pages/IntroPage'))
 export const MarketplacePage = lazy(() => import('../pages/MarketplacePage'))
+export const MarketplaceDetailPage = lazy(() => import('../pages/MarketplaceDetailPage'))
 export const FallbackPage = lazy(() => import('../pages/FallbackPage'))
 
 export default function Routes() {
@@ -12,6 +13,7 @@ export default function Routes() {
       <Switch>
         <Route path='/' exact component={IntroPage} />
         <Route path='/marketplace' exact component={MarketplacePage} />
+        <Route path='/marketplace/:address/:tokenId' exact component={MarketplaceDetailPage} />
         <Route path='/securitize' exact component={FallbackPage} />
         <Route path='/portfolio' exact component={FallbackPage} />
         <Route path='/tutorial' exact component={FallbackPage} />
