@@ -11,7 +11,7 @@ export default function Routes() {
     <Suspense fallback={<LazyLoading />}>
       <Switch>
         <Route path='/' exact component={IntroPage} />
-        <Route path='/marketplace/:page' exact component={MarketplacePage} />
+        <Route path='/marketplace' exact component={MarketplacePage} />
         <Route path='/securitize' exact component={FallbackPage} />
         <Route path='/portfolio' exact component={FallbackPage} />
         <Route path='/tutorial' exact component={FallbackPage} />

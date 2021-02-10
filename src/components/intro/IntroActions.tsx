@@ -13,7 +13,7 @@ export const IntroActions: React.FC<ActionIntroProps> = ({ className }: ActionIn
       <S.H1>Explore and discovery a world of NFT securitization</S.H1>
       <S.H2>Welcome to Nftfy</S.H2>
       <S.AreaActionButtons>
-        <S.ButtonExplore href='/marketplace/1'>Explore</S.ButtonExplore>
+        <S.ButtonExplore href='/marketplace'>Explore</S.ButtonExplore>
         <S.ButtonSecuritize href='/securitize'>Securitize</S.ButtonSecuritize>
       </S.AreaActionButtons>
     </S.ContentInfoPage>

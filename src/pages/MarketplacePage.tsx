@@ -1,14 +1,30 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { RouteProps } from 'react-router-dom'
 import styled from 'styled-components'
-import { NftCard, NftCardProps } from '../components/marketplace/NftCard'
+import { NftCard } from '../components/marketplace/NftCard'
 import { PaginationButton } from '../components/shared/buttons/PaginationButton'
 import { SortDropdownFilter } from '../components/shared/buttons/SortDropdownFilter'
 import { Footer, Header } from '../components/shared/layout'
 import { colors, viewport } from '../styles/variables'
-import { nftsMock } from '../__mocks__/pages/MarketplacePage.mock'
+import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
+import { Paged } from '../types/UtilTypes'
 
-export default function MarketplacePage() {
-  const [nfts] = useState<NftCardProps[]>(nftsMock)
+export default function MarketplacePage({ location }: RouteProps) {
+  const [nfts, setNfts] = useState<MarketplaceERC20Item[]>([])
+  useEffect(() => {
+    const params = new URLSearchParams(location ? location.search : '')
+    const page = params.get('page')
+    const limit = params.get('limit')
+
+    const getNfts = async () => {
+      const nftItems = (
+        await axios.get<Paged<MarketplaceERC20Item[]>>(`http://localhost:5000/marketplace?page=${page || '1'}${limit && `&limit=${limit}`}`)
+      ).data
+      setNfts(nftItems.data)
+    }
+    getNfts()
+  }, [location])
 
   return (
     <>
@@ -19,18 +35,18 @@ export default function MarketplacePage() {
           <S.CardsContainer>
             {nfts.map(nftItem => (
               <NftCard
-                key={nftItem.id}
-                id={nftItem.id}
-                image={nftItem.image}
+                key={`${nftItem.erc721.address}-${nftItem.erc721.tokenId}`}
+                id={`${nftItem.erc721.address}-${nftItem.erc721.tokenId}`}
+                image={`${nftItem.erc721.image_url}`}
                 name={nftItem.name}
-                price={nftItem.price}
-                loading={nftItem.loading}
+                price={0}
+                loading={false}
               />
             ))}
           </S.CardsContainer>
         </S.Content>
       </S.Main>
-      <S.Pagination total={50} />
+      <S.Pagination total={100} />
       <Footer />
     </>
   )

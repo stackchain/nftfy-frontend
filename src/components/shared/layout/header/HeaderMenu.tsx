@@ -6,7 +6,7 @@ import { colors, fonts } from '../../../../styles/variables'
 export const HeaderMenu: React.FC = () => {
   return (
     <S.Menu>
-      <S.LinkItem to='/marketplace/1' className='active'>
+      <S.LinkItem to='/marketplace' className='active'>
         Explore
       </S.LinkItem>
       <S.LinkItem to='/securitize'>Securitize</S.LinkItem>
