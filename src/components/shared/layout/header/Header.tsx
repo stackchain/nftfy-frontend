@@ -3,8 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import menuIcon from '../../../../assets/menuIcon.svg'
-import nftfyHeaderLogo from '../../../../assets/nftfyHeaderLogo.svg'
-import nftfyHeaderLogoMobile from '../../../../assets/nftfyHeaderLogoMobile.svg'
+import nftfy from '../../../../assets/nftfy.svg'
 import searchIcon from '../../../../assets/searchIcon.svg'
 import { accountVar } from '../../../../graphql/variables/WalletVariable'
 import { colors, viewport } from '../../../../styles/variables'
@@ -20,14 +19,14 @@ export const Header: React.FC = () => {
     <>
       <S.Header>
         <Link to='/'>
-          <S.Logo src={nftfyHeaderLogo} alt='Nftfy' />
+          <S.Logo src={nftfy} alt='Nftfy' />
         </Link>
         <HeaderSearch />
         <HeaderMenu />
         {account ? <WalletButton /> : <HeaderWallet />}
       </S.Header>
       <S.HeaderMobile>
-        <S.LogoMobile src={nftfyHeaderLogoMobile} alt='Nftfy' />
+        <S.LogoMobile src={nftfy} alt='Nftfy' />
         <S.Search src={searchIcon} alt='Search' />
         <S.Menu src={menuIcon} alt='Menu' />
         {account ? <WalletButton /> : <HeaderWallet />}

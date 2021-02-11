@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import nftfyHeaderLogo from '../../assets/nftfyHeaderLogo.svg'
+import nftfy from '../../assets/nftfy.svg'
 import { connectWalletModalVar } from '../../graphql/variables/WalletVariable'
 import { colors, viewport } from '../../styles/variables'
 import { ConnectWallet } from './ConnectWallet'
@@ -12,7 +12,7 @@ export const ConnectWalletModal: React.FC = () => {
 
   return (
     <S.ConnectWalletModal>
-      <S.Logo src={nftfyHeaderLogo} onClick={closeModal} />
+      <S.Logo src={nftfy} onClick={closeModal} />
       <ConnectWallet />
     </S.ConnectWalletModal>
   )
