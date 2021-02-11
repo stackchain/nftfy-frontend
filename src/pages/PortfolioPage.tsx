@@ -5,7 +5,7 @@ import { HeaderPortfolio } from '../components/portfolio/headerPortfolio'
 import { Footer, Header } from '../components/shared/layout'
 import { colors, viewport } from '../styles/variables'
 
-export default function PagePortfolio() {
+export default function PortfolioPage() {
   return (
     <>
       <Header />

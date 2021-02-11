@@ -2,6 +2,7 @@
 import { LoadingOutlined } from '@ant-design/icons'
 import { Skeleton, Spin } from 'antd'
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import notFound from '../../assets/notfound.svg'
 import { colors, fonts, viewport } from '../../styles/variables'
@@ -15,10 +16,10 @@ export interface NftCardProps {
   className?: string
 }
 
-export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, className }) => {
+export const NftCard: React.FC<NftCardProps> = ({ id, image, name, price, loading, className }) => {
   const Spinner = <LoadingOutlined spin />
   return (
-    <S.Card className={className}>
+    <S.Card className={className} to={`/marketplace/${id}`}>
       <S.BoxImg className={image === '' ? 'bg-fail' : ''}>
         <S.Img src={image || notFound} alt={name || 'not found'} hidden={loading} />
         <Spin indicator={Spinner} spinning={loading} />
@@ -46,7 +47,7 @@ export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, c
 }
 
 const S = {
-  Card: styled.div`
+  Card: styled(Link)`
     width: 100%;
     height: auto;
     max-width: 576px;

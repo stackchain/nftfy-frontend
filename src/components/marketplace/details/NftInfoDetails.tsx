@@ -8,7 +8,7 @@ import { BuyNftButton } from '../../shared/buttons/BuyNftButton'
 export interface NftInfoDetailsProps {
   contractName: string
   contractAddress: string
-  tokenId: number
+  tokenId: string
   details: string
 }
 export const NftInfoDetails: React.FC<NftInfoDetailsProps> = ({ contractName, contractAddress, tokenId, details }: NftInfoDetailsProps) => {

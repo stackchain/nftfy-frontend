@@ -12,6 +12,7 @@ import { Paged } from '../types/UtilTypes'
 
 export default function MarketplacePage({ location }: RouteProps) {
   const [nfts, setNfts] = useState<MarketplaceERC20Item[]>([])
+
   useEffect(() => {
     const params = new URLSearchParams(location ? location.search : '')
     const page = params.get('page')
@@ -35,8 +36,8 @@ export default function MarketplacePage({ location }: RouteProps) {
           <S.CardsContainer>
             {nfts.map(nftItem => (
               <NftCard
-                key={`${nftItem.erc721.address}-${nftItem.erc721.tokenId}`}
-                id={`${nftItem.erc721.address}-${nftItem.erc721.tokenId}`}
+                key={`${nftItem.address}`}
+                id={`${nftItem.address}`}
                 image={`${nftItem.erc721.image_url}`}
                 name={nftItem.name}
                 price={0}

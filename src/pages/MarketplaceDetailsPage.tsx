@@ -1,6 +1,7 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import catFrost from '../assets/nftImage/catFrost.png'
 import { NftBuyShareDetails } from '../components/marketplace/details/NftBuyShareDetails'
 import { NftImage } from '../components/marketplace/details/NftImage'
 import { NftInfoDetails } from '../components/marketplace/details/NftInfoDetails'
@@ -9,8 +10,22 @@ import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetai
 import { BuyNftButton } from '../components/shared/buttons/BuyNftButton'
 import { Footer, Header } from '../components/shared/layout'
 import { colors, viewport } from '../styles/variables'
+import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 
 export default function MarketplaceDetailsPage() {
+  const [erc20, setErc20] = useState<MarketplaceERC20Item | undefined>(undefined)
+  const { address } = useParams<{ address: string | undefined }>()
+  useEffect(() => {
+    const getNfts = async () => {
+      const nft = (await axios.get<MarketplaceERC20Item>(`http://localhost:5000/marketplace/${address}`)).data
+      setErc20(nft)
+    }
+    getNfts()
+  }, [address])
+
+  // TODO: Implement Empty
+  if (!erc20) return <></>
+
   return (
     <>
       <Header />
@@ -18,23 +33,28 @@ export default function MarketplaceDetailsPage() {
         <S.Content>
           <S.Info>
             <div className='mobileTitle'>
-              <TitleNftDetails name='Cat Frost' created='moon cat 88' />
+              <TitleNftDetails name={erc20.name} created='moon cat 88' />
             </div>
             <S.Image>
-              <NftImage name='cat frost' image={catFrost} />
+              <NftImage name='cat frost' image={erc20.erc721.image_url} />
             </S.Image>
             <S.Details>
               <div className='desktopTitle'>
-                <TitleNftDetails name='Cat Frost' created='moon cat 88' />
+                <TitleNftDetails name={erc20.name} created='moon cat 88' />
               </div>
-              <NftInfoDetails contractName='CryptoKitties' contractAddress='0xfbee...74b7d' tokenId={1122334} details='Descriptor of nft' />
+              <NftInfoDetails
+                contractName={erc20.erc721.name}
+                contractAddress={erc20.erc721.address}
+                tokenId={erc20.erc721.tokenId}
+                details={erc20.erc721.description}
+              />
               <div className='btnMobile'>
                 <BuyNftButton url='http://exemplo.com' />
               </div>
               <S.Division />
               <NftBuyShareDetails
-                title='Cat Frost Shares (CFS)'
-                addressERC20='0x32bfaa23447c'
+                title={erc20.name}
+                addressERC20={erc20.address}
                 price={0.000051}
                 price2={0.04}
                 profitExitPricePercentage='150'

@@ -9,5 +9,6 @@ export interface MarketplaceERC20Item {
     tokenId: string
     description: string
     image_url: string
+    name: string
   }
 }
