@@ -14,6 +14,7 @@ const S = {
     font-family: ${fonts.montserrat};
     max-width: 131px;
     height: 40px;
+    max-height: 40px;
     border: 1px solid ${colors.gray5};
     box-sizing: border-box;
     border-radius: 8px;

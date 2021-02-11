@@ -40,11 +40,8 @@ export const ShareStatsNftDetails: React.FC<ShareStatsNftDetailsProps> = ({
             </Tooltip>
           </S.Label>
           <div>
-            <S.Price>
-              {exitPriceETH}
-              ETH
-            </S.Price>
-            <small>{exitPrice}</small>
+            <S.Price>{`${exitPriceETH} ETH`}</S.Price>
+            <small>{`$${exitPrice}`}</small>
           </div>
         </S.Li>
         <S.Li>
@@ -55,26 +52,17 @@ export const ShareStatsNftDetails: React.FC<ShareStatsNftDetailsProps> = ({
             </Tooltip>
           </S.Label>
           <div>
-            <S.Price>
-              {shareExitPriceETH}
-              ETH
-            </S.Price>
-            <small>{shareExitPrice}</small>
+            <S.Price>{`${shareExitPriceETH} ETH`}</S.Price>
+            <small>{`$${shareExitPrice}`}</small>
           </div>
         </S.Li>
         <S.Li>
           <S.Label>Total Supply</S.Label>
-          <S.Price>
-            {totalSupply}
-            YCS
-          </S.Price>
+          <S.Price>{`${totalSupply} YCS`}</S.Price>
         </S.Li>
         <S.Li>
           <S.Label>Volume 24H</S.Label>
-          <S.Price>
-            {volume24h}
-            YCS
-          </S.Price>
+          <S.Price>{`${volume24h} YCS`}</S.Price>
         </S.Li>
         <div>
           <S.Li>

@@ -3,6 +3,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import styled from 'styled-components'
 import clip from '../../../assets/icons/clip.svg'
 import { colors, fonts, viewport } from '../../../styles/variables'
+import { BuyNftButton } from '../../shared/buttons/BuyNftButton'
 
 export interface NftInfoDetailsProps {
   contractName: string
@@ -30,6 +31,9 @@ export const NftInfoDetails: React.FC<NftInfoDetailsProps> = ({ contractName, co
         <div>
           <small>Token ID</small>
           <h6>{tokenId}</h6>
+        </div>
+        <div>
+          <BuyNftButton url='http://exemple.com' />
         </div>
       </S.InfoTypes>
       <S.Details>
@@ -91,8 +95,19 @@ const S = {
         justify-content: space-between;
       }
     }
+    div:last-child {
+      width: 131px;
+    }
     @media (max-width: ${viewport.sm}) {
       flex-direction: column;
+      div:last-child {
+        display: none;
+      }
+    }
+    @media (max-width: ${viewport.lg}) {
+      div:last-child {
+        display: none;
+      }
     }
   `,
   Details: styled.div`
