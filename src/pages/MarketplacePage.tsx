@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { RouteProps } from 'react-router-dom'
+import { RouteProps, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { NftCard } from '../components/marketplace/NftCard'
 import { PaginationButton } from '../components/shared/buttons/PaginationButton'
@@ -11,21 +11,32 @@ import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 import { Paged } from '../types/UtilTypes'
 
 export default function MarketplacePage({ location }: RouteProps) {
+  const history = useHistory()
+  const params = new URLSearchParams(location ? location.search : '')
   const [nfts, setNfts] = useState<MarketplaceERC20Item[]>([])
+  const [totalPages, setTotalPages] = useState(0)
+  const [currentPage, setCurrentPage] = useState(Number(params.get('page')) || 1)
+  const [currentLimit, setCurrentLimit] = useState(Number(params.get('limit')) || 12)
+
+  const paginate = (pageNumber: number, pageSizeNumber: number) => {
+    setCurrentPage(pageNumber)
+    setCurrentLimit(pageSizeNumber)
+
+    history.push(`/marketplace/?page=${pageNumber}&limit=${pageSizeNumber}`)
+  }
 
   useEffect(() => {
-    const params = new URLSearchParams(location ? location.search : '')
-    const page = params.get('page')
-    const limit = params.get('limit')
-
     const getNfts = async () => {
       const nftItems = (
-        await axios.get<Paged<MarketplaceERC20Item[]>>(`http://localhost:5000/marketplace?page=${page || '1'}${limit && `&limit=${limit}`}`)
+        await axios.get<Paged<MarketplaceERC20Item[]>>(
+          `http://localhost:5000/marketplace?page=${currentPage}${currentLimit && `&limit=${currentLimit}`}`
+        )
       ).data
       setNfts(nftItems.data)
+      setTotalPages(nftItems.total)
     }
     getNfts()
-  }, [location])
+  }, [currentLimit, currentPage, location])
 
   return (
     <>
@@ -47,7 +58,7 @@ export default function MarketplacePage({ location }: RouteProps) {
           </S.CardsContainer>
         </S.Content>
       </S.Main>
-      <S.Pagination total={100} />
+      {totalPages && <S.Pagination total={totalPages} limit={currentLimit} defaultCurrent={currentPage} onChange={paginate} />}
       <Footer />
     </>
   )

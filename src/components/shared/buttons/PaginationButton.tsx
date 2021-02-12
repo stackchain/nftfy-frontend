@@ -5,10 +5,29 @@ import { colors } from '../../../styles/variables'
 
 export interface PaginationButtonProps {
   className?: string
+  defaultCurrent: number
   total: number
+  limit: number
+  onChange: (pageNumber: number, pageSizeNumber: number) => void
 }
-export const PaginationButton: React.FC<PaginationButtonProps> = ({ className, total }: PaginationButtonProps) => {
-  return <S.Pagination className={className} size='small' total={total} />
+export const PaginationButton: React.FC<PaginationButtonProps> = ({
+  className,
+  total,
+  limit,
+  defaultCurrent,
+  onChange
+}: PaginationButtonProps) => {
+  return (
+    <S.Pagination
+      className={className}
+      size='small'
+      total={total}
+      pageSize={limit}
+      defaultCurrent={defaultCurrent}
+      defaultPageSize={12}
+      onChange={(page, pageSize) => onChange(page, pageSize || 12)}
+    />
+  )
 }
 
 export const S = {

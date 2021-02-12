@@ -1,15 +1,27 @@
+import { useReactiveVar } from '@apollo/client'
 import { Dropdown, Menu } from 'antd'
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import styled from 'styled-components'
-import tokenWallet from '../../assets/walletImage.svg'
+import { accountVar, chainIdVar } from '../../graphql/variables/WalletVariable'
 import { colors } from '../../styles/variables'
 
 export const WalletButton: React.FC = () => {
+  const [nfy, setNfy] = useState(0)
+  const account = useReactiveVar(accountVar)
+  const chainId = useReactiveVar(chainIdVar)
+
+  useEffect(() => {
+    const getNfyBalance = async () => {
+      const nfyBalance = (await axios.get<{ balance: number }>(`http://localhost:5000/wallet/${account}/nfy`)).data
+      setNfy(nfyBalance.balance)
+    }
+    getNfyBalance()
+  }, [account, chainId])
+
   const WalletMenuItems = (
     <S.StyledMenu>
-      <Menu.Item key='0'>
-        <a href='http://www.google.com/'>Wallet</a>
-      </Menu.Item>
       <Menu.Item key='1'>
         <a href='http://www.google.com/'>Buy NFY</a>
       </Menu.Item>
@@ -21,8 +33,10 @@ export const WalletButton: React.FC = () => {
   return (
     <Dropdown overlay={WalletMenuItems} trigger={['click']}>
       <S.WalletButtonArea>
-        <S.WalletButton type='button'>1.000.00 NFY</S.WalletButton>
-        <S.TokenWallet src={tokenWallet} alt='wallet token' />
+        <S.WalletButton type='button'>{`${nfy.toLocaleString('en-us')} NFY`}</S.WalletButton>
+        <S.WalletIcon>
+          <Jazzicon diameter={40} seed={jsNumberForAddress(account)} />
+        </S.WalletIcon>
       </S.WalletButtonArea>
     </Dropdown>
   )
@@ -59,13 +73,12 @@ const S = {
       outline: none;
     }
   `,
-  TokenWallet: styled.img`
+  WalletIcon: styled.div`
     width: 40px;
     height: 40px;
-    margin-left: -18px;
+    margin-left: -16px;
   `,
   StyledMenu: styled(Menu)`
-    width: 192px;
     margin-top: 8px;
     padding: 8px;
     background: ${colors.white};
