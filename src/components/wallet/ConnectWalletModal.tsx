@@ -32,6 +32,8 @@ const S = {
   `,
   Logo: styled.img`
     position: fixed;
+    width: 140px;
+    height: auto;
     left: 48px;
     top: 24px;
     @media (max-width: ${viewport.xl}) {

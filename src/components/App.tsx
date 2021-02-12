@@ -7,7 +7,8 @@ import { graphQlClient } from '../graphql/ClientGraphql'
 import { accountVar, chainIdVar, connectWalletModalVar } from '../graphql/variables/WalletVariable'
 import FallbackPage from '../pages/FallbackPage'
 import Routes from '../routes/Routes'
-import { autoConnect, listenWalletEvents } from '../services/WalletService'
+import { securitize } from '../services/NftfyService'
+import { walletAutoConnect } from '../services/WalletService'
 import '../styles/fonts.css'
 import '../styles/reset.css'
 import { ConnectWalletModal } from './wallet/ConnectWalletModal'
@@ -18,8 +19,16 @@ export default function App() {
   const connectWalletModal = useReactiveVar(connectWalletModalVar)
 
   useEffect(() => {
-    autoConnect()
-    listenWalletEvents()
+    walletAutoConnect()
+    securitize({
+      targetAddress: '0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3',
+      tokenId: 24,
+      sharesCount: 1000,
+      tokenDecimals: 18,
+      exitPrice: 1000,
+      paymentTokenAddress: '0x0000000000000000000000000000000000000000',
+      remnant: false
+    })
   }, [])
 
   return (

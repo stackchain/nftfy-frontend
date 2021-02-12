@@ -1,6 +1,6 @@
 import detectEthereumProvider from '@metamask/detect-provider'
-import { code } from '../errors/wallet'
 import { accountVar, chainIdVar, connectWalletModalVar, setAccount, setChainId } from '../graphql/variables/WalletVariable'
+import { code } from '../messages'
 import { notifyError, notifyWarning } from './NotificationService'
 
 export const initializeMetamaskWallet = async () => {
@@ -50,7 +50,7 @@ const connect = async () => {
   }
 }
 
-export const autoConnect = async () => {
+export const walletAutoConnect = async () => {
   const account = window.localStorage.getItem('account')
   account && setAccount(account)
 
@@ -60,9 +60,11 @@ export const autoConnect = async () => {
     const provider = await detectEthereumProvider()
     startApp(provider)
   }
+
+  walletListenEvents()
 }
 
-export const listenWalletEvents = () => {
+export const walletListenEvents = () => {
   window.ethereum &&
     (window.ethereum as { on: (eventKey: string, callback: (accounts: string[]) => void) => void }).on('accountsChanged', handleAccounts)
 
