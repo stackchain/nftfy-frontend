@@ -11,5 +11,7 @@ export const notifyError = (text: string, err?: Error) => {
   message.error(text)
   if (err) {
     Sentry.captureException(err)
+    // eslint-disable-next-line no-console
+    console.error(err)
   }
 }
