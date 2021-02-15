@@ -2,5 +2,5 @@
   "version": "1",
   "language": "en",
   "ignorePaths": ["**/node_modules/**", "**/vscode-extension/**", "**/.git/**", ".vscode", "report", "**.mock.**"],
-  "words": ["antd", "anticon", "browserslist", "nftfy", "precached", "securitize", "securitization", "Nfts", "securitized"]
+  "words": ["antd", "anticon", "browserslist", "nftfy", "precached", "securitize", "securitization", "Nfts", "securitized, bignumber"]
 }

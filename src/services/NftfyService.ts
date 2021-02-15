@@ -5,17 +5,17 @@ import erc20Abi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
 import nftfyAbi from '../abi/nftfy.json'
 import { addressNftfyMainnet } from '../contracts/mainnet'
-import { addressNfyRinkeby } from '../contracts/rinkeby'
+import { addressNftfyRinkeby } from '../contracts/rinkeby'
 import { accountVar, chainIdVar } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { notifyError } from './NotificationService'
 
-declare const window: { ethereum: provider & { enable: () => void } }
+declare const window: { ethereum: provider & { enable: () => void; request: ({ method }: { method: string }) => void } }
 
-const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNfyRinkeby
+const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
 
 export const initializeWeb3 = () => {
-  window.ethereum.enable()
+  window.ethereum.request({ method: 'eth_requestAccounts' })
   return new Web3(window.ethereum)
 }
 
@@ -60,9 +60,9 @@ export const isApprovedErc721 = async (erc721Address: string, erc721AddressId: n
 export const securitizeErc721 = async (
   erc721tAddress: string,
   erc721Id: number,
-  sharesCount: number,
+  sharesCount: string,
   sharesDecimals: number,
-  exitPrice: number,
+  exitPrice: string,
   paymentTokenAddress: string,
   remnant: boolean
 ) => {
@@ -70,7 +70,7 @@ export const securitizeErc721 = async (
     const web3 = initializeWeb3()
     const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
     contractNftfy.methods
-      .securitize(erc721tAddress, erc721Id, sharesCount, sharesDecimals, exitPrice * 10 ** sharesDecimals, paymentTokenAddress, remnant)
+      .securitize(erc721tAddress, erc721Id, sharesCount, sharesDecimals, exitPrice, paymentTokenAddress, remnant)
       .send({ from: accountVar() })
       .once('error', (error: Error) => {
         notifyError(code[5010], error)
