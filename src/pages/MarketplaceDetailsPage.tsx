@@ -32,25 +32,25 @@ export default function MarketplaceDetailsPage() {
       <S.Main>
         <S.Content>
           <S.Info>
-            <div className='mobileTitle'>
+            <S.MobileTitle>
               <TitleNftDetails name={erc20.name} created='moon cat 88' />
-            </div>
+            </S.MobileTitle>
             <S.Image>
               <NftImage name='cat frost' image={erc20.erc721.image_url} />
             </S.Image>
             <S.Details>
-              <div className='desktopTitle'>
+              <S.DesktopTitle>
                 <TitleNftDetails name={erc20.name} created='moon cat 88' />
-              </div>
+              </S.DesktopTitle>
               <NftInfoDetails
                 contractName={erc20.erc721.name}
                 contractAddress={erc20.erc721.address}
                 tokenId={erc20.erc721.tokenId}
                 details={erc20.erc721.description}
               />
-              <div className='btnMobile'>
+              <S.BtnMobile>
                 <BuyNftButton url='http://exemplo.com' />
-              </div>
+              </S.BtnMobile>
               <S.Division />
               <NftBuyShareDetails
                 title={erc20.name}
@@ -105,18 +105,8 @@ const S = {
     flex-direction: row;
     margin-bottom: 32px;
 
-    .mobileTitle {
-      display: none;
-    }
-
     @media (max-width: ${viewport.md}) {
       flex-direction: column;
-      .mobileTitle {
-        display: flex;
-      }
-      .desktopTitle {
-        display: none;
-      }
     }
   `,
   Image: styled.div`
@@ -134,29 +124,33 @@ const S = {
     width: 50%;
     margin: 0 auto;
 
-    .btnMobile {
-      display: none;
-      justify-content: center;
-    }
-
     @media (min-width: ${viewport.md}) {
       padding-left: 10px;
     }
 
-    @media (max-width: ${viewport.lg}) {
-      .btnMobile {
-        display: flex;
-      }
-    }
-
     @media (max-width: ${viewport.md}) {
       width: 100%;
-      .btnMobile {
-        display: flex;
-      }
     }
   `,
   Stats: styled.div`
     margin-bottom: 247px;
+  `,
+  DesktopTitle: styled.div`
+    @media (max-width: ${viewport.md}) {
+      display: none;
+    }
+  `,
+  MobileTitle: styled.div`
+    display: none;
+    @media (max-width: ${viewport.md}) {
+      display: flex;
+    }
+  `,
+  BtnMobile: styled.div`
+    display: none;
+    justify-content: center;
+    @media (max-width: ${viewport.lg}) {
+      display: flex;
+    }
   `
 }
