@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import { colors } from '../../styles/variables'
 
-export interface HeaderPortfolioProps {
+export interface PortfolioHeaderProps {
   totalValue: string
   className?: string
 }
-export const HeaderPortfolio: React.FC<HeaderPortfolioProps> = ({ className, totalValue }: HeaderPortfolioProps) => {
+export const PortfolioHeader: React.FC<PortfolioHeaderProps> = ({ className, totalValue }: PortfolioHeaderProps) => {
   return (
     <S.HeaderPortfolio className={className}>
       <S.ContentTitle>

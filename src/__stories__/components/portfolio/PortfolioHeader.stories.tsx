@@ -2,15 +2,15 @@
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
-import { HeaderPortfolio, HeaderPortfolioProps } from '../../../components/portfolio/headerPortfolio'
+import { PortfolioHeader, PortfolioHeaderProps } from '../../../components/portfolio/PortfolioHeader'
 
 export default {
-  title: 'components/portfolio/HeaderPortfolio.tsx',
-  component: HeaderPortfolio,
+  title: 'components/portfolio/PortfolioHeader.tsx',
+  component: PortfolioHeader,
   argTypes: {}
 } as Meta
 
-const Template: Story<HeaderPortfolioProps> = args => <HeaderPortfolio {...args} />
+const Template: Story<PortfolioHeaderProps> = args => <PortfolioHeader {...args} />
 
 export const Default = Template.bind({})
 Default.args = {

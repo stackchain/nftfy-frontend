@@ -2,10 +2,10 @@
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
 import React from 'react'
-import { ClaimModal, ClaimModalProps } from '../../../components/portfolio/claim-modal'
+import { ClaimModal, ClaimModalProps } from '../../../components/portfolio/ClaimModal'
 
 export default {
-  title: 'components/portfolio/claim-modal.tsx',
+  title: 'components/portfolio/ClaimModal.tsx',
   component: ClaimModal,
   argTypes: {}
 } as Meta

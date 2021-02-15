@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { colors } from '../../styles/variables'
 import { erc721Mock } from '../../__mocks__/pages/PagePortfolio.mock'
 
-export interface Erc721ContentPortfolioProps {
+export interface PortfolioContentProps {
   className?: string
 }
 
@@ -15,7 +15,7 @@ export interface ERC721 {
   tokenId: number
 }
 
-export const Erc721Content: React.FC<Erc721ContentPortfolioProps> = ({ className }: Erc721ContentPortfolioProps) => {
+export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }: PortfolioContentProps) => {
   const [erc721] = useState<ERC721[]>(erc721Mock)
   return (
     <S.Erc721Content className={className}>

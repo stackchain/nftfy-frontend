@@ -143,7 +143,7 @@ export const S = {
     width: 48px;
     height: 48px;
 
-    background: black;
+    background: ${colors.black};
     @media (max-width: ${viewport.sm}) {
       margin-right: 10px;
     }
