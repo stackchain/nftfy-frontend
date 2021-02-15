@@ -54,8 +54,8 @@ export const isApprovedErc721 = async (erc721Address: string, erc721AddressId: n
     return address === nftfyAddress
   } catch (error) {
     notifyError(code[5011], error)
+    return false
   }
-  return false
 }
 
 export const securitizeErc721 = async (
@@ -81,7 +81,7 @@ export const securitizeErc721 = async (
   }
 }
 
-export const isSecuritized = async (tokenAddress: string, tokenId: number) => {
+export const isSecuritizedErc721 = async (tokenAddress: string, tokenId: number) => {
   try {
     const web3 = initializeWeb3()
     const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
@@ -97,7 +97,6 @@ export const isSecuritized = async (tokenAddress: string, tokenId: number) => {
     return !!securitized
   } catch (error) {
     notifyError(code[5011], error)
+    return false
   }
-
-  return false
 }
