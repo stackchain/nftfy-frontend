@@ -8,7 +8,7 @@ export interface PortfolioHeaderProps {
 }
 export const PortfolioHeader: React.FC<PortfolioHeaderProps> = ({ className, totalValue }: PortfolioHeaderProps) => {
   return (
-    <S.HeaderPortfolio className={className}>
+    <S.PortfolioHeader className={className}>
       <S.ContentTitle>
         <S.H1Title>Portfolio</S.H1Title>
         <S.H2Title>Assets</S.H2Title>
@@ -17,11 +17,11 @@ export const PortfolioHeader: React.FC<PortfolioHeaderProps> = ({ className, tot
         <S.SpanTotalValue>{`$${totalValue}`}</S.SpanTotalValue>
         <S.SpanAcquiredValue>+2.7%($102.89)</S.SpanAcquiredValue>
       </S.ContentValues>
-    </S.HeaderPortfolio>
+    </S.PortfolioHeader>
   )
 }
 export const S = {
-  HeaderPortfolio: styled.header`
+  PortfolioHeader: styled.header`
     flex: 1;
     display: flex;
     flex-direction: row;
