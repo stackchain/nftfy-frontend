@@ -5,15 +5,16 @@ import erc20Abi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
 import erc721WrappedAbi from '../abi/erc721wrapped.json'
 import nftfyAbi from '../abi/nftfy.json'
-import { addressNftfyMainnet } from '../contracts/mainnet'
-import { addressNftfyRinkeby } from '../contracts/rinkeby'
+import { addressesERC721Mainnet, addressNftfyMainnet } from '../contracts/mainnet'
+import { addressesERC721Rinkeby, addressNftfyRinkeby } from '../contracts/rinkeby'
 import { accountVar, chainIdVar } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { notifyError } from './NotificationService'
 
 declare const window: { ethereum: provider & { enable: () => void; request: ({ method }: { method: string }) => void } }
 
-const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
+export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
+export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
 
 export const initializeWeb3 = () => {
   window.ethereum.request({ method: 'eth_requestAccounts' })
