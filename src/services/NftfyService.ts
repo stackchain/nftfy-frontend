@@ -3,6 +3,7 @@ import { provider } from 'web3-core'
 import { AbiItem } from 'web3-utils'
 import erc20Abi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
+import erc721WrappedAbi from '../abi/erc721wrapped.json'
 import nftfyAbi from '../abi/nftfy.json'
 import { addressNftfyMainnet } from '../contracts/mainnet'
 import { addressNftfyRinkeby } from '../contracts/rinkeby'
@@ -78,4 +79,25 @@ export const securitizeErc721 = async (
   } catch (error) {
     notifyError(code[5011], error)
   }
+}
+
+export const isSecuritized = async (tokenAddress: string, tokenId: number) => {
+  try {
+    const web3 = initializeWeb3()
+    const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
+    const wrappedAddress = await contractNftfy.methods.wrappers(tokenAddress).call()
+
+    if (!wrappedAddress) {
+      throw new Error(code[5012])
+    }
+
+    const contractWrappedErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], wrappedAddress)
+    const securitized = await contractWrappedErc721.methods.securitized(tokenId).call()
+
+    return !!securitized
+  } catch (error) {
+    notifyError(code[5011], error)
+  }
+
+  return false
 }
