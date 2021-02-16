@@ -2,34 +2,40 @@ import detectEthereumProvider from '@metamask/detect-provider'
 import * as Sentry from '@sentry/react'
 import axios from 'axios'
 import { flatten } from 'lodash'
+import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import erc20SharesAbi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
 import erc721WrappedAbi from '../abi/erc721wrapped.json'
 import nftfyAbi from '../abi/nftfy.json'
-import { addressesERC721Mainnet, addressNftfyMainnet, addressNfyMainnet } from '../contracts/mainnet'
-import { addressesERC721Rinkeby, addressNftfyRinkeby, addressNfyRinkeby } from '../contracts/rinkeby'
+import { addressesERC721Mainnet, addressInfuraMainnet, addressNftfyMainnet, addressNfyMainnet } from '../contracts/mainnet'
+import { addressesERC721Rinkeby, addressInfuraRinkeby, addressNftfyRinkeby, addressNfyRinkeby } from '../contracts/rinkeby'
 import { accountVar, chainIdVar, connectWalletModalVar, setAccount, setChainId } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { WalletERC20Item, WalletErc721Item, WalletItem } from '../types/WalletTypes'
-import { initializeWeb3 } from './NftfyService'
 import { notifyError, notifyWarning } from './NotificationService'
 
 export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
 export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
 export const nfyAddress = chainIdVar() === 1 ? addressNfyMainnet : addressNfyRinkeby
+export const infuraAddress = chainIdVar() === 1 ? addressInfuraMainnet : addressInfuraRinkeby
+
+export const initializeWeb3 = () => {
+  window.ethereum && (window.ethereum as { request: ({ method }: { method: string }) => void }).request({ method: 'eth_requestAccounts' })
+  return new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/4add15ca294d449fb8eca92ad07ec0dd'))
+}
 
 export const initializeMetamaskWallet = async () => {
-  const provider = await detectEthereumProvider()
-  if (provider) {
-    startApp(provider)
+  const ethProvider = await detectEthereumProvider()
+  if (ethProvider) {
+    startApp(ethProvider)
   } else {
     notifyError(code[5003])
   }
 }
 
-const startApp = async (provider: unknown) => {
-  if (provider !== window.ethereum) {
+const startApp = async (ethProvider: unknown) => {
+  if (ethProvider !== window.ethereum) {
     notifyError(code[5002])
   }
   await connect()
@@ -73,8 +79,8 @@ export const walletAutoConnect = async () => {
   const chainId = Number(window.localStorage.getItem('chainId'))
   chainId && setChainId(chainId)
   if (account && chainId) {
-    const provider = await detectEthereumProvider()
-    startApp(provider)
+    const ethProvider = await detectEthereumProvider()
+    startApp(ethProvider)
   }
 
   walletListenEvents()

@@ -10,8 +10,8 @@ import { addressesERC721Rinkeby, addressNftfyRinkeby, addressNfyRinkeby } from '
 import { chainIdVar } from '../graphql/variables/WalletVariable'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 import { Paged } from '../types/UtilTypes'
-import { initializeWeb3 } from './NftfyService'
 import paginator from './UtilService'
+import { initializeWeb3 } from './WalletService'
 
 export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
 export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby

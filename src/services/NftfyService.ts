@@ -1,5 +1,3 @@
-import Web3 from 'web3'
-import { provider } from 'web3-core'
 import { AbiItem } from 'web3-utils'
 import erc20Abi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
@@ -10,16 +8,10 @@ import { addressesERC721Rinkeby, addressNftfyRinkeby } from '../contracts/rinkeb
 import { accountVar, chainIdVar } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { notifyError } from './NotificationService'
-
-declare const window: { ethereum: provider & { enable: () => void; request: ({ method }: { method: string }) => void } }
+import { initializeWeb3 } from './WalletService'
 
 export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
 export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
-
-export const initializeWeb3 = () => {
-  window.ethereum.request({ method: 'eth_requestAccounts' })
-  return new Web3(window.ethereum)
-}
 
 export const approveErc20 = async (erc20Address: string, spenderAddress: string, erc20Decimals: number, erc20Amount: number) => {
   try {
