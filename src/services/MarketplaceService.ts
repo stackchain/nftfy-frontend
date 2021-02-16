@@ -65,7 +65,6 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
   }
 
   const erc20 = flatten(await Promise.all(erc20Promises))
-
   const getERC20Metadata = async (addressErc20: string): Promise<MarketplaceERC20Item> => {
     const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], addressErc20)
     const erc20Name = await contractErc20Shares.methods.name().call()
@@ -77,8 +76,6 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
     const securitized = await contractWrapperErc721.methods.securitized(tokenId).call()
     const erc721Address = await contractWrapperErc721.methods.target().call()
 
-    const { description, image_url, name } = await getErc20OpenSeaMetadata(erc721Address, tokenId)
-
     return {
       address: addressErc20,
       name: erc20Name,
@@ -88,9 +85,9 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
         address: erc721Address,
         tokenId,
         wrapper: erc721Wrapper,
-        image_url,
-        description,
-        name
+        image_url: '',
+        description: '',
+        name: ''
       }
     }
   }
@@ -101,8 +98,28 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
     erc20WithMetadataPromises.push(getERC20Metadata(erc20[i]))
   }
 
-  const erc20Items = flatten(await Promise.all(erc20WithMetadataPromises)).filter(erc20Item => erc20Item.securitized)
-  return paginator(erc20Items, page || 1, limit || 12)
+  const erc20WithMetadata = flatten(await Promise.all(erc20WithMetadataPromises)).filter(erc20Item => erc20Item.securitized)
+  const erc20Paginated = paginator(erc20WithMetadata, page || 1, limit || 12)
+
+  const getERC20Images = async (erc20Item: MarketplaceERC20Item) => {
+    const { description, image_url, name } = await getErc20OpenSeaMetadata(erc20Item.erc721.address, erc20Item.erc721.tokenId)
+
+    return {
+      ...erc20Item,
+      erc721: {
+        ...erc20Item.erc721,
+        image_url,
+        description,
+        name
+      }
+    }
+  }
+
+  const erc20WithImagesPromises: Promise<MarketplaceERC20Item>[] = []
+  erc20Paginated.data.forEach(erc20Item => erc20WithImagesPromises.push(getERC20Images(erc20Item)))
+  const erc20WithImages = await Promise.all(erc20WithImagesPromises)
+
+  return { ...erc20Paginated, data: erc20WithImages }
 }
 
 export const getMarketplaceItemByAddress = async (erc20Address: string): Promise<MarketplaceERC20Item> => {
