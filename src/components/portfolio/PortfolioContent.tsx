@@ -51,7 +51,7 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }:
         </S.ContractAddress>
 
         {erc721.map(erc721Item => (
-          <>
+          <div key={`erc721-${erc721Item.address}`}>
             <S.TokenTitle>
               <S.TokenImage src={erc721Item.image_url} />
             </S.TokenTitle>
@@ -65,7 +65,7 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }:
             <S.ContractAddress>
               <S.ContractAddressLink>{erc721Item.address}</S.ContractAddressLink>
             </S.ContractAddress>
-          </>
+          </div>
         ))}
       </S.ERC721TableItem>
     </S.Erc721Content>
