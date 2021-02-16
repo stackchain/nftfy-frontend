@@ -1,10 +1,10 @@
 import { useReactiveVar } from '@apollo/client'
 import { Dropdown, Menu } from 'antd'
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import styled from 'styled-components'
 import { accountVar, chainIdVar } from '../../graphql/variables/WalletVariable'
+import { getNfyBalance } from '../../services/WalletService'
 import { colors } from '../../styles/variables'
 
 export const WalletButton: React.FC = () => {
@@ -13,11 +13,13 @@ export const WalletButton: React.FC = () => {
   const chainId = useReactiveVar(chainIdVar)
 
   useEffect(() => {
-    const getNfyBalance = async () => {
-      const nfyBalance = (await axios.get<{ balance: number }>(`http://localhost:5000/wallet/${account}/nfy`)).data
-      setNfy(nfyBalance.balance)
+    const getNfy = async () => {
+      if (account) {
+        const nfyBalance = await getNfyBalance(account)
+        setNfy(nfyBalance.balance)
+      }
     }
-    getNfyBalance()
+    getNfy()
   }, [account, chainId])
 
   const WalletMenuItems = (

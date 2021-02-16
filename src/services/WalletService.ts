@@ -1,4 +1,5 @@
 import detectEthereumProvider from '@metamask/detect-provider'
+import * as Sentry from '@sentry/react'
 import axios from 'axios'
 import { flatten } from 'lodash'
 import { AbiItem } from 'web3-utils'
@@ -109,21 +110,18 @@ const handleChainChanged = (chainId: string) => {
 }
 
 const getErc721OpenSeaMetadata = async (address: string, tokenId: string) => {
-  let description = ''
-  let image_url = ''
-
   try {
     const metadata = await axios.get<{ description: string; image_url: string }>(
       `https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}`
     )
+    const { description, image_url } = metadata.data
 
-    description = metadata.data.description
-    image_url = metadata.data.image_url
+    return { address, tokenId, description, image_url }
   } catch (error) {
-    notifyError(`getErc721OpenSeaMetadata - not found - ${address}, ${tokenId}`, error)
+    Sentry.captureException(error)
   }
 
-  return { address, tokenId, description, image_url }
+  return { address, tokenId, description: '', image_url: '' }
 }
 export const getERC721Items = async (walletAddress: string): Promise<WalletErc721Item[]> => {
   const web3 = initializeWeb3()

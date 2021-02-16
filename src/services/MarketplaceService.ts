@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react'
 import axios from 'axios'
 import { flatten } from 'lodash'
 import { AbiItem } from 'web3-utils'
@@ -10,7 +11,6 @@ import { chainIdVar } from '../graphql/variables/WalletVariable'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 import { Paged } from '../types/UtilTypes'
 import { initializeWeb3 } from './NftfyService'
-import { notifyWarning } from './NotificationService'
 import paginator from './UtilService'
 
 export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
@@ -18,23 +18,19 @@ export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNf
 export const nfyAddress = chainIdVar() === 1 ? addressNfyMainnet : addressNfyRinkeby
 
 const getErc20OpenSeaMetadata = async (address: string, tokenId: string) => {
-  let name = ''
-  let description = ''
-  let image_url = ''
-
   try {
     const metadata = await axios.get<{ description: string; image_url: string; name: string }>(
-      `https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}/`
+      `https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}`
     )
 
-    name = metadata.data.name
-    description = metadata.data.description
-    image_url = metadata.data.image_url
+    const { name, description, image_url } = metadata.data
+
+    return { description, image_url, name }
   } catch (error) {
-    notifyWarning(`getErc721OpenSeaMetadata - not found - ${address} ${tokenId}`)
+    Sentry.captureException(error)
   }
 
-  return { description, image_url, name }
+  return { description: '', image_url: '', name: '' }
 }
 
 export const getMarketplaceItems = async (page?: number, limit?: number): Promise<Paged<MarketplaceERC20Item[]>> => {

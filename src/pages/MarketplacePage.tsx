@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { RouteProps, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
@@ -6,9 +5,9 @@ import { NftCard } from '../components/marketplace/NftCard'
 import { PaginationButton } from '../components/shared/buttons/PaginationButton'
 import { SortDropdownFilter } from '../components/shared/buttons/SortDropdownFilter'
 import { Footer, Header } from '../components/shared/layout'
+import { getMarketplaceItems } from '../services/MarketplaceService'
 import { colors, viewport } from '../styles/variables'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
-import { Paged } from '../types/UtilTypes'
 
 export default function MarketplacePage({ location }: RouteProps) {
   const history = useHistory()
@@ -27,11 +26,8 @@ export default function MarketplacePage({ location }: RouteProps) {
 
   useEffect(() => {
     const getNfts = async () => {
-      const nftItems = (
-        await axios.get<Paged<MarketplaceERC20Item[]>>(
-          `http://localhost:5000/marketplace?page=${currentPage}${currentLimit && `&limit=${currentLimit}`}`
-        )
-      ).data
+      const nftItems = await getMarketplaceItems(currentPage, currentLimit)
+
       setNfts(nftItems.data)
       setTotalPages(nftItems.total)
     }
@@ -106,7 +102,7 @@ export const S = {
   `,
   CardsContainer: styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: auto;
     gap: 16px 16px;
 

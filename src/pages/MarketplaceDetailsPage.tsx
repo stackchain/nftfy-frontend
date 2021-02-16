@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
@@ -9,6 +8,7 @@ import { ShareStatsNftDetails } from '../components/marketplace/details/ShareSta
 import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetails'
 import { BuyNftButton } from '../components/shared/buttons/BuyNftButton'
 import { Footer, Header } from '../components/shared/layout'
+import { getMarketplaceItemByAddress } from '../services/MarketplaceService'
 import { colors, viewport } from '../styles/variables'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 
@@ -17,8 +17,10 @@ export default function MarketplaceDetailsPage() {
   const { address } = useParams<{ address: string | undefined }>()
   useEffect(() => {
     const getNfts = async () => {
-      const nft = (await axios.get<MarketplaceERC20Item>(`http://localhost:5000/marketplace/${address}`)).data
-      setErc20(nft)
+      if (address) {
+        const nft = await getMarketplaceItemByAddress(address)
+        setErc20(nft)
+      }
     }
     getNfts()
   }, [address])
