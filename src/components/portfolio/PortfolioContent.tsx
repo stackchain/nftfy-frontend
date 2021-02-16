@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import { useReactiveVar } from '@apollo/client'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { accountVar } from '../../graphql/variables/WalletVariable'
+import { getERC721Items } from '../../services/WalletService'
 import { colors } from '../../styles/variables'
-import { erc721Mock } from '../../__mocks__/pages/PagePortfolio.mock'
+import { WalletErc721Item } from '../../types/WalletTypes'
 
 export interface PortfolioContentProps {
   className?: string
@@ -16,43 +19,52 @@ export interface ERC721 {
 }
 
 export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }: PortfolioContentProps) => {
-  const [erc721] = useState<ERC721[]>(erc721Mock)
+  const [erc721, setErc721] = useState<WalletErc721Item[]>([])
+  const account = useReactiveVar(accountVar)
+
+  useEffect(() => {
+    const getErc721 = async () => {
+      if (account) {
+        const nfts = await getERC721Items(account)
+        setErc721(nfts)
+      }
+    }
+
+    getErc721()
+  })
+
   return (
     <S.Erc721Content className={className}>
       <S.ERC721TableItem>
         <S.TokenTitle>
           <S.TokenSpanTitle>ECR721</S.TokenSpanTitle>
         </S.TokenTitle>
-        <S.ContractAddress>
-          <S.ContractAddressSpanTitle>Contract Address</S.ContractAddressSpanTitle>
-        </S.ContractAddress>
+
         <S.ContractName>
           <S.ContractNameSpanTitle>Contract Name</S.ContractNameSpanTitle>
         </S.ContractName>
         <S.TokenId>
           <S.TokenIdSpanTitle>Token ID</S.TokenIdSpanTitle>
         </S.TokenId>
+        <S.ContractAddress>
+          <S.ContractAddressSpanTitle>Contract Address</S.ContractAddressSpanTitle>
+        </S.ContractAddress>
 
         {erc721.map(erc721Item => (
           <>
             <S.TokenTitle>
-              <S.TokenArea>
-                <S.TokenImage src={erc721Item.tokenImage} />
-                <S.TokenName>
-                  {erc721Item.tokenName}
-                  <S.TokenNameNft> NFT</S.TokenNameNft>
-                </S.TokenName>
-              </S.TokenArea>
+              <S.TokenImage src={erc721Item.image_url} />
             </S.TokenTitle>
-            <S.ContractAddress>
-              <S.ContractAddressLink>{erc721Item.contractAddress}</S.ContractAddressLink>
-            </S.ContractAddress>
+
             <S.ContractName>
-              <S.ContractNameContentSpan>{erc721Item.contractName}</S.ContractNameContentSpan>
+              <S.ContractNameContentSpan>{erc721Item.name}</S.ContractNameContentSpan>
             </S.ContractName>
             <S.TokenId>
               <S.TokenIdContentSpan>{erc721Item.tokenId}</S.TokenIdContentSpan>
             </S.TokenId>
+            <S.ContractAddress>
+              <S.ContractAddressLink>{erc721Item.address}</S.ContractAddressLink>
+            </S.ContractAddress>
           </>
         ))}
       </S.ERC721TableItem>
@@ -69,28 +81,11 @@ export const S = {
     margin-bottom: 18px;
     flex: 1;
     display: grid;
-    grid-template-columns: 4fr 3fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 8fr;
     gap: 16px 0px;
   `,
   TokenTitle: styled.div``,
-  TokenName: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 22px;
 
-    color: ${colors.gray2};
-  `,
-  TokenNameNft: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 22px;
-
-    color: ${colors.gray5};
-  `,
   TokenSpanTitle: styled.span`
     font-family: Montserrat;
     font-style: normal;
@@ -100,12 +95,7 @@ export const S = {
 
     color: ${colors.gray2};
   `,
-  TokenArea: styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  `,
+
   TokenImage: styled.img`
     width: 48px;
     height: 48px;

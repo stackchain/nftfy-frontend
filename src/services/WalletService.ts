@@ -299,6 +299,7 @@ export const getERC20Items = async (walletAddress: string): Promise<WalletItem[]
   const walletItemsWithErc721 = await Promise.all(walletItemsWithErc721Promises)
   return walletItemsWithErc721
 }
+
 export const getWalletItems = async (walletAddress: string): Promise<WalletItem[]> => {
   const items: WalletItem[] = []
 
@@ -320,6 +321,7 @@ export const getWalletItems = async (walletAddress: string): Promise<WalletItem[
 
   return items
 }
+
 export const getNfyBalance = async (walletAddress: string): Promise<{ balance: number }> => {
   const web3 = initializeWeb3()
 
