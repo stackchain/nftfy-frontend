@@ -31,7 +31,7 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }:
     }
 
     getErc721()
-  })
+  }, [account])
 
   return (
     <S.Erc721Content className={className}>
