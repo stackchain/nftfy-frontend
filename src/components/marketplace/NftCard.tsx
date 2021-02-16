@@ -8,37 +8,37 @@ import notFound from '../../assets/notfound.svg'
 import { colors, fonts, viewport } from '../../styles/variables'
 
 export interface NftCardProps {
-  id: string
   image: string
   name: string
-  price: number
-  loading: boolean
+  price?: number
+  url?: string
+  loading?: boolean
   className?: string
 }
 
-export const NftCard: React.FC<NftCardProps> = ({ id, image, name, price, loading, className }) => {
+export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, url, className }) => {
   const Spinner = <LoadingOutlined spin />
   return (
-    <S.Card className={className} to={`/marketplace/${id}`}>
+    <S.Card className={className} to={`${url || '#'}`}>
       <S.BoxImg className={image === '' ? 'bg-fail' : ''}>
-        <S.Img src={image || notFound} alt={name || 'not found'} hidden={loading} />
-        <Spin indicator={Spinner} spinning={loading} />
+        <S.Img src={image || notFound} alt={name || 'not found'} hidden={!!loading} />
+        <Spin indicator={Spinner} spinning={!!loading} />
       </S.BoxImg>
       <S.BoxInfo>
         <S.Texts>
-          <Skeleton loading={loading} active paragraph={{ rows: 0 }}>
+          <Skeleton loading={!!loading} active paragraph={{ rows: 0 }}>
             <span>Name</span>
           </Skeleton>
-          <S.SkeletonRight loading={loading} active paragraph={{ rows: 0 }}>
-            <span>Share Price</span>
+          <S.SkeletonRight className={!price ? 'hidden-collection' : ''} loading={!!loading} active paragraph={{ rows: 0 }}>
+            <span className={!price ? 'hidden-collection' : ''}>Share Price</span>
           </S.SkeletonRight>
         </S.Texts>
         <S.Content>
-          <Skeleton loading={loading} active paragraph={{ rows: 0 }}>
+          <Skeleton loading={!!loading} active paragraph={{ rows: 0 }}>
             <span>{`${name}`}</span>
           </Skeleton>
-          <S.SkeletonRight loading={loading} active paragraph={{ rows: 0 }}>
-            <span>{`${price} usd`}</span>
+          <S.SkeletonRight loading={!!loading} active paragraph={{ rows: 0 }}>
+            <span className={!price ? 'hidden-collection' : ''}>{`${price} usd`}</span>
           </S.SkeletonRight>
         </S.Content>
       </S.BoxInfo>
@@ -98,6 +98,7 @@ const S = {
     display: flex;
     flex-direction: column;
     padding: 16px;
+
     .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-title {
       margin: 0px !important;
       width: 90% !important;
@@ -132,6 +133,9 @@ const S = {
       line-height: 22px;
       color: ${colors.gray1};
     }
+    .hidden-collection {
+      display: none;
+    }
   `,
   Content: styled.div`
     display: flex;
@@ -139,6 +143,7 @@ const S = {
     justify-content: space-between;
     align-items: center;
     margin-top: 5px;
+
     span {
       font-family: ${fonts.montserrat};
       font-style: normal;
@@ -149,6 +154,9 @@ const S = {
       strong {
         text-transform: uppercase;
       }
+    }
+    .hidden-collection {
+      display: none;
     }
   `
 }

@@ -44,11 +44,10 @@ export default function MarketplacePage({ location }: RouteProps) {
             {nfts.map(nftItem => (
               <NftCard
                 key={`${nftItem.address}`}
-                id={`${nftItem.address}`}
                 image={`${nftItem.erc721.image_url}`}
                 name={nftItem.name}
                 price={0}
-                loading={false}
+                url={`/marketplace/${nftItem.address}`}
               />
             ))}
           </S.CardsContainer>
