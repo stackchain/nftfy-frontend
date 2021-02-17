@@ -17,6 +17,7 @@ export default function Routes() {
         <Route path='/marketplace' exact component={MarketplacePage} />
         <Route path='/marketplace/:address' exact component={MarketplaceDetailsPage} />
         <Route path='/securitize' exact component={SecuritizePage} />
+        <Route path='/securitize/:address/:tokenId' exact component={FallbackPage} />
         <Route path='/portfolio' exact component={PortfolioPage} />
         <Route path='/tutorial' exact component={FallbackPage} />
         <Route path='/terms' exact component={FallbackPage} />

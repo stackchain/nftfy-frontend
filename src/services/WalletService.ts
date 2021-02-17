@@ -14,6 +14,7 @@ import { accountVar, chainIdVar, connectWalletModalVar, setAccount, setChainId }
 import { code } from '../messages'
 import { WalletERC20Item, WalletErc721Item, WalletItem } from '../types/WalletTypes'
 import { notifyError, notifyWarning } from './NotificationService'
+import paginator from './UtilService'
 
 export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
 export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
@@ -198,6 +199,11 @@ export const getERC721Items = async (walletAddress: string): Promise<WalletErc72
   const erc721 = await Promise.all(erc721Promises)
 
   return flatten(erc721)
+}
+export const getPagedERC721Items = async (walletAddress: string, page?: number, limit?: number) => {
+  const erc721Items = await getERC721Items(walletAddress)
+
+  return paginator(erc721Items, page || 1, limit || 12)
 }
 
 export const getERC20Items = async (walletAddress: string): Promise<WalletItem[]> => {

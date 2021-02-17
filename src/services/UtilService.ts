@@ -1,11 +1,6 @@
-import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 import { Paged } from '../types/UtilTypes'
 
-export default function paginator(
-  items: MarketplaceERC20Item[],
-  current_page: number,
-  per_page_items: number
-): Paged<MarketplaceERC20Item[]> {
+export default function paginator<T>(items: T[], current_page: number, per_page_items: number): Paged<T[]> {
   const page = current_page || 1
   const per_page = per_page_items || 10
   const offset = (page - 1) * per_page
