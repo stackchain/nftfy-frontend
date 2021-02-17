@@ -1,26 +1,14 @@
 import { useReactiveVar } from '@apollo/client'
 import { Dropdown, Menu } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import styled from 'styled-components'
-import { accountVar, chainIdVar } from '../../graphql/variables/WalletVariable'
-import { getNfyBalance } from '../../services/WalletService'
+import { accountVar, nfyVar } from '../../graphql/variables/WalletVariable'
 import { colors } from '../../styles/variables'
 
 export const WalletButton: React.FC = () => {
-  const [nfy, setNfy] = useState(0)
   const account = useReactiveVar(accountVar)
-  const chainId = useReactiveVar(chainIdVar)
-
-  useEffect(() => {
-    const getNfy = async () => {
-      if (account) {
-        const nfyBalance = await getNfyBalance(account)
-        setNfy(nfyBalance.balance)
-      }
-    }
-    getNfy()
-  }, [account, chainId])
+  const nfy = useReactiveVar(nfyVar)
 
   const WalletMenuItems = (
     <S.StyledMenu>
@@ -35,7 +23,7 @@ export const WalletButton: React.FC = () => {
   return (
     <Dropdown overlay={WalletMenuItems} trigger={['click']}>
       <S.WalletButtonArea>
-        <S.WalletButton type='button'>{`${nfy.toLocaleString('en-us')} NFY`}</S.WalletButton>
+        <S.WalletButton type='button'>{`${nfy ? `${nfy.toLocaleString('en-us')} NFY` : 'Loading...'}`}</S.WalletButton>
         <S.WalletIcon>
           <Jazzicon diameter={40} seed={jsNumberForAddress(account)} />
         </S.WalletIcon>

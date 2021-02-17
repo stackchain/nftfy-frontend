@@ -10,7 +10,7 @@ import erc721WrappedAbi from '../abi/erc721wrapped.json'
 import nftfyAbi from '../abi/nftfy.json'
 import { addressesERC721Mainnet, addressInfuraMainnet, addressNftfyMainnet, addressNfyMainnet } from '../contracts/mainnet'
 import { addressesERC721Rinkeby, addressInfuraRinkeby, addressNftfyRinkeby, addressNfyRinkeby } from '../contracts/rinkeby'
-import { accountVar, chainIdVar, connectWalletModalVar, setAccount, setChainId } from '../graphql/variables/WalletVariable'
+import { accountVar, chainIdVar, connectWalletModalVar, nfyVar, setAccount, setChainId } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { WalletERC20Item, WalletErc721Item, WalletItem } from '../types/WalletTypes'
 import { notifyError, notifyWarning } from './NotificationService'
@@ -50,6 +50,8 @@ const connect = async () => {
       })
       if (accounts[0]) {
         setAccount(accounts[0])
+        const nfy = await getNfyBalance(accounts[0])
+        nfyVar(nfy.balance)
       } else {
         notifyError(code[5004])
       }
@@ -95,16 +97,19 @@ export const walletListenEvents = () => {
     (window.ethereum as { on: (eventKey: string, callback: (chainId: string) => void) => void }).on('chainChanged', handleChainChanged)
 }
 
-const handleAccounts = (accounts: string[]) => {
+const handleAccounts = async (accounts: string[]) => {
   if (accounts.length > 0) {
     const currentAccount = accountVar()
     currentAccount && accounts[0] !== currentAccount && notifyWarning(code[5008])
     setAccount(accounts[0])
+    const nfy = await getNfyBalance(accounts[0])
+    nfyVar(nfy.balance)
   } else {
     notifyWarning(code[5007])
     setAccount(undefined)
     setChainId(undefined)
     connectWalletModalVar(undefined)
+    nfyVar(undefined)
   }
 }
 
