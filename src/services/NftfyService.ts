@@ -52,7 +52,7 @@ export const isApprovedErc721 = async (erc721Address: string, erc721AddressId: n
 }
 
 export const securitizeErc721 = async (
-  erc721tAddress: string,
+  erc721Address: string,
   erc721Id: number,
   sharesCount: string,
   sharesDecimals: number,
@@ -64,7 +64,7 @@ export const securitizeErc721 = async (
     const web3 = initializeWeb3()
     const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
     contractNftfy.methods
-      .securitize(erc721tAddress, erc721Id, sharesCount, sharesDecimals, exitPrice, paymentTokenAddress, remnant)
+      .securitize(erc721Address, erc721Id, sharesCount, sharesDecimals, exitPrice, paymentTokenAddress, remnant)
       .send({ from: accountVar() })
       .once('error', (error: Error) => {
         notifyError(code[5010], error)
