@@ -14,6 +14,14 @@ export interface WalletERC20Item {
   balance: number
 }
 
+export interface WalletERC20Share extends WalletERC20Item {
+  imageUrl: string
+  price: number
+  change: number
+  dollarBalance: number
+  isClaimable: boolean
+}
+
 export interface WalletItem {
   erc721?: WalletErc721Item
   erc20?: WalletERC20Item

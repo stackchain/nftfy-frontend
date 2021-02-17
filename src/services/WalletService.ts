@@ -335,7 +335,7 @@ export const getWalletItems = async (walletAddress: string): Promise<WalletItem[
   return items
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getERC20Shares = async (walletAddress: string): Promise<WalletItem[]> => {
+export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20Item[]> => {
   return []
 }
 
