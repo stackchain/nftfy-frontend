@@ -135,6 +135,7 @@ const getErc721OpenSeaMetadata = async (address: string, tokenId: string) => {
 
   return { address, tokenId, description: '', image_url: '' }
 }
+
 export const getERC721Items = async (walletAddress: string): Promise<WalletErc721Item[]> => {
   const web3 = initializeWeb3()
 
@@ -205,6 +206,7 @@ export const getERC721Items = async (walletAddress: string): Promise<WalletErc72
 
   return flatten(erc721)
 }
+
 export const getPagedERC721Items = async (walletAddress: string, page?: number, limit?: number) => {
   const erc721Items = await getERC721Items(walletAddress)
 
@@ -331,6 +333,10 @@ export const getWalletItems = async (walletAddress: string): Promise<WalletItem[
   })
 
   return items
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const getERC20Shares = async (walletAddress: string): Promise<WalletItem[]> => {
+  return []
 }
 
 export const getNfyBalance = async (walletAddress: string): Promise<{ balance: number }> => {
