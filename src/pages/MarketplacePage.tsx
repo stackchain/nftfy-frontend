@@ -16,8 +16,10 @@ export default function MarketplacePage({ location }: RouteProps) {
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(Number(params.get('page')) || 1)
   const [currentLimit, setCurrentLimit] = useState(Number(params.get('limit')) || 12)
+  const [loading, setLoading] = useState(true)
 
   const paginate = (pageNumber: number, pageSizeNumber: number) => {
+    setLoading(true)
     setCurrentPage(pageNumber)
     setCurrentLimit(pageSizeNumber)
 
@@ -27,7 +29,7 @@ export default function MarketplacePage({ location }: RouteProps) {
   useEffect(() => {
     const getNfts = async () => {
       const nftItems = await getMarketplaceItems(currentPage, currentLimit)
-
+      setLoading(false)
       setNfts(nftItems.data)
       setTotalPages(nftItems.total)
     }
@@ -38,22 +40,26 @@ export default function MarketplacePage({ location }: RouteProps) {
     <>
       <Header />
       <S.Main>
-        <S.Content>
-          <S.SortFilter />
-          <S.CardsContainer>
-            {nfts.map(nftItem => (
-              <NftCard
-                key={`${nftItem.address}`}
-                image={`${nftItem.erc721.image_url}`}
-                name={nftItem.name}
-                price={0}
-                url={`/marketplace/${nftItem.address}`}
-              />
-            ))}
-          </S.CardsContainer>
-        </S.Content>
+        {loading && <div>Loading</div>}
+        {!loading && (
+          <S.Content>
+            <S.SortFilter />
+
+            <S.CardsContainer>
+              {nfts.map(nftItem => (
+                <NftCard
+                  key={`${nftItem.address}`}
+                  image={`${nftItem.erc721.image_url}`}
+                  name={nftItem.name}
+                  price={0}
+                  url={`/marketplace/${nftItem.address}`}
+                />
+              ))}
+            </S.CardsContainer>
+            <S.Pagination total={totalPages} limit={currentLimit} defaultCurrent={currentPage} onChange={paginate} />
+          </S.Content>
+        )}
       </S.Main>
-      {totalPages && <S.Pagination total={totalPages} limit={currentLimit} defaultCurrent={currentPage} onChange={paginate} />}
       <Footer />
     </>
   )
@@ -62,7 +68,7 @@ export default function MarketplacePage({ location }: RouteProps) {
 export const S = {
   Main: styled.main`
     width: 100%;
-    height: 100%;
+    height: calc(100% - 136px);
     background: ${colors.white};
     display: flex;
     justify-content: center;
