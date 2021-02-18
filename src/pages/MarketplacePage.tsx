@@ -44,7 +44,6 @@ export default function MarketplacePage({ location }: RouteProps) {
         {!loading && (
           <S.Content>
             <S.SortFilter />
-
             <S.CardsContainer>
               {nfts.map(nftItem => (
                 <NftCard
@@ -56,7 +55,7 @@ export default function MarketplacePage({ location }: RouteProps) {
                 />
               ))}
             </S.CardsContainer>
-            <S.Pagination total={totalPages} limit={currentLimit} defaultCurrent={currentPage} onChange={paginate} />
+            {totalPages && <S.Pagination defaultCurrent={currentPage} limit={currentLimit} total={totalPages} onChange={paginate} />}
           </S.Content>
         )}
       </S.Main>
@@ -99,18 +98,13 @@ export const S = {
       margin-bottom: 24px;
     }
   `,
-  Pagination: styled(PaginationButton)`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 32px;
-    background: ${colors.white};
-  `,
+
   CardsContainer: styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: auto;
     gap: 16px 16px;
+    margin-bottom: 32px;
 
     @media (max-width: ${viewport.xl}) {
       grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -127,5 +121,11 @@ export const S = {
     @media (max-width: ${viewport.sm}) {
       grid-template-columns: 1fr;
     }
+  `,
+  Pagination: styled(PaginationButton)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${colors.white};
   `
 }

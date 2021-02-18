@@ -71,17 +71,14 @@ const S = {
   `,
   BoxImg: styled.div`
     width: 100%;
-    height: 240px;
+    height: 312px;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    @media (max-width: ${viewport.xxl}) {
-      height: 220px;
-    }
-
     @media (max-width: ${viewport.lg}) {
-      height: 320px;
+      height: auto;
+      min-height: 350px;
     }
   `,
   Img: styled.img`
