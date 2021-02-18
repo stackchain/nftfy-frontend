@@ -68,7 +68,8 @@ export default function MarketplacePage({ location }: RouteProps) {
 export const S = {
   Main: styled.main`
     width: 100%;
-    height: calc(100% - 136px);
+    height: 100%;
+    min-height: calc(100vh - 136px);
     background: ${colors.white};
     display: flex;
     justify-content: center;
