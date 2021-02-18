@@ -12,7 +12,7 @@ import { addressesERC721Mainnet, addressInfuraMainnet, addressNftfyMainnet, addr
 import { addressesERC721Rinkeby, addressInfuraRinkeby, addressNftfyRinkeby, addressNfyRinkeby } from '../contracts/rinkeby'
 import { accountVar, chainIdVar, connectWalletModalVar, nfyVar, setAccount, setChainId } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
-import { WalletERC20Item, WalletErc721Item, WalletItem } from '../types/WalletTypes'
+import { WalletERC20Item, WalletERC20Share, WalletErc721Item, WalletItem } from '../types/WalletTypes'
 import { notifyError, notifyWarning } from './NotificationService'
 import paginator from './UtilService'
 
@@ -335,7 +335,7 @@ export const getWalletItems = async (walletAddress: string): Promise<WalletItem[
   return items
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20Item[]> => {
+export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20Share[]> => {
   return []
 }
 
