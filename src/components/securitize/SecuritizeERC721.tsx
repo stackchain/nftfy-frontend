@@ -2,18 +2,9 @@ import { Tooltip } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 import iconInfo from '../../assets/icons/info.svg'
-import { colors, fonts } from '../../styles/variables'
+import { colors, fonts, viewport } from '../../styles/variables'
 
-export interface SecuritizeERC721Props {
-  tokens: [
-    {
-      name: string
-      icon: string
-    }
-  ]
-}
-
-export const SecuritizeERC721: React.FC<SecuritizeERC721Props> = () => {
+export const SecuritizeERC721: React.FC = () => {
   return (
     <S.Content>
       <S.Title>
@@ -30,15 +21,23 @@ export const SecuritizeERC721: React.FC<SecuritizeERC721Props> = () => {
           <input type='text' />
         </S.FormControl>
 
-        <S.FormControl>
+        <S.FormControlPrice>
           <S.Label>
             Exit Price
             <Tooltip placement='top' title='info'>
               <img src={iconInfo} alt='info' />
             </Tooltip>
           </S.Label>
-          <input type='text' />
-        </S.FormControl>
+          <div>
+            <select name='' id=''>
+              <option value='#'>ETH</option>
+            </select>
+            <input type='text' />
+          </div>
+        </S.FormControlPrice>
+        <S.Action>
+          <S.ButtonSecuritize>Securitize</S.ButtonSecuritize>
+        </S.Action>
       </S.Form>
     </S.Content>
   )
@@ -55,6 +54,9 @@ const S = {
     border-radius: 8px;
     border: 1px solid ${colors.gray3};
     box-sizing: border-box;
+    @media (max-width: ${viewport.xl}) {
+      height: auto;
+    }
   `,
   Title: styled.div`
     padding: 33px 0px 33px 33px;
@@ -97,6 +99,75 @@ const S = {
       text-align: end;
       padding-right: 15px;
     }
+    @media (max-width: ${viewport.xl}) {
+      flex-direction: column;
+      label {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+      input {
+        width: 100%;
+      }
+    }
+  `,
+  FormControlPrice: styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 0 0;
+    select {
+      width: 152px;
+      height: 40px;
+      border: 1px solid ${colors.gray3};
+      box-sizing: border-box;
+      outline: none;
+      border-bottom-left-radius: 8px;
+      border-top-left-radius: 8px;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: ${colors.gray2};
+    }
+    input {
+      width: 288px;
+      height: 40px;
+      border: 1px solid ${colors.gray3};
+      box-sizing: border-box;
+      border-bottom-right-radius: 8px;
+      border-top-right-radius: 8px;
+      padding: none !important;
+      outline: none;
+      text-align: end;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      font-family: ${fonts.montserrat};
+      color: ${colors.gray2};
+      text-align: end;
+      padding-right: 15px;
+    }
+    @media (max-width: ${viewport.xl}) {
+      flex-direction: column;
+      label {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+      div {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        select {
+          width: 25%;
+        }
+        input {
+          width: 75%;
+        }
+      }
+    }
   `,
   Label: styled.label`
     font-family: ${fonts.montserrat};
@@ -110,5 +181,25 @@ const S = {
       padding-left: 5px;
       cursor: pointer;
     }
+  `,
+  Action: styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  `,
+  ButtonSecuritize: styled.button`
+    width: 209px;
+    height: 40px;
+    outline: none;
+    border: none;
+    background: ${colors.blue1};
+    border-radius: 8px;
+    cursor: pointer;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: ${colors.white};
   `
 }

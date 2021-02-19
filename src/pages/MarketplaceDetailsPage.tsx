@@ -35,7 +35,7 @@ export default function MarketplaceDetailsPage() {
         <S.Content>
           <S.Info>
             <S.MobileTitle>
-              <TitleNftDetails name={erc20.name} created='moon cat 88' />
+              <TitleNftDetails name={erc20.name} />
             </S.MobileTitle>
             <S.Image>
               <NftImage name='cat frost' image={erc20.erc721.image_url} />

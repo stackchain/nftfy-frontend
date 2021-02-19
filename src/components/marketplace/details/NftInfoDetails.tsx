@@ -10,8 +10,15 @@ export interface NftInfoDetailsProps {
   contractAddress: string
   tokenId: string
   details: string
+  collectionAttr?: boolean
 }
-export const NftInfoDetails: React.FC<NftInfoDetailsProps> = ({ contractName, contractAddress, tokenId, details }: NftInfoDetailsProps) => {
+export const NftInfoDetails: React.FC<NftInfoDetailsProps> = ({
+  contractName,
+  contractAddress,
+  tokenId,
+  details,
+  collectionAttr
+}: NftInfoDetailsProps) => {
   return (
     <S.Content>
       <S.InfoTypes>
@@ -32,7 +39,7 @@ export const NftInfoDetails: React.FC<NftInfoDetailsProps> = ({ contractName, co
           <small>Token ID</small>
           <h6>{tokenId}</h6>
         </div>
-        <div>
+        <div className={collectionAttr ? 'hidden-collection' : ''}>
           <BuyNftButton url='http://exemple.com' />
         </div>
       </S.InfoTypes>
@@ -97,6 +104,9 @@ const S = {
     }
     div:last-child {
       width: 131px;
+    }
+    .hidden-collection {
+      display: none;
     }
     @media (max-width: ${viewport.sm}) {
       flex-direction: column;

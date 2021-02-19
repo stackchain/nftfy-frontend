@@ -14,6 +14,6 @@ const Template: Story<TitleNftDetailsProps> = args => <TitleNftDetails {...args}
 export const Default = Template.bind({})
 
 Default.args = {
-  created: 'moon cat 32',
+  // created: 'moon cat 32',
   name: 'Cat Frost'
 }

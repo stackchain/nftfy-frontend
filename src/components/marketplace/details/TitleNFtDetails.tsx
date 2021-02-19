@@ -1,21 +1,20 @@
-import { Button } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 import { colors, fonts, viewport } from '../../../styles/variables'
 
 export interface TitleNftDetailsProps {
   name: string
-  created: string
+  created?: string
 }
 
-export const TitleNftDetails: React.FC<TitleNftDetailsProps> = ({ name, created }: TitleNftDetailsProps) => {
+export const TitleNftDetails: React.FC<TitleNftDetailsProps> = ({ name }: TitleNftDetailsProps) => {
   return (
     <S.Content>
       <small>
-        Created by 55786B -
-        <Button type='link' danger>
+        Created by 55786B
+        {/* <Button type='link' danger>
           {created}
-        </Button>
+        </Button> */}
       </small>
       <h1>{name}</h1>
     </S.Content>
