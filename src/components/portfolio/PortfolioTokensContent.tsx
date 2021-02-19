@@ -1,16 +1,16 @@
 import { Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-// import { accountVar } from '../../graphql/variables/WalletVariable'
-import { getERC20Shares } from '../../services/WalletService'
+import { getERC20Tokens } from '../../services/WalletService'
+// import { getERC20Items } from '../../services/WalletService'
 import { colors } from '../../styles/variables'
 import { WalletERC20Share } from '../../types/WalletTypes'
 
-export interface PortfolioContentProps {
+export interface PortfolioTokensContentProps {
   className?: string
 }
 
-export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }: PortfolioContentProps) => {
+export const PortfolioTokensContent: React.FC<PortfolioTokensContentProps> = ({ className }: PortfolioTokensContentProps) => {
   const [erc20share, setErc20share] = useState<WalletERC20Share[]>([])
   // const account = useReactiveVar(accountVar)
   const account = '234'
@@ -18,7 +18,7 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }:
   useEffect(() => {
     const getErc721 = async () => {
       if (account) {
-        const nfts = await getERC20Shares(account)
+        const nfts = await getERC20Tokens(account)
         setErc20share(nfts)
       }
     }
@@ -34,14 +34,14 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }:
     <S.Erc720Content className={className}>
       <S.ERC720TableItem>
         <S.TokenTitle>
-          <S.TokenSpanTitle>ERC20 shares</S.TokenSpanTitle>
+          <S.TokenSpanTitle>ERC20 Tokens</S.TokenSpanTitle>
         </S.TokenTitle>
         <S.TitleTable>Price</S.TitleTable>
         <S.TitleTable>% of Portfolio</S.TitleTable>
         <S.TitleTable>Balance</S.TitleTable>
         <S.TitleTable>Value</S.TitleTable>
         <S.TitleTable>Change</S.TitleTable>
-        <S.TitleTable>Actions</S.TitleTable>
+        <div />
         {erc20share.map(erc20Item => (
           <>
             <S.DivImage key={`erc20-${erc20Item.address}`}>
@@ -66,7 +66,7 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }:
             <S.DivErc20>
               <S.Erc20SpanTable className={returnColor(erc20Item.change)}>{`${erc20Item.change}%`}</S.Erc20SpanTable>
             </S.DivErc20>
-            <S.DivErc20>{erc20Item.isClaimable && <S.Claim>Claim</S.Claim>}</S.DivErc20>
+            <div />
           </>
         ))}
       </S.ERC720TableItem>

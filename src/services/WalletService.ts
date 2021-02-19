@@ -336,7 +336,101 @@ export const getWalletItems = async (walletAddress: string): Promise<WalletItem[
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20Share[]> => {
-  return []
+  return [
+    {
+      address: 'x04012990890890890890890',
+      name: 'Cat Frost',
+      symbol: 'ETH',
+      balance: 150.0,
+      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
+      price: 0.35,
+      change: 32,
+      dollarBalance: 50.0,
+      isClaimable: false
+    },
+    {
+      address: 'x04012990890890890890890',
+      name: 'Cat Frost',
+      symbol: 'ETH',
+      balance: 150.0,
+      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
+      price: 0.35,
+      change: 0,
+      dollarBalance: 50.0,
+      isClaimable: false
+    },
+    {
+      address: 'x04012990890890890890890',
+      name: 'Cat Frost',
+      symbol: 'ETH',
+      balance: 150.0,
+      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
+      price: 0.35,
+      change: 32,
+      dollarBalance: 50.0,
+      isClaimable: false
+    },
+    {
+      address: 'x04012990890890890890890',
+      name: 'Cat Frost',
+      symbol: 'ETH',
+      balance: 150.0,
+      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
+      price: 0.35,
+      change: -32,
+      dollarBalance: 50.0,
+      isClaimable: true
+    }
+  ]
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const getERC20Tokens = async (walletAddress: string): Promise<WalletERC20Share[]> => {
+  return [
+    {
+      address: 'x04012990890890890890890',
+      name: 'Ethereum',
+      symbol: 'ETH',
+      balance: 150.0,
+      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
+      price: 0.35,
+      change: 32,
+      dollarBalance: 50.0,
+      isClaimable: false
+    },
+    {
+      address: 'x04012990890890890890890',
+      name: 'Uniswap',
+      symbol: 'UNI',
+      balance: 150.0,
+      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
+      price: 0.35,
+      change: 0,
+      dollarBalance: 50.0,
+      isClaimable: false
+    },
+    {
+      address: 'x04012990890890890890890',
+      name: 'Balancer',
+      symbol: 'BAL',
+      balance: 150.0,
+      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
+      price: 0.35,
+      change: 32,
+      dollarBalance: 50.0,
+      isClaimable: false
+    },
+    {
+      address: 'x04012990890890890890890',
+      name: 'UMA token',
+      symbol: 'UMA',
+      balance: 150.0,
+      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
+      price: 0.35,
+      change: -32,
+      dollarBalance: 50.0,
+      isClaimable: true
+    }
+  ]
 }
 
 export const getNfyBalance = async (walletAddress: string): Promise<{ balance: number }> => {
