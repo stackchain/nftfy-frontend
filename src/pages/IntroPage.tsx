@@ -10,12 +10,14 @@ export default function IntroPage() {
     <>
       <Header />
       <S.Main>
-        <S.BoxActionIntro>
-          <IntroActions />
-        </S.BoxActionIntro>
-        <S.AreaDivVideo>
-          <S.AreaVideo src={communityDefy} />
-        </S.AreaDivVideo>
+        <S.Container>
+          <S.BoxActionIntro>
+            <IntroActions />
+          </S.BoxActionIntro>
+          <S.AreaDivVideo>
+            <S.AreaVideo src={communityDefy} />
+          </S.AreaDivVideo>
+        </S.Container>
       </S.Main>
       <Footer />
     </>
@@ -27,20 +29,31 @@ export const S = {
     display: flex;
     flex: 1;
     width: 100%;
+    height: calc(100vh - 88px - 48px);
+    background: red;
+    padding: 0px 48px;
+    background: ${colors.white};
+    @media (max-width: ${viewport.xxl}) {
+      padding: 0px 48px;
+    }
+    @media (max-width: ${viewport.xl}) {
+      padding: 0px 24px;
+      height: calc(100vh - 64px - 48px);
+    }
+    @media (max-width: ${viewport.sm}) {
+      padding: 0px 8px;
+      margin: 40px 0px;
+    }
+  `,
+  Container: styled.div`
+    flex: 1;
+    display: flex;
+    align-items: center;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background: ${colors.white};
-    padding: 230px 48px;
-    @media (max-width: ${viewport.xxl}) {
-      padding: 100px 48px;
-    }
     @media (max-width: ${viewport.xl}) {
       flex-direction: column-reverse;
-      padding: 100px 24px;
-    }
-    @media (max-width: ${viewport.sm}) {
-      padding: 40px 8px;
     }
   `,
   BoxActionIntro: styled.div`
@@ -68,5 +81,9 @@ export const S = {
     max-height: 524px;
     width: 100%;
     height: auto;
+
+    @media (max-width: ${viewport.xl}) {
+      max-height: 380px;
+    }
   `
 }

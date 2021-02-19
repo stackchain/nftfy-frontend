@@ -27,11 +27,12 @@ const S = {
     color: ${colors.gray2};
     margin-left: 24px;
     transition: background-color 0.5s;
-
+    padding: 0;
     cursor: pointer;
 
     &:hover {
       background: ${colors.gray3};
+      color: ${colors.gray2};
     }
 
     &:focus {

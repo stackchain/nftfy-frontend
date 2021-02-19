@@ -99,8 +99,7 @@ const S = {
     align-items: center;
   `,
   LogoMobile: styled.img`
-    width: 32px;
-    height: 32px;
+    width: 78px;
     margin-right: auto;
   `,
   Search: styled.img`

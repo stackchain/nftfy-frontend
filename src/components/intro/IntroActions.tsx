@@ -22,8 +22,8 @@ export const IntroActions: React.FC<ActionIntroProps> = ({ className }: ActionIn
 
 const S = {
   ContentInfoPage: styled.section`
+    flex: 1;
     max-width: 592px;
-    max-height: 242px;
     background: ${colors.white};
   `,
   H1: styled.h1`
@@ -76,11 +76,21 @@ const S = {
     font-weight: 600;
     font-size: 1.6rem;
     line-height: 2.4rem;
+    padding: 0px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     color: ${colors.white};
+    transition: background-color 2s;
     &:focus {
       border: none;
       outline: none;
+    }
+    &:hover {
+      color: ${colors.white};
+      background: #e8455b;
     }
   `,
   ButtonSecuritize: styled(Button)`
@@ -88,6 +98,11 @@ const S = {
     max-width: 190px;
     height: 40px;
     cursor: pointer;
+    padding: 0px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     background: ${colors.white};
     border-radius: 8px;
@@ -102,6 +117,11 @@ const S = {
     color: ${colors.gray2};
     &:focus {
       outline: none;
+    }
+    &:hover {
+      color: ${colors.gray2};
+      background: ${colors.white};
+      border: 1px solid ${colors.gray6};
     }
   `
 }
