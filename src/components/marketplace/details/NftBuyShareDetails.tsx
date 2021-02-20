@@ -120,7 +120,6 @@ const S = {
     cursor: default;
     img {
       margin-left: 6px;
-      cursor: pointer;
       height: 14px;
       width: 14px;
       cursor: default;
