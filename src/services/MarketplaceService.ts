@@ -17,20 +17,25 @@ export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : add
 export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
 export const nfyAddress = chainIdVar() === 1 ? addressNfyMainnet : addressNfyRinkeby
 
-const getErc20OpenSeaMetadata = async (address: string, tokenId: string) => {
+const getErc721OpenSeaMetadata = async (address: string, tokenId: string) => {
   try {
-    const metadata = await axios.get<{ description: string; image_url: string; name: string }>(
-      `https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}`
-    )
+    const metadata = await axios.get<{
+      description: string
+      image_url: string
+      name: string
+      symbol: string
+      asset_contract: { symbol: string }
+    }>(`https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}`)
 
     const { name, description, image_url } = metadata.data
+    const { symbol } = metadata.data.asset_contract
 
-    return { description, image_url, name }
+    return { description, image_url, name, symbol }
   } catch (error) {
     Sentry.captureException(error)
   }
 
-  return { description: '', image_url: '', name: '' }
+  return { description: '', image_url: '', name: '', symbol: '' }
 }
 
 export const getMarketplaceItems = async (page?: number, limit?: number): Promise<Paged<MarketplaceERC20Item[]>> => {
@@ -87,7 +92,8 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
         wrapper: erc721Wrapper,
         image_url: '',
         description: '',
-        name: ''
+        name: '',
+        symbol: ''
       }
     }
   }
@@ -102,7 +108,7 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
   const erc20Paginated = paginator(erc20WithMetadata, page || 1, limit || 12)
 
   const getERC20Images = async (erc20Item: MarketplaceERC20Item) => {
-    const { description, image_url, name } = await getErc20OpenSeaMetadata(erc20Item.erc721.address, erc20Item.erc721.tokenId)
+    const { description, image_url, name, symbol } = await getErc721OpenSeaMetadata(erc20Item.erc721.address, erc20Item.erc721.tokenId)
 
     return {
       ...erc20Item,
@@ -110,7 +116,8 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
         ...erc20Item.erc721,
         image_url,
         description,
-        name
+        name,
+        symbol
       }
     }
   }
@@ -136,20 +143,20 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
     const securitized = await contractWrapperErc721.methods.securitized(tokenId).call()
     const erc721Address = await contractWrapperErc721.methods.target().call()
 
-    const { description, image_url, name } = await getErc20OpenSeaMetadata(erc721Address, tokenId)
-
+    const erc721Metadata = await getErc721OpenSeaMetadata(erc721Address, tokenId)
     return {
       address,
       name: erc20Name,
       symbol,
       securitized,
       erc721: {
-        name,
+        name: erc721Metadata.name,
         address: erc721Address,
         tokenId,
         wrapper: erc721Wrapper,
-        image_url,
-        description
+        image_url: erc721Metadata.image_url,
+        description: erc721Metadata.description,
+        symbol: erc721Metadata.symbol
       }
     }
   }

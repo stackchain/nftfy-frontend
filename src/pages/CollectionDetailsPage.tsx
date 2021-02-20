@@ -16,14 +16,14 @@ export default function CollectionDetailsPage() {
         <S.Content>
           <S.Info>
             <S.MobileTitle>
-              <TitleNftDetails name='Name test' created='moon cat 88' />
+              <TitleNftDetails name='Name test' symbol='test' created='moon cat 88' />
             </S.MobileTitle>
             <S.Image>
               <NftImage name='cat frost' image={imageNft} />
             </S.Image>
             <S.Details>
               <S.DesktopTitle>
-                <TitleNftDetails name='Name Test' created='moon cat 88' />
+                <TitleNftDetails name='Name Test' symbol='test' created='moon cat 88' />
               </S.DesktopTitle>
               <NftInfoDetails contractName='CryptoKitties' contractAddress='0xfbee74b7d' tokenId='1992671' details='details text' />
               <SecuritizeERC721 />

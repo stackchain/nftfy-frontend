@@ -17,10 +17,8 @@ export const NftInfoDetails: React.FC<NftInfoDetailsProps> = ({ contractAddress,
       <S.InfoTypes>
         <S.CopyToClipboard text={contractAddress}>
           <Tooltip placement='right' title='Copy ERC721 Address'>
-            <h6>
-              {contractAddress}
-              <img src={clip} alt='clip' />
-            </h6>
+            <h6>{contractAddress}</h6>
+            <img src={clip} alt='clip' />
           </Tooltip>
         </S.CopyToClipboard>
       </S.InfoTypes>
@@ -43,7 +41,7 @@ const S = {
     }
   `,
   InfoTypes: styled.div`
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     justify-content: space-between;
   `,
@@ -68,21 +66,37 @@ const S = {
     }
   `,
   CopyToClipboard: styled(CopyToClipboard)`
-    font-size: 14px;
+    font-size: 12px;
     font-family: ${fonts.montserrat};
     font-style: normal;
     font-weight: 500;
-    color: ${colors.gray1};
+    display: flex;
+    align-items: center;
+
     cursor: pointer;
 
-    &:hover {
-      opacity: 0.8;
+    h6 {
+      color: ${colors.gray1};
     }
 
     img {
       margin-left: 8px;
       width: 12px;
       height: 12px;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    @media (max-width: ${viewport.sm}) {
+      h6 {
+        width: 80vw;
+        white-space: nowrap;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   `
 }

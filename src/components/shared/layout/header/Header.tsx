@@ -3,6 +3,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import menuIcon from '../../../../assets/menuIcon.svg'
+import nftfyIcon from '../../../../assets/nftfy-icon.svg'
 import nftfy from '../../../../assets/nftfy.svg'
 import searchIcon from '../../../../assets/searchIcon.svg'
 import { accountVar } from '../../../../graphql/variables/WalletVariable'
@@ -26,7 +27,10 @@ export const Header: React.FC = () => {
         {account ? <WalletButton /> : <HeaderWallet />}
       </S.Header>
       <S.HeaderMobile>
-        <S.LogoMobile src={nftfy} alt='Nftfy' />
+        <Link to='/'>
+          <S.Logo src={nftfy} alt='Nftfy' />
+          <S.LogoMobile src={nftfyIcon} alt='Nftfy' />
+        </Link>
         <S.Search src={searchIcon} alt='Search' />
         <S.Menu src={menuIcon} alt='Menu' />
         {account ? <WalletButton /> : <HeaderWallet />}
@@ -46,13 +50,13 @@ const S = {
     padding: 0px 48px;
     background: ${colors.white};
     border-bottom: 1px solid ${colors.gray3};
-    @media (max-width: ${viewport.xl}) {
+    @media (max-width: ${viewport.lg}) {
       display: none;
     }
   `,
   HeaderMobile: styled.header`
     display: none;
-    @media (max-width: ${viewport.xl}) {
+    @media (max-width: ${viewport.lg}) {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -62,17 +66,27 @@ const S = {
       background: ${colors.white};
       padding: 0px 24px;
       align-items: center;
+
+      a {
+        display: flex;
+        flex: 1;
+        justify-content: flex-start;
+      }
     }
 
     @media (max-width: ${viewport.sm}) {
-      padding: 8px;
+      padding: 16px;
     }
   `,
   Logo: styled.img`
-    width: 128px;
+    width: 112px;
     height: 40px;
     margin-right: 24px;
     cursor: pointer;
+
+    @media (max-width: ${viewport.sm}) {
+      display: none;
+    }
   `,
   ButtonConnectWallet: styled.button`
     width: 250.25px;
@@ -99,8 +113,14 @@ const S = {
     align-items: center;
   `,
   LogoMobile: styled.img`
-    width: 110px;
+    width: 40px;
+    height: 40px;
     margin-right: auto;
+    display: none;
+
+    @media (max-width: ${viewport.sm}) {
+      display: flex;
+    }
   `,
   Search: styled.img`
     width: 32px;

@@ -7,33 +7,28 @@ import { colors, fonts, viewport } from '../../../styles/variables'
 
 export interface NftBuyShareDetailsProps {
   name: string
+  symbol: string
   addressERC20: string
   price: number
   price2: number
 }
 
-export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, addressERC20 }: NftBuyShareDetailsProps) => {
+export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, symbol, addressERC20 }: NftBuyShareDetailsProps) => {
   return (
     <S.Content>
-      <S.Title>{name}</S.Title>
-
+      <S.Title>
+        {name}
+        <small>{symbol}</small>
+      </S.Title>
       <S.AddressToken>
         <S.CopyToClipboard text={addressERC20}>
           <Tooltip placement='right' title='Copy ERC20 Shares Address'>
-            <h6>
-              {addressERC20}
-              <img src={clip} alt='clip' />
-            </h6>
+            <h6>{addressERC20}</h6>
+            <img src={clip} alt='clip' />
           </Tooltip>
         </S.CopyToClipboard>
       </S.AddressToken>
       <S.SharePrice>
-        {/* <S.Label>
-          Share Price
-          <Tooltip placement='right' title='Quote of the last price'>
-            <img src={iconInfo} alt='info' />
-          </Tooltip>
-        </S.Label> */}
         <S.PriceAction>
           <div>
             <S.MainPrice>
@@ -45,7 +40,7 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, ad
               0.04
             </S.DollarPrice>
           </div>
-          <S.TradeShares>Buy Shares</S.TradeShares>
+          <S.TradeSharesButton>Buy Shares</S.TradeSharesButton>
         </S.PriceAction>
       </S.SharePrice>
     </S.Content>
@@ -53,6 +48,7 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, ad
 }
 const S = {
   Content: styled.div`
+    flex: 1;
     max-width: 575px;
     @media (max-width: ${viewport.lg}) {
       max-width: none;
@@ -67,6 +63,16 @@ const S = {
     margin-bottom: 4px;
 
     color: ${colors.gray2};
+
+    small {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      line-height: 14px;
+      color: ${colors.gray1};
+      margin-left: 8px;
+      font-weight: 600;
+    }
   `,
 
   AddressToken: styled.div`
@@ -101,7 +107,7 @@ const S = {
     }
   `,
   SharePrice: styled.div`
-    margin-top: 24px;
+    margin-top: 32px;
     @media (max-width: ${viewport.sm}) {
       display: flex;
       flex-direction: column;
@@ -134,6 +140,10 @@ const S = {
     justify-content: space-between;
     font-family: ${fonts.montserrat};
     align-items: flex-start;
+
+    @media (max-width: ${viewport.sm}) {
+      flex-direction: column;
+    }
   `,
   MainPrice: styled.div`
     font-style: normal;
@@ -160,11 +170,12 @@ const S = {
     font-size: 14px;
     line-height: 22px;
     color: ${colors.gray1};
+    margin-bottom: 16px;
     small {
       margin-left: 4px;
     }
   `,
-  TradeShares: styled(Button)`
+  TradeSharesButton: styled(Button)`
     height: 40px;
     padding: 0 64px;
     border-radius: 8px;
@@ -179,23 +190,39 @@ const S = {
       background-color: ${colors.blue2};
       border: 1px solid ${colors.blue2};
     }
+
+    @media (max-width: ${viewport.sm}) {
+      width: 100%;
+      margin-bottom: 32px;
+    }
   `,
   CopyToClipboard: styled(CopyToClipboard)`
-    font-size: 14px;
+    font-size: 12px;
     font-family: ${fonts.montserrat};
     font-style: normal;
     font-weight: 500;
     color: ${colors.gray3};
     cursor: pointer;
-
-    &:hover {
-      opacity: 0.8;
-    }
+    display: flex;
+    align-items: center;
 
     img {
       margin-left: 8px;
       width: 12px;
       height: 12px;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    @media (max-width: ${viewport.sm}) {
+      h6 {
+        width: 80vw;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   `
 }

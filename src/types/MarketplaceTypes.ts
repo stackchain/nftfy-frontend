@@ -10,5 +10,6 @@ export interface MarketplaceERC20Item {
     description: string
     image_url: string
     name: string
+    symbol: string
   }
 }
