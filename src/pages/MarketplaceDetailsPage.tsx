@@ -1,3 +1,4 @@
+import { Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
@@ -5,10 +6,9 @@ import { NftBuyShareDetails } from '../components/marketplace/details/NftBuyShar
 import { NftImage } from '../components/marketplace/details/NftImage'
 import { NftInfoDetails } from '../components/marketplace/details/NftInfoDetails'
 import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetails'
-import { BuyNftButton } from '../components/shared/buttons/BuyNftButton'
 import { Footer, Header } from '../components/shared/layout'
 import { getMarketplaceItemByAddress } from '../services/MarketplaceService'
-import { colors, viewport } from '../styles/variables'
+import { colors, fonts, viewport } from '../styles/variables'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 
 export default function MarketplaceDetailsPage() {
@@ -37,12 +37,15 @@ export default function MarketplaceDetailsPage() {
               <TitleNftDetails name={erc20.erc721.name} />
             </S.MobileTitle>
             <S.Image>
-              <NftImage name='cat frost' image={erc20.erc721.image_url} />
+              <NftImage name={erc20.erc721.name} image={erc20.erc721.image_url} />
             </S.Image>
             <S.Details>
-              <S.DesktopTitle>
-                <TitleNftDetails name={erc20.erc721.name} created='moon cat 88' />
-              </S.DesktopTitle>
+              <S.TitleArea>
+                <S.DesktopTitle>
+                  <TitleNftDetails name={erc20.erc721.name} />
+                </S.DesktopTitle>
+                <S.BuyNft>Buy NFT</S.BuyNft>
+              </S.TitleArea>
               <NftInfoDetails
                 contractName={erc20.erc721.name}
                 contractAddress={erc20.erc721.address}
@@ -50,7 +53,7 @@ export default function MarketplaceDetailsPage() {
                 details={erc20.erc721.description}
               />
               <S.BtnMobile>
-                <BuyNftButton url='http://exemplo.com' />
+                <S.BuyNft>Buy NFT</S.BuyNft>
               </S.BtnMobile>
               <S.Division />
               <NftBuyShareDetails name={erc20.name} addressERC20={erc20.address} price={0.000051} price2={0.04} />
@@ -122,6 +125,9 @@ const S = {
     margin-bottom: 247px;
   `,
   DesktopTitle: styled.div`
+    flex: 1;
+    max-width: 450px;
+
     @media (max-width: ${viewport.md}) {
       display: none;
     }
@@ -138,5 +144,20 @@ const S = {
     @media (max-width: ${viewport.lg}) {
       display: flex;
     }
+  `,
+
+  TitleArea: styled.div`
+    display: flex;
+    flex-direction: row;
+    max-width: 575px;
+    min-height: 50px;
+  `,
+  BuyNft: styled(Button)`
+    height: 40px;
+    padding: 0 32px;
+    border-radius: 8px;
+    font-family: ${fonts.montserrat};
+    font-weight: 500;
+    color: ${colors.gray2};
   `
 }

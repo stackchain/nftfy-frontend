@@ -18,7 +18,7 @@ export const NftInfoDetails: React.FC<NftInfoDetailsProps> = ({ contractAddress,
       <S.InfoTypes>
         <S.CopyToClipboard text={contractAddress}>
           <Tooltip placement='right' title='Copy ERC721 Address'>
-            <h6 className='link-copy'>
+            <h6>
               {contractAddress}
               <img src={clip} alt='clip' />
             </h6>

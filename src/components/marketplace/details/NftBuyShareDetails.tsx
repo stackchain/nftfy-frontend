@@ -1,4 +1,4 @@
-import { Tooltip } from 'antd'
+import { Button, Tooltip } from 'antd'
 import React from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import styled from 'styled-components'
@@ -20,10 +20,10 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, ad
       <S.AddressToken>
         <S.CopyToClipboard text={addressERC20}>
           <Tooltip placement='right' title='Copy ERC20 Shares Address'>
-            <h3 className='link-copy'>
+            <h6>
               {addressERC20}
               <img src={clip} alt='clip' />
-            </h3>
+            </h6>
           </Tooltip>
         </S.CopyToClipboard>
       </S.AddressToken>
@@ -36,16 +36,16 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, ad
         </S.Label> */}
         <S.PriceAction>
           <div>
-            <span>
+            <S.MainPrice>
               0.000051
               <small>ETH</small>
-            </span>
-            <span>
+            </S.MainPrice>
+            <S.DollarPrice>
               <small>$</small>
               0.04
-            </span>
+            </S.DollarPrice>
           </div>
-          <S.ButtonBuy>Buy Shares</S.ButtonBuy>
+          <S.TradeShares>Buy Shares</S.TradeShares>
         </S.PriceAction>
       </S.SharePrice>
     </S.Content>
@@ -60,7 +60,7 @@ const S = {
     font-style: normal;
     font-weight: 600;
     font-size: 24px;
-    line-height: 32px;
+    line-height: 28px;
     margin-bottom: 4px;
 
     color: ${colors.gray2};
@@ -69,7 +69,7 @@ const S = {
   AddressToken: styled.div`
     font-family: ${fonts.montserrat};
     display: flex;
-    h3 {
+    h6 {
       font-style: normal;
       font-weight: 500;
       font-size: 14px;
@@ -131,65 +131,50 @@ const S = {
     justify-content: space-between;
     font-family: ${fonts.montserrat};
     align-items: flex-start;
-
-    span {
-      font-style: normal;
-      font-weight: 600;
-      font-size: 36px;
-      line-height: 42px;
-      color: ${colors.gray2};
-      small {
-        color: ${colors.gray1};
-        font-size: 14px;
-        font-weight: 500;
-        margin-left: 4px;
-        line-height: 22px;
-      }
-
-      &:last-child small {
-        margin-right: 4px;
-      }
-    }
-
-    div {
-      display: flex;
-      flex-direction: column;
-      span:nth-child(2) {
-        font-size: 14px;
-        line-height: 22px;
-        color: ${colors.gray1};
-        small {
-          margin-left: 4px;
-        }
-      }
-    }
-
-    @media (max-width: ${viewport.sm}) {
-      flex-direction: column;
-      div {
-        span:nth-child(2) {
-          margin-bottom: 16px;
-        }
-      }
-    }
   `,
-  ButtonBuy: styled.button`
-    font-family: ${fonts.montserrat};
-    width: 285px;
-    height: 40px;
-    border-radius: 8px;
-    background: ${colors.blue1};
-    border: none;
-    outline: none;
-    cursor: pointer;
-    color: ${colors.white};
+  MainPrice: styled.div`
     font-style: normal;
     font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 36px;
+    line-height: 42px;
+    height: 42px;
+    color: ${colors.gray2};
+    font-family: ${fonts.montserrat};
 
-    &:hover {
-      background: ${colors.blue2};
+    small {
+      font-size: 14px;
+      margin-left: 4px;
+    }
+
+    &:last-child small {
+      margin-right: 4px;
+    }
+  `,
+  DollarPrice: styled.div`
+    font-family: ${fonts.montserrat};
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 22px;
+    color: ${colors.gray1};
+    small {
+      margin-left: 4px;
+    }
+  `,
+  TradeShares: styled(Button)`
+    height: 40px;
+    padding: 0 64px;
+    border-radius: 8px;
+    font-family: ${fonts.montserrat};
+    font-weight: 500;
+    color: ${colors.white};
+    background-color: ${colors.blue1};
+
+    &:hover,
+    &:focus {
+      color: ${colors.white};
+      background-color: ${colors.blue2};
+      border: 1px solid ${colors.blue2};
     }
   `,
   CopyToClipboard: styled(CopyToClipboard)`
@@ -197,7 +182,7 @@ const S = {
     font-family: ${fonts.montserrat};
     font-style: normal;
     font-weight: 500;
-    color: ${colors.gray1};
+    color: ${colors.gray3};
     cursor: pointer;
 
     &:hover {
