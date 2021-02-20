@@ -54,6 +54,9 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, ad
 const S = {
   Content: styled.div`
     max-width: 575px;
+    @media (max-width: ${viewport.lg}) {
+      max-width: none;
+    }
   `,
   Title: styled.span`
     font-family: ${fonts.montserrat};

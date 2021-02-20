@@ -10,7 +10,6 @@ export interface NftInfoDetailsProps {
   contractAddress: string
   tokenId: string
   details: string
-  collectionAttr?: boolean
 }
 export const NftInfoDetails: React.FC<NftInfoDetailsProps> = ({ contractAddress, details }: NftInfoDetailsProps) => {
   return (
@@ -25,9 +24,11 @@ export const NftInfoDetails: React.FC<NftInfoDetailsProps> = ({ contractAddress,
           </Tooltip>
         </S.CopyToClipboard>
       </S.InfoTypes>
-      <S.Details>
-        <p>{details}</p>
-      </S.Details>
+      {details && (
+        <S.Details>
+          <p>{details}</p>
+        </S.Details>
+      )}
     </S.Content>
   )
 }
@@ -37,31 +38,14 @@ const S = {
     display: flex;
     flex-direction: column;
     max-width: 575px;
+    @media (max-width: ${viewport.lg}) {
+      max-width: none;
+    }
   `,
   InfoTypes: styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
-    @media (max-width: ${viewport.sm}) {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-
-    .hidden-collection {
-      display: none;
-    }
-    @media (max-width: ${viewport.sm}) {
-      flex-direction: column;
-      div:last-child {
-        display: none;
-      }
-    }
-    @media (max-width: ${viewport.lg}) {
-      div:last-child {
-        display: none;
-      }
-    }
   `,
   Details: styled.div`
     margin-top: 32px;

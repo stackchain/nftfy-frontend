@@ -33,17 +33,14 @@ export default function MarketplaceDetailsPage() {
       <S.Main>
         <S.Content>
           <S.Info>
-            <S.MobileTitle>
-              <TitleNftDetails name={erc20.erc721.name} />
-            </S.MobileTitle>
-            <S.Image>
+            <S.BoxImage>
               <NftImage name={erc20.erc721.name} image={erc20.erc721.image_url} />
-            </S.Image>
+            </S.BoxImage>
             <S.Details>
               <S.TitleArea>
-                <S.DesktopTitle>
+                <S.TitleBox>
                   <TitleNftDetails name={erc20.erc721.name} />
-                </S.DesktopTitle>
+                </S.TitleBox>
                 <S.BuyNft>Buy NFT</S.BuyNft>
               </S.TitleArea>
               <NftInfoDetails
@@ -82,24 +79,36 @@ const S = {
     height: 100%;
     flex: 1;
     max-width: ${viewport.xxl};
+
+    @media (max-width: ${viewport.lg}) {
+      margin-top: 32px;
+    }
   `,
   Info: styled.div`
     display: flex;
     flex-direction: row;
     margin-bottom: 32px;
 
-    @media (max-width: ${viewport.md}) {
+    @media (max-width: ${viewport.lg}) {
       flex-direction: column;
     }
   `,
-  Image: styled.div`
-    width: 50%;
+  Image: styled.div``,
+  BoxImage: styled.div`
+    flex: 1;
     display: flex;
     justify-content: flex-end;
     margin-right: 48px;
+    margin-bottom: 64px;
 
-    @media (max-width: ${viewport.md}) {
-      margin-bottom: 16px;
+    @media (max-width: ${viewport.lg}) {
+      justify-content: center;
+      margin-right: 0;
+
+      img {
+        max-width: 400px;
+        max-height: 400px;
+      }
     }
   `,
   Division: styled.div`
@@ -108,42 +117,30 @@ const S = {
     background: ${colors.gray3};
     margin: 36px 0;
     max-width: 575px;
+    @media (max-width: ${viewport.lg}) {
+      max-width: none;
+    }
   `,
   Details: styled.div`
-    width: 50%;
-    margin: 0 auto;
-
-    @media (min-width: ${viewport.md}) {
-      padding-left: 10px;
-    }
-
-    @media (max-width: ${viewport.md}) {
-      width: 100%;
-    }
+    flex: 1;
   `,
   Stats: styled.div`
     margin-bottom: 247px;
   `,
-  DesktopTitle: styled.div`
+  TitleBox: styled.div`
     flex: 1;
     max-width: 450px;
 
-    @media (max-width: ${viewport.md}) {
-      display: none;
+    @media (max-width: ${viewport.lg}) {
+      max-width: none;
     }
   `,
   MobileTitle: styled.div`
     display: none;
-    @media (max-width: ${viewport.md}) {
-      display: flex;
-    }
   `,
   BtnMobile: styled.div`
     display: none;
     justify-content: center;
-    @media (max-width: ${viewport.lg}) {
-      display: flex;
-    }
   `,
 
   TitleArea: styled.div`
@@ -151,6 +148,11 @@ const S = {
     flex-direction: row;
     max-width: 575px;
     min-height: 50px;
+    max-width: none;
+
+    @media (max-width: ${viewport.lg}) {
+      max-width: none;
+    }
   `,
   BuyNft: styled(Button)`
     height: 40px;

@@ -25,13 +25,7 @@ export default function CollectionDetailsPage() {
               <S.DesktopTitle>
                 <TitleNftDetails name='Name Test' created='moon cat 88' />
               </S.DesktopTitle>
-              <NftInfoDetails
-                contractName='CryptoKitties'
-                contractAddress='0xfbee74b7d'
-                tokenId='1992671'
-                details='details text'
-                collectionAttr
-              />
+              <NftInfoDetails contractName='CryptoKitties' contractAddress='0xfbee74b7d' tokenId='1992671' details='details text' />
               <SecuritizeERC721 />
             </S.Details>
           </S.Info>

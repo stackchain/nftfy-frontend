@@ -18,10 +18,10 @@ export interface NftCardProps {
 export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, url, className }) => {
   return (
     <S.Card className={className} to={`${url || '#'}`}>
-      <S.BoxImg className={image === '' ? 'bg-fail' : ''}>
+      <S.BoxImage className={image === '' ? 'bg-fail' : ''}>
         <S.Img src={image || notFound} alt={name || 'not found'} hidden={!!loading} />
         <Spin indicator={<Skeleton.Avatar active size={64} shape='circle' />} spinning={!!loading} />
-      </S.BoxImg>
+      </S.BoxImage>
       <S.BoxInfo>
         <S.Content>
           <Skeleton loading={!!loading} active paragraph={{ rows: 0 }}>
@@ -58,7 +58,7 @@ const S = {
       box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
   `,
-  BoxImg: styled.div`
+  BoxImage: styled.div`
     width: 100%;
     height: 312px;
     display: flex;
