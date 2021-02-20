@@ -11,8 +11,6 @@ export interface NftBuyShareDetailsProps {
   addressERC20: string
   price: number
   price2: number
-  profitExitPricePercentage: string
-  profitExitPrice: string
 }
 
 export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = () => {
@@ -45,18 +43,6 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = () => {
           </div>
           <S.ButtonBuy>Buy Shares</S.ButtonBuy>
         </S.PriceAction>
-        <S.ContentExitPrice>
-          <S.Label>
-            Profit if Exit Price
-            <Tooltip placement='top' title='info text'>
-              <img src={iconInfo} alt='info' />
-            </Tooltip>
-          </S.Label>
-          <span>
-            <strong>150%</strong>
-            <small>(0.00010000 ETH)</small>
-          </span>
-        </S.ContentExitPrice>
       </S.SharePrice>
     </S.Content>
   )
@@ -181,37 +167,6 @@ const S = {
 
     &:hover {
       background: ${colors.blue2};
-    }
-  `,
-  ContentExitPrice: styled.div`
-    display: flex;
-    flex-direction: row;
-    margin-top: 42px;
-
-    span {
-      font-family: ${fonts.montserrat};
-      strong {
-        color: ${colors.green1};
-        font-style: normal;
-        font-weight: 600;
-        font-size: 20px;
-        line-height: 28px;
-        margin-left: 32px;
-      }
-      small {
-        font-style: normal;
-        font-weight: 500;
-        font-size: 12px;
-        line-height: 16px;
-        color: ${colors.gray1};
-        margin-left: 5px;
-      }
-    }
-
-    @media (max-width: ${viewport.sm}) {
-      small {
-        display: none;
-      }
     }
   `
 }

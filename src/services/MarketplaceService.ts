@@ -136,7 +136,9 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
     const securitized = await contractWrapperErc721.methods.securitized(tokenId).call()
     const erc721Address = await contractWrapperErc721.methods.target().call()
 
-    const { description, image_url, name } = await getErc20OpenSeaMetadata(erc721Address, tokenId)
+    const erc721Name = await contractWrapperErc721.methods.name().call()
+
+    const { description, image_url } = await getErc20OpenSeaMetadata(erc721Address, tokenId)
 
     return {
       address,
@@ -144,7 +146,7 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
       symbol,
       securitized,
       erc721: {
-        name,
+        name: erc721Name,
         address: erc721Address,
         tokenId,
         wrapper: erc721Wrapper,

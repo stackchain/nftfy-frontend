@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { NftBuyShareDetails } from '../components/marketplace/details/NftBuyShareDetails'
 import { NftImage } from '../components/marketplace/details/NftImage'
 import { NftInfoDetails } from '../components/marketplace/details/NftInfoDetails'
-import { ShareStatsNftDetails } from '../components/marketplace/details/ShareStatsNftDetails'
 import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetails'
 import { BuyNftButton } from '../components/shared/buttons/BuyNftButton'
 import { Footer, Header } from '../components/shared/layout'
@@ -54,29 +53,9 @@ export default function MarketplaceDetailsPage() {
                 <BuyNftButton url='http://exemplo.com' />
               </S.BtnMobile>
               <S.Division />
-              <NftBuyShareDetails
-                title={erc20.name}
-                addressERC20={erc20.address}
-                price={0.000051}
-                price2={0.04}
-                profitExitPricePercentage='150'
-                profitExitPrice='0.00010000'
-              />
+              <NftBuyShareDetails title={erc20.name} addressERC20={erc20.address} price={0.000051} price2={0.04} />
             </S.Details>
           </S.Info>
-          <S.Stats>
-            <ShareStatsNftDetails
-              exitPriceETH='10.000000'
-              exitPrice='4.600,00'
-              shareExitPriceETH='0.00010000'
-              shareExitPrice='0.12'
-              totalSupply='1,000,000'
-              volume24h='7,500'
-              change24h={2.5}
-              change7d={-1.5}
-              change30d={3.2}
-            />
-          </S.Stats>
         </S.Content>
       </S.Main>
       <Footer />

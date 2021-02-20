@@ -10,12 +10,6 @@ export interface TitleNftDetailsProps {
 export const TitleNftDetails: React.FC<TitleNftDetailsProps> = ({ name }: TitleNftDetailsProps) => {
   return (
     <S.Content>
-      <small>
-        Created by 55786B
-        {/* <Button type='link' danger>
-          {created}
-        </Button> */}
-      </small>
       <h1>{name}</h1>
     </S.Content>
   )
