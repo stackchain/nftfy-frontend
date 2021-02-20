@@ -1,13 +1,12 @@
-import React, { lazy, Suspense } from 'react'
+import React, { Suspense } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { LazyLoading } from '../components/shared/loading'
-
-const IntroPage = lazy(() => import('../pages/IntroPage'))
-const MarketplacePage = lazy(() => import('../pages/MarketplacePage'))
-const MarketplaceDetailsPage = lazy(() => import('../pages/MarketplaceDetailsPage'))
-const PortfolioPage = lazy(() => import('../pages/PortfolioPage'))
-const SecuritizePage = lazy(() => import('../pages/SecuritizePage'))
-const FallbackPage = lazy(() => import('../pages/FallbackPage'))
+import FallbackPage from '../pages/FallbackPage'
+import IntroPage from '../pages/IntroPage'
+import MarketplaceDetailsPage from '../pages/MarketplaceDetailsPage'
+import MarketplacePage from '../pages/MarketplacePage'
+import PortfolioPage from '../pages/PortfolioPage'
+import SecuritizePage from '../pages/SecuritizePage'
 
 export default function Routes() {
   return (
