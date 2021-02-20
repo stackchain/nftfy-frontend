@@ -20,6 +20,7 @@ const S = {
     flex-direction: row;
     align-items: center;
     margin: 0 24px;
+    margin-right: 0;
   `,
 
   SearchInput: styled.input.attrs({ type: 'text' })`
