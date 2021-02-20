@@ -26,8 +26,8 @@ export const SortDropdownFilter: React.FC<SortDropdownFilterProps> = ({ classNam
     </S.StyledMenu>
   )
   return (
-    <Dropdown overlay={SortMenuItems} trigger={['click']}>
-      <S.SortButton className={className} type='button'>
+    <Dropdown overlay={SortMenuItems} trigger={['click']} className={className}>
+      <S.SortButton type='button'>
         Sort by
         <img src={filterIcon} alt='wallet token' />
       </S.SortButton>

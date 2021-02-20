@@ -4,7 +4,7 @@ import React from 'react'
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import styled from 'styled-components'
 import { accountVar, nfyVar } from '../../graphql/variables/WalletVariable'
-import { colors } from '../../styles/variables'
+import { colors, viewport } from '../../styles/variables'
 
 export const WalletButton: React.FC = () => {
   const account = useReactiveVar(accountVar)
@@ -48,6 +48,10 @@ const S = {
       height: 40px;
       margin-top: 25px !important;
     }
+
+    @media (max-width: ${viewport.xl}) {
+      margin-right: 0;
+    }
   `,
   WalletButtonArea: styled.div`
     display: flex;
@@ -70,6 +74,7 @@ const S = {
     white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.5s;
+
     &:hover {
       background: ${colors.gray3};
     }
@@ -83,6 +88,10 @@ const S = {
     height: 40px;
     position: relative;
     left: -16px;
+
+    @media (max-width: ${viewport.xl}) {
+      margin-right: -16px;
+    }
   `,
   StyledMenu: styled(Menu)`
     margin-top: 8px;

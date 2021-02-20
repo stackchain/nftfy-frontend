@@ -1,3 +1,4 @@
+import { Empty } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { RouteProps, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
@@ -45,9 +46,10 @@ export default function MarketplacePage({ location }: RouteProps) {
       <Header />
       <S.Main>
         <S.Content>
-          <S.SortFilter />
-          <S.CardsContainer>
+          {(loading || !!nfts.length) && <S.SortFilter />}
+          <S.CardsContainer className={`${!loading && !nfts.length && 'empty'}`}>
             {loading && loadingCards}
+            {!loading && !nfts.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             {!loading &&
               nfts.map(nftItem => (
                 <NftCard
@@ -59,7 +61,9 @@ export default function MarketplacePage({ location }: RouteProps) {
                 />
               ))}
           </S.CardsContainer>
-          <S.Pagination defaultCurrent={currentPage} limit={currentLimit} total={totalPages || 1} onChange={paginate} />
+          {(loading || !!nfts.length) && (
+            <S.Pagination defaultCurrent={currentPage} limit={currentLimit} total={totalPages || 1} onChange={paginate} />
+          )}
         </S.Content>
       </S.Main>
       <Footer />
@@ -109,6 +113,13 @@ export const S = {
     gap: 16px 16px;
     margin-bottom: 32px;
 
+    &.empty {
+      grid-template-columns: 1fr;
+      height: 100px;
+      margin-top: 100px;
+      margin-bottom: 132px;
+    }
+
     @media (max-width: ${viewport.xl}) {
       grid-template-columns: 1fr 1fr 1fr 1fr;
     }
@@ -130,5 +141,9 @@ export const S = {
     align-items: center;
     justify-content: center;
     background: ${colors.white};
+
+    .hide {
+      display: none;
+    }
   `
 }

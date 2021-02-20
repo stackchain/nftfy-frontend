@@ -36,15 +36,13 @@ const S = {
     display: flex;
     align-items: center;
     color: ${colors.gray1};
-    margin: 0 24px;
+    margin: 0 12px;
 
     &:hover {
       color: ${colors.gray2};
     }
 
     &:nth-last-child(2) {
-      margin-left: 24px;
-      margin-right: 0;
       &::after {
         margin-left: 24px;
         margin-right: 0;
