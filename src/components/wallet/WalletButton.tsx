@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client'
-import { Dropdown, Menu } from 'antd'
+import { Dropdown, Menu, Skeleton } from 'antd'
 import React from 'react'
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 import styled from 'styled-components'
@@ -20,25 +20,40 @@ export const WalletButton: React.FC = () => {
       </Menu.Item>
     </S.StyledMenu>
   )
+
   return (
-    <Dropdown overlay={WalletMenuItems} trigger={['click']}>
-      <S.WalletButtonArea>
-        <S.WalletButton type='button'>{`${nfy ? `${nfy.toLocaleString('en-us')} NFY` : 'Loading...'}`}</S.WalletButton>
-        <S.WalletIcon>
-          <Jazzicon diameter={40} seed={jsNumberForAddress(account)} />
-        </S.WalletIcon>
-      </S.WalletButtonArea>
-    </Dropdown>
+    <S.Container>
+      <Dropdown overlay={WalletMenuItems} trigger={['click']}>
+        <S.WalletButtonArea>
+          <S.Skeleton active loading={!nfy} paragraph={{ rows: 0 }}>
+            <S.WalletButton type='button'>{`${nfy && nfy.toLocaleString('en-us')} NFY`}</S.WalletButton>
+            <S.WalletIcon>
+              <Jazzicon diameter={40} seed={jsNumberForAddress(account)} />
+            </S.WalletIcon>
+          </S.Skeleton>
+        </S.WalletButtonArea>
+      </Dropdown>
+    </S.Container>
   )
 }
 
 const S = {
+  Container: styled.div`
+    min-width: 120px;
+    margin-right: 24px;
+    margin-left: 12px;
+
+    .ant-skeleton-content .ant-skeleton-title {
+      width: 100% !important;
+      height: 40px;
+      margin-top: 25px !important;
+    }
+  `,
   WalletButtonArea: styled.div`
     display: flex;
-    flex-direction: row;
-    width: auto;
   `,
   WalletButton: styled.button`
+    flex: 1;
     width: 100%;
     padding: 0 24px;
     min-width: 120px;
@@ -66,7 +81,8 @@ const S = {
   WalletIcon: styled.div`
     width: 40px;
     height: 40px;
-    margin-left: -16px;
+    position: relative;
+    left: -16px;
   `,
   StyledMenu: styled(Menu)`
     margin-top: 8px;
@@ -93,5 +109,6 @@ const S = {
         color: ${colors.gray4};
       }
     }
-  `
+  `,
+  Skeleton: styled(Skeleton)``
 }

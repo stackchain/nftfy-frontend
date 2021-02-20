@@ -58,9 +58,9 @@ export const S = {
     }
 
     li.ant-pagination-item.ant-pagination-item-active {
-      background: ${colors.gray3};
+      background: ${colors.white1};
       box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
-      border: 1px solid ${colors.gray3};
+      border: 1px solid ${colors.white1};
       display: flex;
       align-items: center;
       justify-content: center;

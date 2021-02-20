@@ -36,16 +36,20 @@ export default function MarketplacePage({ location }: RouteProps) {
     getNfts()
   }, [currentLimit, currentPage, location])
 
+  const loadingCards = []
+  for (let i = 1; i <= currentLimit; i += 1) {
+    loadingCards.push(<NftCard loading />)
+  }
   return (
     <>
       <Header />
       <S.Main>
-        {loading && <div>Loading</div>}
-        {!loading && (
-          <S.Content>
-            <S.SortFilter />
-            <S.CardsContainer>
-              {nfts.map(nftItem => (
+        <S.Content>
+          <S.SortFilter />
+          <S.CardsContainer>
+            {loading && loadingCards}
+            {!loading &&
+              nfts.map(nftItem => (
                 <NftCard
                   key={`${nftItem.address}`}
                   image={`${nftItem.erc721.image_url}`}
@@ -54,10 +58,9 @@ export default function MarketplacePage({ location }: RouteProps) {
                   url={`/marketplace/${nftItem.address}`}
                 />
               ))}
-            </S.CardsContainer>
-            {totalPages && <S.Pagination defaultCurrent={currentPage} limit={currentLimit} total={totalPages} onChange={paginate} />}
-          </S.Content>
-        )}
+          </S.CardsContainer>
+          <S.Pagination defaultCurrent={currentPage} limit={currentLimit} total={totalPages || 1} onChange={paginate} />
+        </S.Content>
       </S.Main>
       <Footer />
     </>
