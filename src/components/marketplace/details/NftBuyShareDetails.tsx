@@ -1,45 +1,49 @@
-import { Button, Tooltip } from 'antd'
+import { Tooltip } from 'antd'
 import React from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import styled from 'styled-components'
 import clip from '../../../assets/icons/clip.svg'
-import iconInfo from '../../../assets/icons/info.svg'
 import { colors, fonts, viewport } from '../../../styles/variables'
 
 export interface NftBuyShareDetailsProps {
-  title: string
+  name: string
   addressERC20: string
   price: number
   price2: number
 }
 
-export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = () => {
+export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, addressERC20 }: NftBuyShareDetailsProps) => {
   return (
     <S.Content>
-      <S.Title>Cat Frost Shares (CFS)</S.Title>
+      <S.Title>{name}</S.Title>
+
       <S.AddressToken>
-        <span>erc20 address</span>
-        <CopyToClipboard text='0x32bfaa23447c'>
-          <Button type='text'>
-            0x32bfaa23447c
-            <img src={clip} alt='copy' />
-          </Button>
-        </CopyToClipboard>
+        <S.CopyToClipboard text={addressERC20}>
+          <Tooltip placement='right' title='Copy ERC20 Shares Address'>
+            <h3 className='link-copy'>
+              {addressERC20}
+              <img src={clip} alt='clip' />
+            </h3>
+          </Tooltip>
+        </S.CopyToClipboard>
       </S.AddressToken>
       <S.SharePrice>
-        <S.Label>
+        {/* <S.Label>
           Share Price
-          <Tooltip placement='top' title='info text'>
+          <Tooltip placement='right' title='Quote of the last price'>
             <img src={iconInfo} alt='info' />
           </Tooltip>
-        </S.Label>
+        </S.Label> */}
         <S.PriceAction>
           <div>
             <span>
               0.000051
               <small>ETH</small>
             </span>
-            <span>$0.04</span>
+            <span>
+              <small>$</small>
+              0.04
+            </span>
           </div>
           <S.ButtonBuy>Buy Shares</S.ButtonBuy>
         </S.PriceAction>
@@ -57,15 +61,19 @@ const S = {
     font-weight: 600;
     font-size: 24px;
     line-height: 32px;
+    margin-bottom: 4px;
+
     color: ${colors.gray2};
   `,
+
   AddressToken: styled.div`
     font-family: ${fonts.montserrat};
-    span {
+    display: flex;
+    h3 {
       font-style: normal;
       font-weight: 500;
       font-size: 14px;
-      line-height: 22px;
+      line-height: 26px;
       color: ${colors.gray1};
     }
     button {
@@ -109,9 +117,13 @@ const S = {
     font-size: 14px;
     line-height: 22px;
     color: ${colors.gray1};
+    cursor: default;
     img {
-      margin-left: 5px;
+      margin-left: 6px;
       cursor: pointer;
+      height: 14px;
+      width: 14px;
+      cursor: default;
     }
   `,
   PriceAction: styled.div`
@@ -119,7 +131,27 @@ const S = {
     flex-direction: row;
     justify-content: space-between;
     font-family: ${fonts.montserrat};
-    align-items: center;
+    align-items: flex-start;
+
+    span {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 36px;
+      line-height: 42px;
+      color: ${colors.gray2};
+      small {
+        color: ${colors.gray1};
+        font-size: 14px;
+        font-weight: 500;
+        margin-left: 4px;
+        line-height: 22px;
+      }
+
+      &:last-child small {
+        margin-right: 4px;
+      }
+    }
+
     div {
       display: flex;
       flex-direction: column;
@@ -127,20 +159,12 @@ const S = {
         font-size: 14px;
         line-height: 22px;
         color: ${colors.gray1};
+        small {
+          margin-left: 4px;
+        }
       }
     }
-    span {
-      font-style: normal;
-      font-weight: 600;
-      font-size: 38px;
-      line-height: 46px;
-      color: ${colors.gray2};
-      small {
-        color: ${colors.gray1};
-        font-size: 14px;
-        font-weight: 400;
-      }
-    }
+
     @media (max-width: ${viewport.sm}) {
       flex-direction: column;
       div {
@@ -167,6 +191,24 @@ const S = {
 
     &:hover {
       background: ${colors.blue2};
+    }
+  `,
+  CopyToClipboard: styled(CopyToClipboard)`
+    font-size: 14px;
+    font-family: ${fonts.montserrat};
+    font-style: normal;
+    font-weight: 500;
+    color: ${colors.gray1};
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    img {
+      margin-left: 8px;
+      width: 12px;
+      height: 12px;
     }
   `
 }

@@ -44,6 +44,7 @@ const S = {
       max-width: 575px;
       max-height: 504px;
       object-fit: cover;
+      border-radius: 4px;
     }
 
     @media (max-width: ${viewport.md}) {

@@ -34,14 +34,14 @@ export default function MarketplaceDetailsPage() {
         <S.Content>
           <S.Info>
             <S.MobileTitle>
-              <TitleNftDetails name={erc20.name} />
+              <TitleNftDetails name={erc20.erc721.name} />
             </S.MobileTitle>
             <S.Image>
               <NftImage name='cat frost' image={erc20.erc721.image_url} />
             </S.Image>
             <S.Details>
               <S.DesktopTitle>
-                <TitleNftDetails name={erc20.name} created='moon cat 88' />
+                <TitleNftDetails name={erc20.erc721.name} created='moon cat 88' />
               </S.DesktopTitle>
               <NftInfoDetails
                 contractName={erc20.erc721.name}
@@ -53,7 +53,7 @@ export default function MarketplaceDetailsPage() {
                 <BuyNftButton url='http://exemplo.com' />
               </S.BtnMobile>
               <S.Division />
-              <NftBuyShareDetails title={erc20.name} addressERC20={erc20.address} price={0.000051} price2={0.04} />
+              <NftBuyShareDetails name={erc20.name} addressERC20={erc20.address} price={0.000051} price2={0.04} />
             </S.Details>
           </S.Info>
         </S.Content>
@@ -67,18 +67,17 @@ const S = {
   Main: styled.div`
     width: 100%;
     height: 100%;
-    margin-top: 80px;
+    min-height: calc(100vh - 136px);
     background: ${colors.white};
     display: flex;
-    @media (max-width: ${viewport.md}) {
-      margin-top: 20px;
-    }
+    justify-content: center;
   `,
   Content: styled.div`
-    flex: 1;
-    display: flex;
     flex-direction: column;
-    margin: 0 auto;
+    padding: 32px 48px;
+    margin-top: 64px;
+    height: 100%;
+    flex: 1;
     max-width: ${viewport.xxl};
   `,
   Info: styled.div`
@@ -91,6 +90,11 @@ const S = {
     }
   `,
   Image: styled.div`
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 48px;
+
     @media (max-width: ${viewport.md}) {
       margin-bottom: 16px;
     }
@@ -99,7 +103,8 @@ const S = {
     width: 100%;
     height: 2px;
     background: ${colors.gray3};
-    margin: 24px 0;
+    margin: 36px 0;
+    max-width: 575px;
   `,
   Details: styled.div`
     width: 50%;

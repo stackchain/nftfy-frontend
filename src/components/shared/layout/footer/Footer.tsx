@@ -11,7 +11,7 @@ export interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({ className }: FooterProps) => {
   return (
     <S.Footer className={className}>
-      <S.Span>© Nftfy 2021, All rights reserved.</S.Span>
+      <S.Span>© Nftfy 2021</S.Span>
       <FooterMenu />
       <FooterMenuSocial />
     </S.Footer>

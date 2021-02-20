@@ -132,5 +132,6 @@ body {
   font-size: 10px;
   font-weight: 400;
   font-family: 'Montserrat', sans-serif;
+  text-rendering: optimizeLegibility;
   height: 100%;
 }

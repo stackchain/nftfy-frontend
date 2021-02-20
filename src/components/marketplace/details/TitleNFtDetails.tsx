@@ -34,6 +34,7 @@ const S = {
       font-weight: 600;
       font-size: 38px;
       line-height: 46px;
+      margin-bottom: 4px;
       color: ${colors.gray2};
     }
 
