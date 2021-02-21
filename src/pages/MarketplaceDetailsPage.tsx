@@ -2,6 +2,7 @@ import { Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import BuyModal from '../components/marketplace/BuyModal'
 import { NftBuyShareDetails } from '../components/marketplace/details/NftBuyShareDetails'
 import { NftImage } from '../components/marketplace/details/NftImage'
 import { NftInfoDetails } from '../components/marketplace/details/NftInfoDetails'
@@ -61,6 +62,7 @@ export default function MarketplaceDetailsPage() {
         </S.Content>
       </S.Main>
       <Footer />
+      <BuyModal />
     </>
   )
 }

@@ -22,7 +22,7 @@
     "@metamask/detect-provider": "^1.2.0",
     "@sentry/react": "^5.30.0",
     "@sentry/tracing": "^5.30.0",
-    "antd": "^4.10.3",
+    "antd": "^4.12.3",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "graphql": "^15.4.0",

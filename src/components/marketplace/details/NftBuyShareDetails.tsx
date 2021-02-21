@@ -3,6 +3,7 @@ import React from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import styled from 'styled-components'
 import clip from '../../../assets/icons/clip.svg'
+import { buyModalVar } from '../../../graphql/variables/MarketplaceVariable'
 import { colors, fonts, viewport } from '../../../styles/variables'
 
 export interface NftBuyShareDetailsProps {
@@ -40,7 +41,7 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, sy
               0.04
             </S.DollarPrice>
           </div>
-          <S.TradeSharesButton>Buy Shares</S.TradeSharesButton>
+          <S.TradeSharesButton onClick={() => buyModalVar('shares')}>Buy Shares</S.TradeSharesButton>
         </S.PriceAction>
       </S.SharePrice>
     </S.Content>
