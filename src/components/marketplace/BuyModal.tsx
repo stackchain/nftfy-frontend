@@ -23,7 +23,7 @@ export default function BuyModal() {
 
   return (
     <S.Modal visible onCancel={handleCancel}>
-      <S.Tabs defaultActiveKey={buyModal === 'shares' ? '1' : '1'} onChange={callback}>
+      <S.Tabs defaultActiveKey={buyModal === 'shares' ? '2' : '2'} onChange={callback}>
         <S.TabPane tab='Buy Shares' key='1'>
           <S.SharesContent>
             <S.Header>
@@ -127,7 +127,7 @@ export const S = {
     }
     .ant-modal-content {
       border-radius: 16px;
-      max-width: 500px;
+      max-width: 460px;
     }
     .ant-modal-close-x {
       display: none;
