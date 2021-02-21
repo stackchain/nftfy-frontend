@@ -3,6 +3,7 @@ import { Button, Input, Modal, Tabs } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 import arrowDown from '../../assets/arrowDown.svg'
+import switchTopDown from '../../assets/switchTopDown.svg'
 import ethereum from '../../assets/tokens/ethereum.svg'
 import { buyModalVar } from '../../graphql/variables/MarketplaceVariable'
 import { colors, fonts } from '../../styles/variables'
@@ -19,7 +20,7 @@ export default function BuyModal() {
   const callback = () => {
     console.log('callback')
   }
-  console.log('buyModal', buyModal)
+
   return (
     <S.Modal visible onCancel={handleCancel}>
       <S.Tabs defaultActiveKey={buyModal === 'shares' ? '1' : '1'} onChange={callback}>
@@ -44,11 +45,11 @@ export default function BuyModal() {
               <div>
                 <div>From</div>
                 <div>
-                  <S.TokenDropdownButton>
+                  <S.TokenButton>
                     <img src={ethereum} alt='Ethereum' />
                     <span>ETH</span>
-                    <img src={arrowDown} alt='arrow down' />
-                  </S.TokenDropdownButton>
+                    <img src={arrowDown} alt='Arrow Down' />
+                  </S.TokenButton>
                 </div>
                 <div>
                   <S.TokenInput placeholder='0.0000' />
@@ -56,19 +57,35 @@ export default function BuyModal() {
               </div>
             </S.SharesFrom>
             <S.SharesSwitch>
-              <div>switch</div>
-              <div>1 share =</div>
+              <div>
+                <div>
+                  <img src={switchTopDown} alt='Switch Token' />
+                </div>
+              </div>
+              <div>
+                <span>1 Share =</span>
+                <span>0.0000053 ETH</span>
+                <span>$0,50</span>
+              </div>
             </S.SharesSwitch>
             <S.SharesTo>
-              <div>balance</div>
+              <div>Balance: 100.0</div>
               <div>
-                <div>to</div>
-                <div>KIE28</div>
-                <div>Input</div>
+                <div>To</div>
+                <div>
+                  <S.TokenButton className='noDropdown'>
+                    <img src={ethereum} alt='Ethereum' />
+                    <span>KIE24</span>
+                    <img src={arrowDown} alt='Arrow Down' />
+                  </S.TokenButton>
+                </div>
+                <div>
+                  <S.TokenInput placeholder='0.0000' />
+                </div>
               </div>
             </S.SharesTo>
             <S.SharesUnlock>
-              <S.ActionButton>unlock</S.ActionButton>
+              <S.ActionButton>Unlock</S.ActionButton>
             </S.SharesUnlock>
           </S.SharesContent>
         </S.TabPane>
@@ -264,15 +281,174 @@ export const S = {
       }
     }
   `,
-  SharesSwitch: styled.div``,
-  SharesTo: styled.div``,
-  SharesUnlock: styled.div``,
+  SharesSwitch: styled.div`
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-items: center;
+
+    > div:nth-child(1) {
+      display: flex;
+      flex: 64px 0 0;
+
+      div {
+        background-color: ${colors.gray4};
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 40px 0 0;
+        cursor: pointer;
+
+        margin-top: 24px;
+        margin-bottom: 24px;
+
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: -moz-none;
+        -o-user-select: none;
+        user-select: none;
+
+        img {
+          width: 20px;
+          height: 18px;
+        }
+
+        &:hover {
+          background-color: ${colors.gray1};
+        }
+      }
+    }
+
+    > div:nth-child(2) {
+      display: flex;
+      flex: 1;
+      font-family: ${fonts.montserrat};
+      font-size: 16px;
+      line-height: 24px;
+      color: ${colors.gray2};
+      font-weight: 500;
+
+      span:nth-child(1) {
+        margin-right: 4px;
+      }
+
+      span:nth-child(2) {
+        margin-right: 16px;
+      }
+
+      span:nth-child(3) {
+        color: ${colors.gray1};
+        margin-right: 16px;
+      }
+    }
+  `,
+  SharesTo: styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: -32px;
+    margin-bottom: 32px;
+
+    > div:nth-child(1) {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      font-family: ${fonts.montserrat};
+      font-size: 12px;
+      line-height: 16px;
+      color: ${colors.gray1};
+      font-weight: 500;
+
+      height: 32px;
+    }
+
+    > div:nth-child(2) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: row;
+      height: 40px;
+
+      > div:nth-child(1) {
+        display: flex;
+        font-family: ${fonts.montserrat};
+        font-size: 16px;
+        line-height: 24px;
+        color: ${colors.gray2};
+        font-weight: 600;
+        flex: 64px 0 0;
+        height: 40px;
+        align-items: center;
+      }
+
+      > div:nth-child(2) {
+        border: 1px solid ${colors.gray3};
+        height: 40px;
+        display: flex;
+        align-items: center;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        flex: 120px 0 0;
+        padding-left: 16px;
+        padding-right: 8px;
+
+        &:hover {
+          background-color: ${colors.white2};
+        }
+      }
+
+      > div:nth-child(3) {
+        border: 1px solid ${colors.gray3};
+        height: 40px;
+        display: flex;
+        align-items: center;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        flex: 1 1 0;
+        border-left: 0;
+        justify-content: flex-end;
+        padding-right: 16px;
+      }
+    }
+  `,
+  SharesUnlock: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+  `,
   NftExitPrice: styled.div``,
   NftDetails: styled.div``,
   NftPayment: styled.div``,
   NftUnlock: styled.div``,
-  ActionButton: styled(Button)``,
-  TokenDropdownButton: styled.div`
+  ActionButton: styled(Button)`
+    height: 40px;
+    padding: 0 64px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: ${fonts.montserrat};
+
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    color: ${colors.white};
+    background-color: ${colors.blue1};
+    border: 1px solid ${colors.blue1};
+
+    &:hover,
+    &:focus {
+      font-family: ${fonts.montserrat};
+      color: ${colors.white};
+      background-color: ${colors.blue2};
+      border: 1px solid ${colors.blue2};
+    }
+  `,
+  TokenButton: styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -296,6 +472,13 @@ export const S = {
     img:nth-child(3) {
       width: 16px;
       height: 16px;
+    }
+
+    &.noDropdown {
+      cursor: default;
+      img:nth-child(3) {
+        display: none;
+      }
     }
   `,
   TokenInput: styled(Input)`
