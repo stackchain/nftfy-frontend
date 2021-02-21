@@ -25,7 +25,7 @@ export const WalletButton: React.FC = () => {
     <S.Container>
       <Dropdown overlay={WalletMenuItems} trigger={['click']}>
         <S.WalletButtonArea>
-          <S.Skeleton active loading={!nfy} paragraph={{ rows: 0 }}>
+          <S.Skeleton active loading={nfy === undefined} paragraph={{ rows: 0 }}>
             <S.WalletButton type='button'>{`${nfy && nfy.toLocaleString('en-us')} NFY`}</S.WalletButton>
             <S.WalletIcon>
               <Jazzicon diameter={40} seed={jsNumberForAddress(account)} />
