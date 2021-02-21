@@ -258,9 +258,7 @@ export const S = {
         align-items: center;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
-        flex: 120px 0 0;
-        padding-left: 16px;
-        padding-right: 8px;
+        flex: 100px 0 0;
 
         &:hover {
           background-color: ${colors.white2};
@@ -391,13 +389,7 @@ export const S = {
         align-items: center;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
-        flex: 120px 0 0;
-        padding-left: 16px;
-        padding-right: 8px;
-
-        &:hover {
-          background-color: ${colors.white2};
-        }
+        flex: 100px 0 0;
       }
 
       > div:nth-child(3) {
@@ -457,6 +449,7 @@ export const S = {
     -moz-user-select: -moz-none;
     -o-user-select: none;
     user-select: none;
+    padding: 8px;
 
     img:nth-child(1) {
       margin-right: 8px;
