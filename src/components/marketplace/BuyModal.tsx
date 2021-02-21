@@ -6,7 +6,7 @@ import arrowDown from '../../assets/arrowDown.svg'
 import switchTopDown from '../../assets/switchTopDown.svg'
 import ethereum from '../../assets/tokens/ethereum.svg'
 import { buyModalVar } from '../../graphql/variables/MarketplaceVariable'
-import { colors, fonts } from '../../styles/variables'
+import { colors, fonts, viewport } from '../../styles/variables'
 
 const { TabPane } = Tabs
 
@@ -64,8 +64,10 @@ export default function BuyModal() {
               </div>
               <div>
                 <span>1 Share =</span>
-                <span>0.0000053 ETH</span>
-                <span>$0,50</span>
+                <span>
+                  0.0000053 ETH
+                  <span>$0,50</span>
+                </span>
               </div>
             </S.SharesSwitch>
             <S.SharesTo>
@@ -119,12 +121,13 @@ export default function BuyModal() {
 export const S = {
   Modal: styled(Modal)`
     border-radius: 8px;
-    max-width: 500px;
+
     .ant-modal-body {
       padding: 0;
     }
     .ant-modal-content {
       border-radius: 16px;
+      max-width: 500px;
     }
     .ant-modal-close-x {
       display: none;
@@ -176,9 +179,17 @@ export const S = {
   `,
   SharesContent: styled.div`
     padding: 24px 32px;
+
+    @media (max-width: ${viewport.sm}) {
+      padding: 16px;
+    }
   `,
   NftContent: styled.div`
     padding: 24px 32px;
+
+    @media (max-width: ${viewport.sm}) {
+      padding: 16px;
+    }
   `,
   Header: styled.div`
     display: flex;
@@ -285,6 +296,11 @@ export const S = {
     flex: 1;
     align-items: center;
 
+    @media (max-width: ${viewport.sm}) {
+      margin-top: 24px;
+      margin-bottom: 24px;
+    }
+
     > div:nth-child(1) {
       display: flex;
       flex: 64px 0 0;
@@ -334,12 +350,14 @@ export const S = {
       }
 
       span:nth-child(2) {
-        margin-right: 16px;
+        span {
+          color: ${colors.gray1};
+          margin-left: 16px;
+        }
       }
 
-      span:nth-child(3) {
-        color: ${colors.gray1};
-        margin-right: 16px;
+      @media (max-width: ${viewport.sm}) {
+        flex-direction: column;
       }
     }
   `,
@@ -438,6 +456,10 @@ export const S = {
       color: ${colors.white};
       background-color: ${colors.blue2};
       border: 1px solid ${colors.blue2};
+    }
+
+    @media (max-width: ${viewport.sm}) {
+      width: 100%;
     }
   `,
   TokenButton: styled.div`
