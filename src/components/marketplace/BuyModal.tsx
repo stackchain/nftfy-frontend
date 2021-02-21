@@ -352,7 +352,9 @@ export const S = {
       span:nth-child(2) {
         span {
           color: ${colors.gray1};
-          margin-left: 16px;
+          margin-left: 8px;
+          font-size: 12px;
+          font-weight: 600;
         }
       }
 
