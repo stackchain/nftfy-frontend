@@ -109,8 +109,26 @@ export default function BuyModal() {
             </S.Header>
             <S.NftExitPrice>ExitPrice</S.NftExitPrice>
             <S.NftDetails>Details</S.NftDetails>
-            <S.NftPayment>Payment</S.NftPayment>
-            <S.NftUnlock>Unlock</S.NftUnlock>
+            <S.NftPayment>
+              <div>Balance: 100.0</div>
+              <div>
+                <div>Payment</div>
+                <div>
+                  <S.TokenButton className='noDropdown'>
+                    <img src={ethereum} alt='Ethereum' />
+                    <span>ETH</span>
+                    <img src={arrowDown} alt='Arrow Down' />
+                  </S.TokenButton>
+                </div>
+                <div>
+                  <S.TokenInput placeholder='0.0000' disabled />
+                </div>
+              </div>
+              <div>$ 300,00</div>
+            </S.NftPayment>
+            <S.NftUnlock>
+              <S.ActionButton>Unlock</S.ActionButton>
+            </S.NftUnlock>
           </S.NftContent>
         </S.TabPane>
       </S.Tabs>
@@ -181,14 +199,14 @@ export const S = {
     padding: 24px 32px;
 
     @media (max-width: ${viewport.sm}) {
-      padding: 16px;
+      padding: 24px 16px;
     }
   `,
   NftContent: styled.div`
     padding: 24px 32px;
 
     @media (max-width: ${viewport.sm}) {
-      padding: 16px;
+      padding: 32px 16px;
     }
   `,
   Header: styled.div`
@@ -434,8 +452,91 @@ export const S = {
   `,
   NftExitPrice: styled.div``,
   NftDetails: styled.div``,
-  NftPayment: styled.div``,
-  NftUnlock: styled.div``,
+  NftPayment: styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: -32px;
+    margin-bottom: 8px;
+
+    > div:nth-child(1) {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      font-family: ${fonts.montserrat};
+      font-size: 12px;
+      line-height: 16px;
+      color: ${colors.gray1};
+      font-weight: 500;
+
+      height: 32px;
+    }
+
+    > div:nth-child(2) {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: row;
+      height: 40px;
+
+      > div:nth-child(1) {
+        display: flex;
+        font-family: ${fonts.montserrat};
+        font-size: 16px;
+        line-height: 24px;
+        color: ${colors.gray2};
+        font-weight: 600;
+        flex: 100px 0 0;
+        height: 40px;
+        align-items: center;
+      }
+
+      > div:nth-child(2) {
+        border: 1px solid ${colors.gray3};
+        height: 40px;
+        display: flex;
+        align-items: center;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        flex: 100px 0 0;
+        background-color: ${colors.white1};
+      }
+
+      > div:nth-child(3) {
+        border: 1px solid ${colors.gray3};
+        height: 40px;
+        display: flex;
+        align-items: center;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        flex: 1 1 0;
+        border-left: 0;
+        justify-content: flex-end;
+        padding-right: 16px;
+        background-color: ${colors.white1};
+      }
+    }
+
+    > div:nth-child(3) {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      font-family: ${fonts.montserrat};
+      font-size: 12px;
+      line-height: 16px;
+      color: ${colors.gray1};
+      font-weight: 500;
+
+      height: 32px;
+    }
+  `,
+  NftUnlock: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+  `,
   ActionButton: styled(Button)`
     height: 40px;
     padding: 0 64px;
