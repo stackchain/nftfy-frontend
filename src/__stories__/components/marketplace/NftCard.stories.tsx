@@ -4,10 +4,10 @@ import { Meta, Story } from '@storybook/react/types-6-0'
 import randomImg from '../../../assets/nft-card/random.png'
 import rectangle from '../../../assets/nft-card/rectangle.png'
 import square from '../../../assets/nft-card/square.png'
-import { NftCard, NftCardProps } from '../../../components/marketplace/NftCard'
+import { NftCard, NftCardProps } from '../../../components/shared/cards/NftCard'
 
 export default {
-  title: 'components/marketplace/NftCard',
+  title: 'components/shared/cards/NftCard',
   component: NftCard,
   argTypes: {}
 } as Meta

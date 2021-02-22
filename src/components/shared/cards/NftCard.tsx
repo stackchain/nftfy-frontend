@@ -3,8 +3,8 @@ import { Skeleton, Spin } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import notFound from '../../assets/notfound.svg'
-import { colors, fonts, viewport } from '../../styles/variables'
+import notFound from '../../../assets/notfound.svg'
+import { colors, fonts, viewport } from '../../../styles/variables'
 
 export interface NftCardProps {
   image?: string
