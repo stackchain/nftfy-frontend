@@ -17,13 +17,9 @@ export default function BuyModal() {
     buyModalVar(undefined)
   }
 
-  const callback = () => {
-    console.log('callback')
-  }
-
   return (
     <S.Modal visible onCancel={handleCancel}>
-      <S.Tabs defaultActiveKey={buyModal === 'shares' ? '2' : '2'} onChange={callback}>
+      <S.Tabs defaultActiveKey={buyModal === 'shares' ? '2' : '2'} onChange={() => null}>
         <S.TabPane tab='Buy Shares' key='1'>
           <S.SharesContent>
             <S.Header>
