@@ -39,8 +39,9 @@ export default function CollectionDetailsPage() {
 const S = {
   Collection: styled.div``,
   Main: styled.div`
-    width: 100%;
-    height: 100%;
+    flex: 1;
+    padding: 32px 48px;
+    min-height: calc(100vh - 136px);
     margin-top: 80px;
     background: ${colors.white};
     display: flex;
