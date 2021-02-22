@@ -8,6 +8,7 @@ import { NftImage } from '../components/marketplace/details/NftImage'
 import { NftInfoDetails } from '../components/marketplace/details/NftInfoDetails'
 import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetails'
 import { Footer, Header } from '../components/shared/layout'
+import { buyModalVar } from '../graphql/variables/MarketplaceVariable'
 import { getMarketplaceItemByAddress } from '../services/MarketplaceService'
 import { colors, fonts, viewport } from '../styles/variables'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
@@ -43,7 +44,7 @@ export default function MarketplaceDetailsPage() {
                   <TitleNftDetails name={erc20.erc721.name} symbol={erc20.erc721.symbol} />
                 </S.TitleBox>
                 <S.BtnDesktop>
-                  <S.BuyNft>Buy NFT</S.BuyNft>
+                  <S.BuyNft onClick={() => buyModalVar('nft')}>Buy NFT</S.BuyNft>
                 </S.BtnDesktop>
               </S.TitleArea>
               <NftInfoDetails

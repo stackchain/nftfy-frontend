@@ -17,10 +17,18 @@ export default function BuyModal() {
     buyModalVar(undefined)
   }
 
+  const handleChange = (activeKey: string) => {
+    if (activeKey === 'shares') {
+      buyModalVar(activeKey)
+    } else if (activeKey === 'nft') {
+      buyModalVar(activeKey)
+    }
+  }
+
   return (
-    <S.Modal visible onCancel={handleCancel}>
-      <S.Tabs defaultActiveKey={buyModal === 'shares' ? '2' : '2'} onChange={() => null}>
-        <S.TabPane tab='Buy Shares' key='1'>
+    <S.Modal visible={!!buyModal} onCancel={handleCancel}>
+      <S.Tabs activeKey={buyModal === 'shares' ? 'shares' : 'nft'} onChange={handleChange}>
+        <S.TabPane tab='Buy Shares' key='shares'>
           <S.SharesContent>
             <S.Header>
               <div>
@@ -87,7 +95,7 @@ export default function BuyModal() {
             </S.SharesUnlock>
           </S.SharesContent>
         </S.TabPane>
-        <S.TabPane tab='Buy NFT' key='2'>
+        <S.TabPane tab='Buy NFT' key='nft'>
           <S.NftContent>
             <S.Header>
               <div>
