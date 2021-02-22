@@ -107,8 +107,27 @@ export default function BuyModal() {
                 />
               </div>
             </S.Header>
-            <S.NftExitPrice>ExitPrice</S.NftExitPrice>
-            <S.NftDetails>Details</S.NftDetails>
+            <S.NftExitPrice>
+              <div>Exit Price</div>
+              <div>
+                <div>50.0 ETH</div>
+                <div>$63.875</div>
+              </div>
+            </S.NftExitPrice>
+            <S.NftDetails>
+              <div>Order Details</div>
+              <div>%</div>
+              <div>Value</div>
+              <div>Your Participation</div>
+              <div>35%</div>
+              <div>100 KIE24</div>
+              <div>Pay Amount</div>
+              <div>65%</div>
+              <div>
+                <div>32.5 ETH</div>
+                <div>$25.750</div>
+              </div>
+            </S.NftDetails>
             <S.NftPayment>
               <div>Balance: 100.0</div>
               <div>
@@ -450,13 +469,93 @@ export const S = {
     align-items: center;
     height: 40px;
   `,
-  NftExitPrice: styled.div``,
-  NftDetails: styled.div``,
+  NftExitPrice: styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 48px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+
+    > div:nth-child(1) {
+      display: flex;
+      flex: 100px 0 0;
+
+      font-family: ${fonts.montserrat};
+      font-size: 12px;
+      line-height: 16px;
+      font-weight: 500;
+      color: ${colors.gray1};
+    }
+
+    > div:nth-child(2) {
+      flex: 1;
+
+      > div {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      > div:nth-child(1) {
+        font-family: ${fonts.montserrat};
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: 500;
+        color: ${colors.gray2};
+      }
+
+      > div:nth-child(2) {
+        font-family: ${fonts.montserrat};
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: 500;
+        color: ${colors.gray1};
+      }
+    }
+  `,
+  NftDetails: styled.div`
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.4fr;
+    grid-template-rows: 1fr 1fr 1fr;
+
+    border: 1px solid ${colors.gray3};
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+
+    div {
+      font-family: ${fonts.montserrat};
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 500;
+      color: ${colors.gray2};
+      text-align: end;
+    }
+
+    > div:nth-child(1),
+    > div:nth-child(2),
+    > div:nth-child(3) {
+      color: ${colors.gray1};
+    }
+
+    > div:nth-child(9) {
+      > div:nth-child(2) {
+        color: ${colors.gray1};
+        font-size: 12px;
+        line-height: 16px;
+      }
+    }
+
+    > div:nth-child(1),
+    > div:nth-child(4),
+    > div:nth-child(7) {
+      text-align: start;
+    }
+  `,
   NftPayment: styled.div`
     display: flex;
     flex-direction: column;
-    margin-top: -32px;
-    margin-bottom: 8px;
+    margin-bottom: 24px;
 
     > div:nth-child(1) {
       display: flex;
