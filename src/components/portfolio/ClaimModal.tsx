@@ -1,58 +1,69 @@
+import { useReactiveVar } from '@apollo/client'
 import { Button, Modal } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
+import { claimModalVar } from '../../graphql/variables/PortfolioVariable'
 import { colors, viewport } from '../../styles/variables'
 
 export interface ClaimModalProps {
   className?: string
-  isVisible: boolean
 }
 
-export const ClaimModal: React.FC<ClaimModalProps> = ({ className, isVisible = true }: ClaimModalProps) => {
+export const ClaimModal: React.FC<ClaimModalProps> = ({ className }: ClaimModalProps) => {
+  const erc20Share = useReactiveVar(claimModalVar)
+
+  const handleCancel = () => {
+    claimModalVar(undefined)
+  }
+
   return (
-    <S.ClaimModal title='Claim Share' className={className} visible={isVisible} footer={null}>
-      <S.Header>
-        <S.HeaderDiv>
-          <S.H1header>Cat Frost Share</S.H1header>
-          <S.ShareAddress>Share address 0xk40...</S.ShareAddress>
-        </S.HeaderDiv>
-        <S.TokenImage />
-      </S.Header>
+    <S.ClaimModal title='Claim Share' onCancel={handleCancel} className={className} visible={!!erc20Share} footer={null}>
+      {!!erc20Share && (
+        <>
+          <S.Header>
+            <S.HeaderDiv>
+              <S.H1header>{erc20Share.name}</S.H1header>
+              <S.ShareAddress>{erc20Share.address}</S.ShareAddress>
+            </S.HeaderDiv>
+            <S.TokenImage />
+          </S.Header>
 
-      <S.HeaderMobile>
-        <S.TokenImage />
-        <S.HeaderDiv>
-          <S.H1header>Cat Frost Share</S.H1header>
-          <S.ShareAddress>Share address 0xk40...</S.ShareAddress>
-        </S.HeaderDiv>
-      </S.HeaderMobile>
+          <S.HeaderMobile>
+            <S.TokenImage />
+            <S.HeaderDiv>
+              <S.H1header>{erc20Share.name}</S.H1header>
+              <S.ShareAddress>{erc20Share.address}</S.ShareAddress>
+            </S.HeaderDiv>
+          </S.HeaderMobile>
 
-      <S.ExitPriceDiv>
-        <S.ExitSpan>Exit Price</S.ExitSpan>
-        <S.PriceDiv>
-          <S.ValueEth>50.00 ETH</S.ValueEth>
-          <S.ValueMoney>$63.875,00</S.ValueMoney>
-        </S.PriceDiv>
-      </S.ExitPriceDiv>
+          <S.ExitPriceDiv>
+            <S.ExitSpan>Exit Price</S.ExitSpan>
+            <S.PriceDiv>
+              <S.ValueEth>{`${erc20Share.balance} ${erc20Share.symbol}`}</S.ValueEth>
+              <S.ValueMoney>{`$${erc20Share.dollarBalance}`}</S.ValueMoney>
+            </S.PriceDiv>
+          </S.ExitPriceDiv>
 
-      <S.DetailsDiv>
-        <S.DetailsH1>Claim Details</S.DetailsH1>
+          <S.DetailsDiv>
+            <S.DetailsH1>Claim Details</S.DetailsH1>
 
-        <S.DetailsBalanceDiv>
-          <S.BalanceSpan>Balance</S.BalanceSpan>
-          <S.BalanceYcs>350.000 YCS</S.BalanceYcs>
-        </S.DetailsBalanceDiv>
+            <S.DetailsBalanceDiv>
+              <S.BalanceSpan>Balance</S.BalanceSpan>
+              <S.BalanceYcs>{`${erc20Share.balance}YCS`}</S.BalanceYcs>
+            </S.DetailsBalanceDiv>
 
-        <S.TotalReceiveDiv>
-          <S.TotalReceiveSpan>Total to receive</S.TotalReceiveSpan>
-          <S.BalanceValueDiv>
-            <S.BalanceEth>32.5 ETH</S.BalanceEth>
-            <S.BalanceMoney>$25.750</S.BalanceMoney>
-          </S.BalanceValueDiv>
-        </S.TotalReceiveDiv>
-      </S.DetailsDiv>
+            <S.TotalReceiveDiv>
+              <S.TotalReceiveSpan>Total to receive</S.TotalReceiveSpan>
+              <S.BalanceValueDiv>
+                <S.BalanceEth>{`${erc20Share.balance} ${erc20Share.symbol}`}</S.BalanceEth>
+                <S.BalanceMoney>{`$${erc20Share.dollarBalance}`}</S.BalanceMoney>
+              </S.BalanceValueDiv>
+            </S.TotalReceiveDiv>
+          </S.DetailsDiv>
 
-      <S.ButtonClaim>Claim</S.ButtonClaim>
+          <S.ButtonClaim>Claim</S.ButtonClaim>
+        </>
+      )}
     </S.ClaimModal>
   )
 }
@@ -305,5 +316,15 @@ export const S = {
     font-size: 16px;
     line-height: 24px;
     color: ${colors.white};
+
+    &:hover {
+      color: ${colors.white};
+      background: ${colors.blue1};
+    }
+
+    &:focus {
+      color: ${colors.white};
+      background: ${colors.blue1};
+    }
   `
 }

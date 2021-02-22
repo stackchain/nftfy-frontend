@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { ClaimModal } from '../components/portfolio/ClaimModal'
 import { PortfolioContent } from '../components/portfolio/PortfolioContent'
 import { PortfolioHeader } from '../components/portfolio/PortfolioHeader'
 import { PortfolioTokensContent } from '../components/portfolio/PortfolioTokensContent'
@@ -17,6 +18,7 @@ export default function PortfolioPage() {
           <S.PortfolioTokensContent />
         </S.PortfolioWrapper>
       </S.Main>
+      <ClaimModal />
       <Footer />
     </>
   )
@@ -25,11 +27,17 @@ export default function PortfolioPage() {
 export const S = {
   Main: styled.main`
     flex: 1;
-    padding: 0px 48px;
+    padding: 32px 48px;
     background: ${colors.white};
     min-height: calc(100vh - 136px);
 
-    margin-bottom: 32px;
+    @media (max-width: ${viewport.xl}) {
+      padding: 32px 24px;
+    }
+
+    @media (max-width: ${viewport.sm}) {
+      padding: 32px 8px;
+    }
   `,
   PortfolioWrapper: styled.section`
     flex: 1;
@@ -37,7 +45,7 @@ export const S = {
     margin: 0 auto;
   `,
   PortfolioHeader: styled(PortfolioHeader)`
-    margin: 32px 0;
+    margin-bottom: 32px;
   `,
   PortfolioContent: styled(PortfolioContent)`
     margin-bottom: 48px;
