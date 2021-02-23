@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { ClaimModal } from '../components/portfolio/ClaimModal'
 import { PortfolioContent } from '../components/portfolio/PortfolioContent'
 import { PortfolioHeader } from '../components/portfolio/PortfolioHeader'
-import { PortfolioTokensContent } from '../components/portfolio/PortfolioTokensContent'
 import { Footer, Header } from '../components/shared/layout'
 import { colors, viewport } from '../styles/variables'
 
@@ -15,7 +14,6 @@ export default function PortfolioPage() {
         <S.PortfolioWrapper>
           <S.PortfolioHeader totalValue='3,861.7 2' />
           <S.PortfolioContent />
-          <S.PortfolioTokensContent />
         </S.PortfolioWrapper>
       </S.Main>
       <ClaimModal />
@@ -49,6 +47,5 @@ export const S = {
   `,
   PortfolioContent: styled(PortfolioContent)`
     margin-bottom: 48px;
-  `,
-  PortfolioTokensContent: styled(PortfolioTokensContent)``
+  `
 }

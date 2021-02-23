@@ -87,12 +87,12 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }:
                 <S.Erc20SpanTable>{erc20Item.balance}</S.Erc20SpanTable>
               </S.DivErc20>
               <S.DivErc20>
-                <S.Erc20SpanTable>{`$${erc20Item.dollarBalance}`}</S.Erc20SpanTable>
+                <S.Erc20SpanTable>{`$${erc20Item.balanceDollar}`}</S.Erc20SpanTable>
               </S.DivErc20>
               <S.DivErc20>
                 <S.Erc20SpanTable className={returnColor(erc20Item.change)}>{`${erc20Item.change}%`}</S.Erc20SpanTable>
               </S.DivErc20>
-              <S.DivErc20>{erc20Item.isClaimable && <S.Claim onClick={() => claimModalVar(erc20Item)}>Claim</S.Claim>}</S.DivErc20>
+              <S.DivErc20>{erc20Item.released && <S.Claim onClick={() => claimModalVar(erc20Item)}>Claim</S.Claim>}</S.DivErc20>
             </>
           ))}
       </S.ERC720TableItem>

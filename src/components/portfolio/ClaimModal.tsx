@@ -40,7 +40,7 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ className }: ClaimModalP
             <S.ExitSpan>Exit Price</S.ExitSpan>
             <S.PriceDiv>
               <S.ValueEth>{`${erc20Share.balance} ${erc20Share.symbol}`}</S.ValueEth>
-              <S.ValueMoney>{`$${erc20Share.dollarBalance}`}</S.ValueMoney>
+              <S.ValueMoney>{`$${erc20Share.balanceDollar}`}</S.ValueMoney>
             </S.PriceDiv>
           </S.ExitPriceDiv>
 
@@ -56,7 +56,7 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ className }: ClaimModalP
               <S.TotalReceiveSpan>Total to receive</S.TotalReceiveSpan>
               <S.BalanceValueDiv>
                 <S.BalanceEth>{`${erc20Share.balance} ${erc20Share.symbol}`}</S.BalanceEth>
-                <S.BalanceMoney>{`$${erc20Share.dollarBalance}`}</S.BalanceMoney>
+                <S.BalanceMoney>{`$${erc20Share.balanceDollar}`}</S.BalanceMoney>
               </S.BalanceValueDiv>
             </S.TotalReceiveDiv>
           </S.DetailsDiv>

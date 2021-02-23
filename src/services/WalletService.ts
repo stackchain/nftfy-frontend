@@ -345,101 +345,45 @@ export const getWalletItems = async (walletAddress: string): Promise<WalletItem[
 export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20Share[]> => {
   return [
     {
-      address: 'x04012999830890890890890890',
-      name: 'Cat Frost',
-      symbol: 'ETH',
-      balance: 150.0,
-      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
-      price: 0.35,
-      change: 32,
-      dollarBalance: 50.0,
-      isClaimable: false
-    },
-    {
-      address: 'x0401299089088790890890890',
-      name: 'Cat Frost',
-      symbol: 'ETH',
-      balance: 150.0,
-      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
-      price: 0.35,
-      change: 0,
-      dollarBalance: 50.0,
-      isClaimable: false
-    },
-    {
-      address: 'x0401299089089017890890890',
-      name: 'Cat Frost',
-      symbol: 'ETH',
-      balance: 150.0,
-      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
-      price: 0.35,
-      change: 32,
-      dollarBalance: 50.0,
-      isClaimable: false
-    },
-    {
-      address: 'x040129908908908904890890',
+      address: '0x040129908908908904890890',
       name: 'Cat Frost',
       symbol: 'ETH',
       balance: 150.0,
       imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
       price: 0.35,
       change: -32,
-      dollarBalance: 50.0,
-      isClaimable: true
+      balanceDollar: 50.0,
+      released: true,
+      tokenId: 1,
+      description: 'Description',
+      totalSupply: 0,
+      exitPrice: 0,
+      exitPriceDollar: 0,
+      paymentToken: '0x30b46B80f4BC5b829556eb4Da9582e8b85405855 ',
+      vaultBalance: 0,
+      vaultBalanceWallet: 0
+    },
+    {
+      address: '0x040129908908908904890890',
+      name: 'Cat Frost',
+      symbol: 'ETH',
+      balance: 150.0,
+      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
+      price: 0.35,
+      change: -32,
+      balanceDollar: 50.0,
+      released: true,
+      tokenId: 1,
+      description: 'Description',
+      totalSupply: 0,
+      exitPrice: 0,
+      exitPriceDollar: 0,
+      paymentToken: '0x30b46B80f4BC5b829556eb4Da9582e8b85405855 ',
+      vaultBalance: 0,
+      vaultBalanceWallet: 0
     }
   ]
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getERC20Tokens = async (walletAddress: string): Promise<WalletERC20Share[]> => {
-  return [
-    // {
-    //   address: 'x04012990890890890890890',
-    //   name: 'Ethereum',
-    //   symbol: 'ETH',
-    //   balance: 150.0,
-    //   imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
-    //   price: 0.35,
-    //   change: 32,
-    //   dollarBalance: 50.0,
-    //   isClaimable: false
-    // },
-    // {
-    //   address: 'x04012990890890890890234890',
-    //   name: 'Uniswap',
-    //   symbol: 'UNI',
-    //   balance: 150.0,
-    //   imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
-    //   price: 0.35,
-    //   change: 0,
-    //   dollarBalance: 50.0,
-    //   isClaimable: false
-    // },
-    // {
-    //   address: 'x0401299089089089083490890',
-    //   name: 'Balancer',
-    //   symbol: 'BAL',
-    //   balance: 150.0,
-    //   imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
-    //   price: 0.35,
-    //   change: 32,
-    //   dollarBalance: 50.0,
-    //   isClaimable: false
-    // },
-    // {
-    //   address: 'x0401299089089089089043890',
-    //   name: 'UMA token',
-    //   symbol: 'UMA',
-    //   balance: 150.0,
-    //   imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
-    //   price: 0.35,
-    //   change: -32,
-    //   dollarBalance: 50.0,
-    //   isClaimable: true
-    // }
-  ]
-}
-
 export const getNfyBalance = async (walletAddress: string): Promise<{ balance: number }> => {
   const web3 = initializeWeb3('metamask')
 
@@ -447,4 +391,58 @@ export const getNfyBalance = async (walletAddress: string): Promise<{ balance: n
   const balance = await contractNfy.methods.balanceOf(walletAddress).call()
 
   return { balance: Number(balance) / 10 ** 18 }
+}
+
+const getERC20SharesMetadata = async (address: string, tokenId: string) => {
+  try {
+    const metadata = await axios.get<{
+      description: string
+      image_url: string
+    }>(`https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}`)
+
+    const { description, image_url } = metadata.data
+    return { description, image_url }
+  } catch (error) {
+    Sentry.captureException(error)
+  }
+
+  return { description: '', image_url: '' }
+}
+
+export const getERC20SharesByAddress = async (walletAddress: string, erc20Address: string): Promise<WalletERC20Share | undefined> => {
+  const web3 = initializeWeb3('infura')
+
+  const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
+
+  const name = contractErc20Shares.methods.name().call()
+  const tokenId = contractErc20Shares.methods.tokenId().call()
+  const symbol = contractErc20Shares.methods.symbol().call()
+  const balance = Number(contractErc20Shares.methods.balanceOf(walletAddress).call())
+  const totalSupply = Number(contractErc20Shares.methods.totalSupply().call())
+  const exitPrice = Number(contractErc20Shares.methods.exitPrice().call())
+  const paymentToken = contractErc20Shares.methods.paymentToken().call()
+  const vaultBalance = contractErc20Shares.methods.vaultBalance().call()
+  const released = contractErc20Shares.methods.released().call()
+  const vaultBalanceWallet = Number(contractErc20Shares.methods.vaultBalanceOf(walletAddress).call())
+
+  const { description, image_url } = await getERC20SharesMetadata(erc20Address, tokenId)
+  return {
+    address: erc20Address,
+    tokenId,
+    name,
+    symbol,
+    balance,
+    imageUrl: image_url,
+    description,
+    totalSupply,
+    exitPrice,
+    exitPriceDollar: 0,
+    paymentToken,
+    vaultBalance,
+    vaultBalanceWallet,
+    price: 0,
+    change: 0,
+    balanceDollar: 0,
+    released
+  }
 }

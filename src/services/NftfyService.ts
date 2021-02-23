@@ -1,5 +1,6 @@
 import { AbiItem } from 'web3-utils'
-import erc20Abi from '../abi/erc20shares.json'
+import erc20Abi from '../abi/erc20.json'
+import erc20SharesAbi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
 import erc721WrappedAbi from '../abi/erc721wrapped.json'
 import nftfyAbi from '../abi/nftfy.json'
@@ -79,6 +80,18 @@ export const isSecuritizedErc721 = async (tokenAddress: string, tokenId: number)
     const securitized = await contractWrappedErc721.methods.securitized(tokenId).call()
 
     return !!securitized
+  } catch (error) {
+    notifyError(code[5011], error)
+    return false
+  }
+}
+
+export const isRedeemableErc20 = async (erc20Address: string) => {
+  try {
+    const web3 = initializeWeb3('infura')
+    const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
+    const address = await contractErc20Shares.methods.released().call()
+    return address === nftfyAddress
   } catch (error) {
     notifyError(code[5011], error)
     return false
