@@ -21,9 +21,16 @@ export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNf
 export const nfyAddress = chainIdVar() === 1 ? addressNfyMainnet : addressNfyRinkeby
 export const infuraAddress = chainIdVar() === 1 ? addressInfuraMainnet : addressInfuraRinkeby
 
-export const initializeWeb3 = () => {
-  window.ethereum && (window.ethereum as { request: ({ method }: { method: string }) => void }).request({ method: 'eth_requestAccounts' })
-  return new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/4add15ca294d449fb8eca92ad07ec0dd'))
+export const initializeWeb3 = (provider: 'infura' | 'metamask') => {
+  switch (provider) {
+    case 'metamask':
+      return new Web3(Web3.givenProvider)
+
+    default:
+      window.ethereum &&
+        (window.ethereum as { request: ({ method }: { method: string }) => void }).request({ method: 'eth_requestAccounts' })
+      return new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/4add15ca294d449fb8eca92ad07ec0dd'))
+  }
 }
 
 export const initializeMetamaskWallet = async () => {
@@ -137,7 +144,7 @@ const getErc721OpenSeaMetadata = async (address: string, tokenId: string) => {
 }
 
 export const getERC721Items = async (walletAddress: string): Promise<WalletErc721Item[]> => {
-  const web3 = initializeWeb3()
+  const web3 = initializeWeb3('metamask')
 
   const getERC721Item = async (addressERC721: string) => {
     let erc721Items: WalletErc721Item[] = []
@@ -214,7 +221,7 @@ export const getPagedERC721Items = async (walletAddress: string, page?: number, 
 }
 
 export const getERC20Items = async (walletAddress: string): Promise<WalletItem[]> => {
-  const web3 = initializeWeb3()
+  const web3 = initializeWeb3('infura')
 
   const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
 
@@ -434,7 +441,7 @@ export const getERC20Tokens = async (walletAddress: string): Promise<WalletERC20
 }
 
 export const getNfyBalance = async (walletAddress: string): Promise<{ balance: number }> => {
-  const web3 = initializeWeb3()
+  const web3 = initializeWeb3('metamask')
 
   const contractNfy = new web3.eth.Contract(erc20SharesAbi as AbiItem[], nfyAddress)
   const balance = await contractNfy.methods.balanceOf(walletAddress).call()

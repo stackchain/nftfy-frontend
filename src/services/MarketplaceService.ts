@@ -39,7 +39,7 @@ const getErc721OpenSeaMetadata = async (address: string, tokenId: string) => {
 }
 
 export const getMarketplaceItems = async (page?: number, limit?: number): Promise<Paged<MarketplaceERC20Item[]>> => {
-  const web3 = initializeWeb3()
+  const web3 = initializeWeb3('infura')
 
   const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
 
@@ -130,7 +130,7 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
 }
 
 export const getMarketplaceItemByAddress = async (erc20Address: string): Promise<MarketplaceERC20Item> => {
-  const web3 = initializeWeb3()
+  const web3 = initializeWeb3('infura')
 
   const getERC20Metadata = async (address: string): Promise<MarketplaceERC20Item> => {
     const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], address)

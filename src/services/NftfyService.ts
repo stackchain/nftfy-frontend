@@ -15,35 +15,29 @@ export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : add
 
 export const approveErc20 = async (erc20Address: string, spenderAddress: string, erc20Decimals: number, erc20Amount: number) => {
   try {
-    const web3 = initializeWeb3()
+    const web3 = initializeWeb3('metamask')
     const contractErc20 = new web3.eth.Contract(erc20Abi as AbiItem[], erc20Address)
-    await contractErc20.methods
-      .approve(spenderAddress, String(erc20Amount * 10 ** erc20Decimals))
-      .send({ from: accountVar() })
-      .once('error', (error: Error) => notifyError(code[5010], error))
+    await contractErc20.methods.approve(spenderAddress, String(erc20Amount * 10 ** erc20Decimals)).send({ from: accountVar() })
   } catch (error) {
     notifyError(code[5011], error)
   }
 }
 
-export const approveErc721 = async (erc721Address: string, erc721AddressId: number) => {
+export const approveErc721 = async (erc721Address: string, erc721TokenId: number) => {
   try {
-    const web3 = initializeWeb3()
+    const web3 = initializeWeb3('metamask')
     const contractErc721 = new web3.eth.Contract(erc721Abi as AbiItem[], erc721Address)
-    await contractErc721.methods
-      .approve(nftfyAddress, erc721AddressId)
-      .send({ from: accountVar() })
-      .once('error', (error: Error) => notifyError(code[5010], error))
+    await contractErc721.methods.approve(nftfyAddress, erc721TokenId).send({ from: accountVar() })
   } catch (error) {
     notifyError(code[5011], error)
   }
 }
 
-export const isApprovedErc721 = async (erc721Address: string, erc721AddressId: number) => {
+export const isApprovedErc721 = async (erc721Address: string, erc721TokenId: number) => {
   try {
-    const web3 = initializeWeb3()
+    const web3 = initializeWeb3('infura')
     const contractErc721 = new web3.eth.Contract(erc721Abi as AbiItem[], erc721Address)
-    const address = await contractErc721.methods.getApproved(erc721AddressId).call()
+    const address = await contractErc721.methods.getApproved(erc721TokenId).call()
     return address === nftfyAddress
   } catch (error) {
     notifyError(code[5011], error)
@@ -61,14 +55,11 @@ export const securitizeErc721 = async (
   remnant: boolean
 ) => {
   try {
-    const web3 = initializeWeb3()
+    const web3 = initializeWeb3('metamask')
     const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
     contractNftfy.methods
       .securitize(erc721Address, erc721Id, sharesCount, sharesDecimals, exitPrice, paymentTokenAddress, remnant)
       .send({ from: accountVar() })
-      .once('error', (error: Error) => {
-        notifyError(code[5010], error)
-      })
   } catch (error) {
     notifyError(code[5011], error)
   }
@@ -76,7 +67,7 @@ export const securitizeErc721 = async (
 
 export const isSecuritizedErc721 = async (tokenAddress: string, tokenId: number) => {
   try {
-    const web3 = initializeWeb3()
+    const web3 = initializeWeb3('infura')
     const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
     const wrappedAddress = await contractNftfy.methods.wrappers(tokenAddress).call()
 

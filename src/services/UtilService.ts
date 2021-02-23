@@ -5,8 +5,8 @@ export default function paginator<T>(items: T[], current_page: number, per_page_
   const per_page = per_page_items || 10
   const offset = (page - 1) * per_page
 
-  const paginatedItems = items.slice(offset).slice(0, per_page_items)
-  const total_pages = Math.ceil(items.length / per_page)
+  const paginatedItems = items ? items.slice(offset).slice(0, per_page_items) : []
+  const total_pages = items ? Math.ceil(items.length / per_page) : 0
 
   return {
     page,
