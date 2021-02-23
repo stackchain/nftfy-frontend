@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/react'
-import axios from 'axios'
 import { flatten } from 'lodash'
 import { AbiItem } from 'web3-utils'
 import erc20SharesAbi from '../abi/erc20shares.json'
@@ -10,33 +8,12 @@ import { addressesERC721Rinkeby, addressNftfyRinkeby, addressNfyRinkeby } from '
 import { chainIdVar } from '../graphql/variables/WalletVariable'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 import { Paged } from '../types/UtilTypes'
-import paginator from './UtilService'
+import paginator, { getErc721OpenSeaMetadata } from './UtilService'
 import { initializeWeb3 } from './WalletService'
 
 export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
 export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
 export const nfyAddress = chainIdVar() === 1 ? addressNfyMainnet : addressNfyRinkeby
-
-const getErc721OpenSeaMetadata = async (address: string, tokenId: string) => {
-  try {
-    const metadata = await axios.get<{
-      description: string
-      image_url: string
-      name: string
-      symbol: string
-      asset_contract: { symbol: string }
-    }>(`https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}`)
-
-    const { name, description, image_url } = metadata.data
-    const { symbol } = metadata.data.asset_contract
-
-    return { description, image_url, name, symbol }
-  } catch (error) {
-    Sentry.captureException(error)
-  }
-
-  return { description: '', image_url: '', name: '', symbol: '' }
-}
 
 export const getMarketplaceItems = async (page?: number, limit?: number): Promise<Paged<MarketplaceERC20Item[]>> => {
   const web3 = initializeWeb3('infura')

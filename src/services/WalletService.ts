@@ -1,6 +1,4 @@
 import detectEthereumProvider from '@metamask/detect-provider'
-import * as Sentry from '@sentry/react'
-import axios from 'axios'
 import { flatten } from 'lodash'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
@@ -14,7 +12,7 @@ import { accountVar, chainIdVar, connectWalletModalVar, nfyVar, setAccount, setC
 import { code } from '../messages'
 import { WalletERC20Item, WalletERC20Share, WalletErc721Item, WalletItem } from '../types/WalletTypes'
 import { notifyError, notifyWarning } from './NotificationService'
-import paginator from './UtilService'
+import paginator, { getErc721OpenSeaMetadata } from './UtilService'
 
 export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
 export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
@@ -126,21 +124,6 @@ const handleChainChanged = (chainId: string) => {
     parseInt(chainId, 16) !== currentChainId && notifyWarning(code[5009])
     setChainId(parseInt(chainId, 16))
   }
-}
-
-const getErc721OpenSeaMetadata = async (address: string, tokenId: string) => {
-  try {
-    const metadata = await axios.get<{ description: string; image_url: string }>(
-      `https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}`
-    )
-    const { description, image_url } = metadata.data
-
-    return { address, tokenId, description, image_url }
-  } catch (error) {
-    Sentry.captureException(error)
-  }
-
-  return { address, tokenId, description: '', image_url: '' }
 }
 
 export const getERC721Items = async (walletAddress: string): Promise<WalletErc721Item[]> => {
