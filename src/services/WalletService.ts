@@ -393,22 +393,6 @@ export const getNfyBalance = async (walletAddress: string): Promise<{ balance: n
   return { balance: Number(balance) / 10 ** 18 }
 }
 
-const getERC20SharesMetadata = async (address: string, tokenId: string) => {
-  try {
-    const metadata = await axios.get<{
-      description: string
-      image_url: string
-    }>(`https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}`)
-
-    const { description, image_url } = metadata.data
-    return { description, image_url }
-  } catch (error) {
-    Sentry.captureException(error)
-  }
-
-  return { description: '', image_url: '' }
-}
-
 export const getERC20SharesByAddress = async (walletAddress: string, erc20Address: string): Promise<WalletERC20Share | undefined> => {
   const web3 = initializeWeb3('infura')
 
@@ -425,7 +409,8 @@ export const getERC20SharesByAddress = async (walletAddress: string, erc20Addres
   const released = contractErc20Shares.methods.released().call()
   const vaultBalanceWallet = Number(contractErc20Shares.methods.vaultBalanceOf(walletAddress).call())
 
-  const { description, image_url } = await getERC20SharesMetadata(erc20Address, tokenId)
+  const { description, image_url } = await getErc721OpenSeaMetadata(erc20Address, tokenId)
+
   return {
     address: erc20Address,
     tokenId,
