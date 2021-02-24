@@ -1,6 +1,7 @@
 import { flatten } from 'lodash'
 import { AbiItem } from 'web3-utils'
 import erc20SharesAbi from '../abi/erc20shares.json'
+import erc721Abi from '../abi/erc721.json'
 import erc721WrappedAbi from '../abi/erc721wrapped.json'
 import nftfyAbi from '../abi/nftfy.json'
 import { getConfigByChainId } from '../config'
@@ -115,7 +116,8 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
     const contractWrapperErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], erc721Wrapper)
     const securitized = await contractWrapperErc721.methods.securitized(tokenId).call()
     const erc721Address = await contractWrapperErc721.methods.target().call()
-    const symbolErc721 = await contractWrapperErc721.methods.symbol().call()
+    const contractErc721 = new web3.eth.Contract(erc721Abi as AbiItem[], erc721Address)
+    const symbolErc721 = await contractErc721.methods.symbol().call()
 
     const erc721Metadata = await getErc721Metadata(erc721Address, tokenId, web3)
     return {
