@@ -1,7 +1,9 @@
+import { useReactiveVar } from '@apollo/client'
 import { Button, Collapse } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { claimModalVar } from '../../graphql/variables/PortfolioVariable'
+import { accountVar } from '../../graphql/variables/WalletVariable'
 // import { accountVar } from '../../graphql/variables/WalletVariable'
 import { getERC20Shares } from '../../services/WalletService'
 import { colors, viewport } from '../../styles/variables'
@@ -16,9 +18,7 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }:
   const [erc20share, setErc20share] = useState<WalletERC20Share[]>([])
   const [loading, setLoading] = useState(true)
   const { Panel } = Collapse
-  // const account = useReactiveVar(accountVar)
-  const account = '234'
-
+  const account = useReactiveVar(accountVar)
   const headerMobile = () => {
     return (
       <S.PanelHeader>
@@ -71,26 +71,26 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className }:
           erc20share.map(erc20Item => (
             <>
               <S.DivImage key={`erc20share-${erc20Item.address}`}>
-                <S.ImageToken src={erc20Item.imageUrl} />
+                <S.ImageToken src={erc20Item.erc721.imageUrl} />
                 <S.Erc20SpanTable>
                   {`${erc20Item.name} `}
                   <S.Symbol>{erc20Item.symbol}</S.Symbol>
                 </S.Erc20SpanTable>
               </S.DivImage>
               <S.DivErc20>
-                <S.Erc20SpanTable>{`$${erc20Item.price}`}</S.Erc20SpanTable>
+                <S.Erc20SpanTable>{`$${erc20Item.financial.price}`}</S.Erc20SpanTable>
               </S.DivErc20>
               <S.DivErc20>
-                <S.Erc20SpanTable>{`${erc20Item.change}%`}</S.Erc20SpanTable>
+                <S.Erc20SpanTable>{`${erc20Item.financial.change}%`}</S.Erc20SpanTable>
               </S.DivErc20>
               <S.DivErc20>
                 <S.Erc20SpanTable>{erc20Item.balance}</S.Erc20SpanTable>
               </S.DivErc20>
               <S.DivErc20>
-                <S.Erc20SpanTable>{`$${erc20Item.balanceDollar}`}</S.Erc20SpanTable>
+                <S.Erc20SpanTable>{`$${erc20Item.financial.balanceDollar}`}</S.Erc20SpanTable>
               </S.DivErc20>
               <S.DivErc20>
-                <S.Erc20SpanTable className={returnColor(erc20Item.change)}>{`${erc20Item.change}%`}</S.Erc20SpanTable>
+                <S.Erc20SpanTable className={returnColor(erc20Item.financial.change)}>{`${erc20Item.financial.change}%`}</S.Erc20SpanTable>
               </S.DivErc20>
               <S.DivErc20>{erc20Item.released && <S.Claim onClick={() => claimModalVar(erc20Item)}>Claim</S.Claim>}</S.DivErc20>
             </>

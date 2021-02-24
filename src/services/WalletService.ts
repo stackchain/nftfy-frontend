@@ -326,46 +326,92 @@ export const getWalletItems = async (walletAddress: string): Promise<WalletItem[
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20Share[]> => {
-  return [
-    {
-      address: '0x040129908908908904890890',
-      name: 'Cat Frost',
-      symbol: 'ETH',
-      balance: 150.0,
-      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
-      price: 0.35,
-      change: -32,
-      balanceDollar: 50.0,
-      released: true,
-      tokenId: 1,
-      description: 'Description',
-      totalSupply: 0,
-      exitPrice: 0,
-      exitPriceDollar: 0,
-      paymentToken: '0x30b46B80f4BC5b829556eb4Da9582e8b85405855 ',
-      vaultBalance: 0,
-      vaultBalanceWallet: 0
-    },
-    {
-      address: '0x040129908908908904890890',
-      name: 'Cat Frost',
-      symbol: 'ETH',
-      balance: 150.0,
-      imageUrl: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg',
-      price: 0.35,
-      change: -32,
-      balanceDollar: 50.0,
-      released: true,
-      tokenId: 1,
-      description: 'Description',
-      totalSupply: 0,
-      exitPrice: 0,
-      exitPriceDollar: 0,
-      paymentToken: '0x30b46B80f4BC5b829556eb4Da9582e8b85405855 ',
-      vaultBalance: 0,
-      vaultBalanceWallet: 0
+  const web3 = initializeWeb3('infura')
+
+  const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
+
+  const addressesWrappedERC721Promises: Promise<string>[] = []
+
+  erc721Addresses.forEach(addressERC721 => addressesWrappedERC721Promises.push(contractNftfy.methods.wrappers(addressERC721).call()))
+
+  const addressesWrappedERC721 = (await Promise.all(addressesWrappedERC721Promises)).filter(
+    addressWrapped721 => addressWrapped721 !== '0x0000000000000000000000000000000000000000'
+  )
+
+  const getErc20 = async (addressERC721Wrapper: string): Promise<string[]> => {
+    const contractWrapperErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], addressERC721Wrapper)
+    const historyLength = await contractWrapperErc721.methods.historyLength().call()
+    const erc20Promises: Promise<string>[] = []
+
+    for (let i = 0; i < historyLength; i += 1) {
+      erc20Promises.push(contractWrapperErc721.methods.historyAt(i).call())
     }
-  ]
+
+    return Promise.all(erc20Promises)
+  }
+
+  const erc20Promises: Promise<string[]>[] = []
+
+  for (let i = 0; i < addressesWrappedERC721.length; i += 1) {
+    erc20Promises.push(getErc20(addressesWrappedERC721[i]))
+  }
+
+  const erc20 = flatten(await Promise.all(erc20Promises))
+  const getERC20Metadata = async (erc20Address: string): Promise<WalletERC20Share> => {
+    const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
+
+    const nameShares = await contractErc20Shares.methods.name().call()
+    const tokenId = await contractErc20Shares.methods.tokenId().call()
+
+    const symbol = await contractErc20Shares.methods.symbol().call()
+    const balance = Number(await contractErc20Shares.methods.balanceOf(walletAddress).call())
+    const totalSupply = Number(await contractErc20Shares.methods.totalSupply().call())
+    const exitPrice = Number(await contractErc20Shares.methods.exitPrice().call())
+    const paymentToken = await contractErc20Shares.methods.paymentToken().call()
+    const vaultBalance = await contractErc20Shares.methods.vaultBalance().call()
+    const wrapper = await contractErc20Shares.methods.wrapper().call()
+    const released = await contractErc20Shares.methods.released().call()
+    const vaultBalanceWallet = Number(await contractErc20Shares.methods.vaultBalanceOf(walletAddress).call())
+
+    const { description, image_url, address, name } = await getErc721OpenSeaMetadata(erc20Address, tokenId)
+
+    return {
+      address: erc20Address,
+      symbol,
+      balance,
+      totalSupply,
+      exitPrice,
+      name: nameShares,
+      paymentToken,
+      vaultBalance,
+      vaultBalanceWallet,
+      released,
+      erc721: {
+        address,
+        description,
+        name,
+        tokenId,
+        imageUrl: image_url,
+        wrapper
+      },
+      financial: {
+        price: 0,
+        change: 0,
+        balanceDollar: 0,
+        exitPriceDollar: 0
+      }
+    }
+  }
+
+  const erc20WithMetadataPromises: Promise<WalletERC20Share>[] = []
+
+  for (let i = 0; i < erc20.length; i += 1) {
+    erc20WithMetadataPromises.push(getERC20Metadata(erc20[i]))
+  }
+
+  const erc20WithMetadata = flatten(await Promise.all(erc20WithMetadataPromises)).filter(erc20Item => erc20Item.balance > 0)
+
+  return erc20WithMetadata
 }
 export const getNfyBalance = async (walletAddress: string): Promise<{ balance: number }> => {
   const web3 = initializeWeb3('metamask')
@@ -381,36 +427,44 @@ export const getERC20SharesByAddress = async (walletAddress: string, erc20Addres
 
   const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
 
-  const name = contractErc20Shares.methods.name().call()
-  const tokenId = contractErc20Shares.methods.tokenId().call()
-  const symbol = contractErc20Shares.methods.symbol().call()
-  const balance = Number(contractErc20Shares.methods.balanceOf(walletAddress).call())
-  const totalSupply = Number(contractErc20Shares.methods.totalSupply().call())
-  const exitPrice = Number(contractErc20Shares.methods.exitPrice().call())
-  const paymentToken = contractErc20Shares.methods.paymentToken().call()
-  const vaultBalance = contractErc20Shares.methods.vaultBalance().call()
-  const released = contractErc20Shares.methods.released().call()
-  const vaultBalanceWallet = Number(contractErc20Shares.methods.vaultBalanceOf(walletAddress).call())
+  const nameShares = await contractErc20Shares.methods.name().call()
+  const tokenId = await contractErc20Shares.methods.tokenId().call()
+  const symbol = await contractErc20Shares.methods.symbol().call()
+  const balance = Number(await contractErc20Shares.methods.balanceOf(walletAddress).call())
+  const totalSupply = Number(await contractErc20Shares.methods.totalSupply().call())
+  const exitPrice = Number(await contractErc20Shares.methods.exitPrice().call())
+  const paymentToken = await contractErc20Shares.methods.paymentToken().call()
+  const vaultBalance = await contractErc20Shares.methods.vaultBalance().call()
+  const wrapper = await contractErc20Shares.methods.wrapper().call()
+  const released = await contractErc20Shares.methods.released().call()
+  const vaultBalanceWallet = Number(await contractErc20Shares.methods.vaultBalanceOf(walletAddress).call())
 
-  const { description, image_url } = await getErc721OpenSeaMetadata(erc20Address, tokenId)
+  const { description, image_url, address, name } = await getErc721OpenSeaMetadata(erc20Address, tokenId)
 
   return {
     address: erc20Address,
-    tokenId,
-    name,
     symbol,
     balance,
-    imageUrl: image_url,
-    description,
     totalSupply,
     exitPrice,
-    exitPriceDollar: 0,
+    name: nameShares,
     paymentToken,
     vaultBalance,
     vaultBalanceWallet,
-    price: 0,
-    change: 0,
-    balanceDollar: 0,
-    released
+    released,
+    erc721: {
+      address,
+      description,
+      name,
+      tokenId,
+      imageUrl: image_url,
+      wrapper
+    },
+    financial: {
+      price: 0,
+      change: 0,
+      balanceDollar: 0,
+      exitPriceDollar: 0
+    }
   }
 }

@@ -15,19 +15,29 @@ export interface WalletERC20Item {
 }
 
 export interface WalletERC20Share extends WalletERC20Item {
-  imageUrl: string
-  description: string
-  tokenId: number
   totalSupply: number
   exitPrice: number
-  exitPriceDollar: number
   paymentToken: string
   vaultBalance: number
   vaultBalanceWallet: number
-  price: number
-  change: number
-  balanceDollar: number
   released: boolean
+  symbol: string
+
+  erc721: {
+    wrapper: string
+    address: string
+    tokenId: string
+    description: string
+    imageUrl: string
+    name: string
+  }
+
+  financial: {
+    exitPriceDollar: number
+    price: number
+    change: number
+    balanceDollar: number
+  }
 }
 
 export interface WalletItem {
