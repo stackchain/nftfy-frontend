@@ -158,7 +158,9 @@ export const getERC721Items = async (walletAddress: string): Promise<WalletErc72
       image_url: string
     }>[] = []
 
-    erc721Items.forEach(erc721Item => erc721ItemsMetadataPromises.push(getErc721OpenSeaMetadata(erc721Item.address, erc721Item.tokenId)))
+    erc721Items.forEach(erc721Item =>
+      erc721ItemsMetadataPromises.push(getErc721OpenSeaMetadata(erc721Item.address, erc721Item.tokenId, web3))
+    )
 
     const erc721ItemsMetadata = await Promise.all(erc721ItemsMetadataPromises)
 
@@ -272,7 +274,7 @@ export const getERC20Items = async (walletAddress: string): Promise<WalletItem[]
     const erc721Name = await contractErc721.methods.name().call()
     const erc721Symbol = await contractErc721.methods.symbol().call()
 
-    const erc721metadata = await getErc721OpenSeaMetadata(erc721Address, erc721TokenId)
+    const erc721metadata = await getErc721OpenSeaMetadata(erc721Address, erc721TokenId, web3)
 
     return {
       erc721: {
@@ -369,7 +371,7 @@ export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20
     const released = await contractErc20Shares.methods.released().call()
     const vaultBalanceWallet = Number(await contractErc20Shares.methods.vaultBalanceOf(walletAddress).call())
 
-    const { description, image_url, address, name } = await getErc721OpenSeaMetadata(erc20Address, tokenId)
+    const { description, image_url, address, name } = await getErc721OpenSeaMetadata(erc20Address, tokenId, web3)
 
     return {
       address: erc20Address,
@@ -435,7 +437,7 @@ export const getERC20SharesByAddress = async (walletAddress: string, erc20Addres
   const released = await contractErc20Shares.methods.released().call()
   const vaultBalanceWallet = Number(await contractErc20Shares.methods.vaultBalanceOf(walletAddress).call())
 
-  const { description, image_url, address, name } = await getErc721OpenSeaMetadata(erc20Address, tokenId)
+  const { description, image_url, address, name } = await getErc721OpenSeaMetadata(erc20Address, tokenId, web3)
 
   return {
     address: erc20Address,

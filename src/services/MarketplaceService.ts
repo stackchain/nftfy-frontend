@@ -82,7 +82,7 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
   const erc20Paginated = paginator(erc20WithMetadata, page || 1, limit || 12)
 
   const getERC20Images = async (erc20Item: MarketplaceERC20Item) => {
-    const { description, image_url, name, symbol } = await getErc721OpenSeaMetadata(erc20Item.erc721.address, erc20Item.erc721.tokenId)
+    const { description, image_url, name } = await getErc721OpenSeaMetadata(erc20Item.erc721.address, erc20Item.erc721.tokenId, web3)
 
     return {
       ...erc20Item,
@@ -90,8 +90,7 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
         ...erc20Item.erc721,
         image_url,
         description,
-        name,
-        symbol
+        name
       }
     }
   }
@@ -116,8 +115,9 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
     const contractWrapperErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], erc721Wrapper)
     const securitized = await contractWrapperErc721.methods.securitized(tokenId).call()
     const erc721Address = await contractWrapperErc721.methods.target().call()
+    const symbolErc721 = await contractWrapperErc721.methods.symbol().call()
 
-    const erc721Metadata = await getErc721OpenSeaMetadata(erc721Address, tokenId)
+    const erc721Metadata = await getErc721OpenSeaMetadata(erc721Address, tokenId, web3)
     return {
       address,
       name: erc20Name,
@@ -130,7 +130,7 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
         wrapper: erc721Wrapper,
         image_url: erc721Metadata.image_url,
         description: erc721Metadata.description,
-        symbol: erc721Metadata.symbol
+        symbol: symbolErc721
       }
     }
   }

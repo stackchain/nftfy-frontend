@@ -1,5 +1,8 @@
 import * as Sentry from '@sentry/react'
 import axios from 'axios'
+import Web3 from 'web3'
+import { AbiItem } from 'web3-utils'
+import erc721Abi from '../abi/erc721.json'
 import { Paged } from '../types/UtilTypes'
 
 export default function paginator<T>(items: T[], current_page: number, per_page_items: number): Paged<T[]> {
@@ -20,24 +23,22 @@ export default function paginator<T>(items: T[], current_page: number, per_page_
     data: paginatedItems
   }
 }
-export const getErc721OpenSeaMetadata = async (address: string, tokenId: string) => {
+export const getErc721OpenSeaMetadata = async (address: string, tokenId: string, web3: Web3) => {
+  const contractErc2721 = new web3.eth.Contract(erc721Abi as AbiItem[], address)
+  const tokenUri = await contractErc2721.methods.tokenURI(tokenId).call()
+
   try {
     const metadata = await axios.get<{
-      address: string
       description: string
-      image_url: string
+      image: string
       name: string
-      symbol: string
-      asset_contract: { symbol: string }
-    }>(`https://rinkeby-api.opensea.io/api/v1/asset/${address}/${tokenId}`)
+    }>(tokenUri)
 
-    const { name, description, image_url } = metadata.data
-    const { symbol } = metadata.data.asset_contract
-
-    return { description, image_url, name, symbol, tokenId, address }
+    const { name, description, image } = metadata.data
+    return { description, image_url: image, name, address, tokenId }
   } catch (error) {
     Sentry.captureException(error)
   }
 
-  return { description: '', image_url: '', name: '', symbol: '', tokenId, address }
+  return { description: '', image_url: '', name: '', address, tokenId }
 }
