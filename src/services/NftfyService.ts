@@ -4,15 +4,13 @@ import erc20SharesAbi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
 import erc721WrappedAbi from '../abi/erc721wrapped.json'
 import nftfyAbi from '../abi/nftfy.json'
-import { addressesERC721Mainnet, addressNftfyMainnet } from '../contracts/mainnet'
-import { addressesERC721Rinkeby, addressNftfyRinkeby } from '../contracts/rinkeby'
+import { getConfigByChainId } from '../config'
 import { accountVar, chainIdVar } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { notifyError } from './NotificationService'
 import { initializeWeb3 } from './WalletService'
 
-export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
-export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
+const { nftfyAddress } = getConfigByChainId(chainIdVar())
 
 export const approveErc20 = async (erc20Address: string, spenderAddress: string, erc20Decimals: number, erc20Amount: number) => {
   try {

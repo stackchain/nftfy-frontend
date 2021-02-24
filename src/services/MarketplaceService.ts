@@ -3,17 +3,14 @@ import { AbiItem } from 'web3-utils'
 import erc20SharesAbi from '../abi/erc20shares.json'
 import erc721WrappedAbi from '../abi/erc721wrapped.json'
 import nftfyAbi from '../abi/nftfy.json'
-import { addressesERC721Mainnet, addressNftfyMainnet, addressNfyMainnet } from '../contracts/mainnet'
-import { addressesERC721Rinkeby, addressNftfyRinkeby, addressNfyRinkeby } from '../contracts/rinkeby'
+import { getConfigByChainId } from '../config'
 import { chainIdVar } from '../graphql/variables/WalletVariable'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 import { Paged } from '../types/UtilTypes'
 import paginator, { getErc721OpenSeaMetadata } from './UtilService'
 import { initializeWeb3 } from './WalletService'
 
-export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
-export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
-export const nfyAddress = chainIdVar() === 1 ? addressNfyMainnet : addressNfyRinkeby
+const { erc721Addresses, nftfyAddress } = getConfigByChainId(chainIdVar())
 
 export const getMarketplaceItems = async (page?: number, limit?: number): Promise<Paged<MarketplaceERC20Item[]>> => {
   const web3 = initializeWeb3('infura')

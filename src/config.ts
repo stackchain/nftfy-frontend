@@ -1,28 +1,28 @@
 export interface ChainConfig {
   id: number
   name: string
-  infura: string
-  nfy: string
-  nftfy: string
-  erc721: string[]
+  infuraAddress: string
+  nfyAddress: string
+  nftfyAddress: string
+  erc721Addresses: string[]
 }
 
 export const chains: ChainConfig[] = [
   {
     id: 1,
     name: 'mainnet',
-    infura: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
-    nfy: '0xc633BAf9fDE99800226C74328024525192294D2b',
-    nftfy: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
-    erc721: []
+    infuraAddress: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
+    nfyAddress: '0xc633BAf9fDE99800226C74328024525192294D2b',
+    nftfyAddress: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
+    erc721Addresses: []
   },
   {
     id: 4,
     name: 'rinkeby',
-    infura: `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
-    nfy: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
-    nftfy: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
-    erc721: [
+    infuraAddress: `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
+    nfyAddress: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
+    nftfyAddress: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
+    erc721Addresses: [
       '0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3',
       '0xe48773a75b337ac258a471c00c6b450907b614bc',
       '0x0934d8e80b3f40c19a2f92a280618af3d0266d4d',
@@ -43,11 +43,11 @@ export const chains: ChainConfig[] = [
   {
     id: 42,
     name: 'kovan',
-    infura: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
-    nfy: '0x1528f3fcc26d13f7079325fb78d9442607781c8c',
-    nftfy: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
-    erc721: ['0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3']
+    infuraAddress: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
+    nfyAddress: '0x1528f3fcc26d13f7079325fb78d9442607781c8c',
+    nftfyAddress: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
+    erc721Addresses: ['0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3']
   }
 ]
 
-export const getChainConfigById = (id: number) => chains.find(chain => chain.id === id) || chains[0]
+export const getConfigByChainId = (id: number) => chains.find(chain => chain.id === id) || chains[0]

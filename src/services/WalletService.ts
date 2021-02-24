@@ -6,18 +6,14 @@ import erc20SharesAbi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
 import erc721WrappedAbi from '../abi/erc721wrapped.json'
 import nftfyAbi from '../abi/nftfy.json'
-import { addressesERC721Mainnet, addressInfuraMainnet, addressNftfyMainnet, addressNfyMainnet } from '../contracts/mainnet'
-import { addressesERC721Rinkeby, addressInfuraRinkeby, addressNftfyRinkeby, addressNfyRinkeby } from '../contracts/rinkeby'
+import { getConfigByChainId } from '../config'
 import { accountVar, chainIdVar, connectWalletModalVar, nfyVar, setAccount, setChainId } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { WalletERC20Item, WalletERC20Share, WalletErc721Item, WalletItem } from '../types/WalletTypes'
 import { notifyError, notifyWarning } from './NotificationService'
 import paginator, { getErc721OpenSeaMetadata } from './UtilService'
 
-export const erc721Addresses = chainIdVar() === 1 ? addressesERC721Mainnet : addressesERC721Rinkeby
-export const nftfyAddress = chainIdVar() === 1 ? addressNftfyMainnet : addressNftfyRinkeby
-export const nfyAddress = chainIdVar() === 1 ? addressNfyMainnet : addressNfyRinkeby
-export const infuraAddress = chainIdVar() === 1 ? addressInfuraMainnet : addressInfuraRinkeby
+const { erc721Addresses, nftfyAddress, nfyAddress, infuraAddress } = getConfigByChainId(chainIdVar() || 1)
 
 export const initializeWeb3 = (provider: 'infura' | 'metamask') => {
   switch (provider) {
@@ -27,7 +23,7 @@ export const initializeWeb3 = (provider: 'infura' | 'metamask') => {
     default:
       window.ethereum &&
         (window.ethereum as { request: ({ method }: { method: string }) => void }).request({ method: 'eth_requestAccounts' })
-      return new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/v3/4add15ca294d449fb8eca92ad07ec0dd'))
+      return new Web3(new Web3.providers.HttpProvider(infuraAddress))
   }
 }
 
