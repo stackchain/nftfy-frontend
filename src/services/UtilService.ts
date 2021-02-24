@@ -23,7 +23,7 @@ export default function paginator<T>(items: T[], current_page: number, per_page_
     data: paginatedItems
   }
 }
-export const getErc721OpenSeaMetadata = async (address: string, tokenId: string, web3: Web3) => {
+export const getErc721Metadata = async (address: string, tokenId: string, web3: Web3) => {
   const contractErc2721 = new web3.eth.Contract(erc721Abi as AbiItem[], address)
   const tokenUri = await contractErc2721.methods.tokenURI(tokenId).call()
 

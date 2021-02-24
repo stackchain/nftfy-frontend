@@ -7,7 +7,7 @@ import { getConfigByChainId } from '../config'
 import { chainIdVar } from '../graphql/variables/WalletVariable'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 import { Paged } from '../types/UtilTypes'
-import paginator, { getErc721OpenSeaMetadata } from './UtilService'
+import paginator, { getErc721Metadata } from './UtilService'
 import { initializeWeb3 } from './WalletService'
 
 const { erc721Addresses, nftfyAddress } = getConfigByChainId(chainIdVar())
@@ -82,7 +82,7 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
   const erc20Paginated = paginator(erc20WithMetadata, page || 1, limit || 12)
 
   const getERC20Images = async (erc20Item: MarketplaceERC20Item) => {
-    const { description, image_url, name } = await getErc721OpenSeaMetadata(erc20Item.erc721.address, erc20Item.erc721.tokenId, web3)
+    const { description, image_url, name } = await getErc721Metadata(erc20Item.erc721.address, erc20Item.erc721.tokenId, web3)
 
     return {
       ...erc20Item,
@@ -117,7 +117,7 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
     const erc721Address = await contractWrapperErc721.methods.target().call()
     const symbolErc721 = await contractWrapperErc721.methods.symbol().call()
 
-    const erc721Metadata = await getErc721OpenSeaMetadata(erc721Address, tokenId, web3)
+    const erc721Metadata = await getErc721Metadata(erc721Address, tokenId, web3)
     return {
       address,
       name: erc20Name,
