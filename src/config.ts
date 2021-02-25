@@ -5,6 +5,12 @@ export interface ChainConfig {
   nfyAddress: string
   nftfyAddress: string
   erc721Addresses: string[]
+  balancer: {
+    subgraphUrl: string
+    subgraphBackupUrl: string
+    weth: string
+    precision: number
+  }
 }
 
 export const chains: ChainConfig[] = [
@@ -14,7 +20,13 @@ export const chains: ChainConfig[] = [
     infuraAddress: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     nfyAddress: '0xc633BAf9fDE99800226C74328024525192294D2b',
     nftfyAddress: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
-    erc721Addresses: []
+    erc721Addresses: [],
+    balancer: {
+      subgraphUrl: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer',
+      subgraphBackupUrl: 'https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange/pools',
+      weth: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+      precision: 6
+    }
   },
   {
     id: 4,
@@ -38,7 +50,13 @@ export const chains: ChainConfig[] = [
       '0x3b829cfd48e2c7df548cab8af0e42ec788869134',
       '0xdee1031c5d64788976e78d78c63c2fd6b411c4ee',
       '0x74c9ea159f5f613f1f70f45f1fc1b5691f9cb97b'
-    ]
+    ],
+    balancer: {
+      subgraphUrl: '',
+      subgraphBackupUrl: '',
+      weth: '',
+      precision: 6
+    }
   },
   {
     id: 42,
@@ -46,7 +64,13 @@ export const chains: ChainConfig[] = [
     infuraAddress: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     nfyAddress: '0x1528f3fcc26d13f7079325fb78d9442607781c8c',
     nftfyAddress: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
-    erc721Addresses: ['0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3']
+    erc721Addresses: ['0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3'],
+    balancer: {
+      subgraphUrl: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-kovan',
+      subgraphBackupUrl: 'https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange-kovan/pools',
+      weth: '0xd0A1E359811322d97991E03f863a0C30C2cF029C',
+      precision: 6
+    }
   }
 ]
 

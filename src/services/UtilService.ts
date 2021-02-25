@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/react'
 import axios from 'axios'
+import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import erc721Abi from '../abi/erc721.json'
@@ -23,6 +24,7 @@ export default function paginator<T>(items: T[], current_page: number, per_page_
     data: paginatedItems
   }
 }
+
 export const getErc721Metadata = async (address: string, tokenId: string, web3: Web3) => {
   const contractErc2721 = new web3.eth.Contract(erc721Abi as AbiItem[], address)
   const tokenUri = await contractErc2721.methods.tokenURI(tokenId).call()
@@ -41,4 +43,10 @@ export const getErc721Metadata = async (address: string, tokenId: string, web3: 
   }
 
   return { description: '', image_url: '', name: '', address, tokenId }
+}
+
+export function scale(input: BigNumber, decimalPlaces: number): BigNumber {
+  const scalePow = new BigNumber(decimalPlaces.toString())
+  const scaleMul = new BigNumber(10).pow(scalePow)
+  return input.times(scaleMul)
 }

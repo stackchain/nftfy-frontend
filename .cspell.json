@@ -23,6 +23,7 @@
     "bignumber",
     "jazzicon",
     "IERC",
-    "BLOCKIE"
+    "BLOCKIE",
+    "ethersproject"
   ]
 }
