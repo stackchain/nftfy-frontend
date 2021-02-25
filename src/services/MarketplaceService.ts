@@ -192,8 +192,9 @@ export async function balancerAssetQuote(
         slippage = slippageNumber.isNegative() ? 0.00001 : slippageNumber.toNumber()
       }
 
-      console.log('Result IN', exitAmount, slippage)
-      return { tradeSwaps, exitAmount, slippage }
+      // eslint-disable-next-line no-console
+      console.log('swapExactIn', exitAmount, slippage, tradeSwaps)
+      return { exitAmount, slippage, tradeSwaps }
     }
     if (swapType === 'swapExactOut' && sor) {
       const assetOutAmountRaw = new BigNumber(amount)
@@ -215,8 +216,9 @@ export async function balancerAssetQuote(
         slippage = slippageNumber.isNegative() ? 0.00001 : slippageNumber.toNumber()
       }
 
-      console.log('Result OUT', tradeSwaps, exitAmount, slippage)
-      return { tradeSwaps, exitAmount, slippage }
+      // eslint-disable-next-line no-console
+      console.log('swapExactOut', exitAmount, slippage, tradeSwaps)
+      return { exitAmount, slippage, tradeSwaps }
     }
   }
 
