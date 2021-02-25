@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import imageNft from '../assets/nftImage/catFrost.png'
 import { NftImage } from '../components/marketplace/details/NftImage'
@@ -6,9 +7,26 @@ import { NftInfoDetails } from '../components/marketplace/details/NftInfoDetails
 import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetails'
 import { SecuritizeERC721 } from '../components/securitize/SecuritizeERC721'
 import { Footer, Header } from '../components/shared/layout'
+import { getNftWalletErc721Item } from '../services/WalletService'
 import { colors, viewport } from '../styles/variables'
+import { WalletErc721Item } from '../types/WalletTypes'
 
 export default function CollectionDetailsPage() {
+  const { address, tokenId } = useParams<{ address: string | undefined; tokenId: string }>()
+  const [erc721, setErc721] = useState<WalletErc721Item | undefined>(undefined)
+
+  useEffect(() => {
+    const getNfts = async () => {
+      if (address) {
+        const nft = await getNftWalletErc721Item(address, tokenId)
+        setErc721(nft)
+      }
+    }
+    getNfts()
+  }, [address, tokenId])
+
+  if (!erc721) return <></>
+
   return (
     <S.Collection>
       <Header />
@@ -16,17 +34,22 @@ export default function CollectionDetailsPage() {
         <S.Content>
           <S.Info>
             <S.MobileTitle>
-              <TitleNftDetails name='Name test' symbol='test' created='moon cat 88' />
+              <TitleNftDetails name={erc721.name} symbol={erc721.symbol} created='moon cat 88' />
             </S.MobileTitle>
             <S.Image>
-              <NftImage name='cat frost' image={imageNft} />
+              <NftImage name={erc721.name} image={imageNft} />
             </S.Image>
             <S.Details>
               <S.DesktopTitle>
-                <TitleNftDetails name='Name Test' symbol='test' created='moon cat 88' />
+                <TitleNftDetails name={erc721.name} symbol={erc721.symbol} created='moon cat 88' />
               </S.DesktopTitle>
-              <NftInfoDetails contractName='CryptoKitties' contractAddress='0xfbee74b7d' tokenId='1992671' details='details text' />
-              <SecuritizeERC721 />
+              <NftInfoDetails
+                contractName={erc721.name}
+                contractAddress={erc721.address}
+                tokenId={erc721.tokenId}
+                details={erc721.description != null ? erc721.description : ''}
+              />
+              <SecuritizeERC721 erc721Address={erc721.address} erc721AddressId={Number(erc721.tokenId)} />
             </S.Details>
           </S.Info>
         </S.Content>

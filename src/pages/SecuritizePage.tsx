@@ -40,32 +40,35 @@ export default function SecuritizePage({ location }: RouteProps) {
     getNfts()
   }, [currentLimit, currentPage, location, account])
 
+  if (!nfts)
+    return (
+      <>
+        <S.EmptyNft>
+          <img src={iconEmpty} alt='Empty' />
+          <span>Você não tem nenhum ERC721</span>
+          <small>Para comprar seu primeiro Token Erc721 acesse o link abaixo</small>
+          <S.ButtonExploreEmpty href='/marketplace'>Explore</S.ButtonExploreEmpty>
+        </S.EmptyNft>
+      </>
+    )
+
   return (
     <>
       <Header />
       <S.Main>
         <S.Content>
           <S.SortFilter />
-          {nfts.length === 0 ? (
-            <S.EmptyNft>
-              <img src={iconEmpty} alt='Empty' />
-              <span>Você não tem nenhum ERC721</span>
-              <small>Para comprar seu primeiro Token Erc721 acesse o link abaixo</small>
-              <S.ButtonExploreEmpty href='/marketplace'>Explore</S.ButtonExploreEmpty>
-            </S.EmptyNft>
-          ) : (
-            <S.CardsContainer>
-              {nfts.map(nftItem => (
-                <NftCard
-                  key={`${nftItem.address}`}
-                  image={`${nftItem.image_url}`}
-                  name={nftItem.name}
-                  price={0}
-                  url={`/securitize/${nftItem.address}/${nftItem.tokenId}`}
-                />
-              ))}
-            </S.CardsContainer>
-          )}
+          <S.CardsContainer>
+            {nfts.map(nftItem => (
+              <NftCard
+                key={`${nftItem.address}`}
+                image={`${nftItem.image_url}`}
+                name={nftItem.name}
+                price={0}
+                url={`/securitize/${nftItem.address}/${nftItem.tokenId}`}
+              />
+            ))}
+          </S.CardsContainer>
         </S.Content>
       </S.Main>
       {totalPages && <S.Pagination total={totalPages} limit={currentLimit} defaultCurrent={currentPage} onChange={paginate} />}

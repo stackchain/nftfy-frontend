@@ -1,10 +1,52 @@
-import { Tooltip } from 'antd'
-import React from 'react'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Spin, Tooltip } from 'antd'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import iconInfo from '../../assets/icons/info.svg'
+import { approveErc721, isApprovedErc721, securitizeErc721 } from '../../services/NftfyService'
 import { colors, fonts, viewport } from '../../styles/variables'
 
-export const SecuritizeERC721: React.FC = () => {
+export interface securitizeErc721Props {
+  erc721Address: string
+  erc721AddressId: number
+}
+
+export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Address, erc721AddressId }: securitizeErc721Props) => {
+  const [approved, setApproved] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [exitPrice, setExitPrice] = useState('100000000000000000')
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
+  const sharesCount = '100000000000000000'
+  const tokenETH = '0x0000000000000000000000000000000000000000'
+
+  useEffect(() => {
+    const statusApprove = async () => {
+      if (erc721Address && erc721AddressId) {
+        const statusApproved = await isApprovedErc721(erc721Address, erc721AddressId)
+        setApproved(statusApproved)
+      }
+    }
+    statusApprove()
+  }, [erc721Address, erc721AddressId, approved])
+
+  const getApprove = async () => {
+    setLoading(true)
+    if (erc721Address && erc721AddressId) {
+      await approveErc721(erc721Address, erc721AddressId)
+      const statusApproved = await isApprovedErc721(erc721Address, erc721AddressId)
+      setApproved(statusApproved)
+    }
+    setLoading(false)
+  }
+
+  const setSecuritizeErc721 = async () => {
+    setLoading(true)
+    if (approved) {
+      await securitizeErc721(erc721Address, erc721AddressId, sharesCount, 0, exitPrice, tokenETH, false)
+    }
+    setLoading(false)
+  }
+
   return (
     <S.Content>
       <S.Title>
@@ -18,7 +60,7 @@ export const SecuritizeERC721: React.FC = () => {
               <img src={iconInfo} alt='info' />
             </Tooltip>
           </S.Label>
-          <input type='text' />
+          <input type='text' value={1000000} disabled />
         </S.FormControl>
 
         <S.FormControlPrice>
@@ -30,13 +72,17 @@ export const SecuritizeERC721: React.FC = () => {
           </S.Label>
           <div>
             <select name='' id=''>
-              <option value='#'>ETH</option>
+              <option value='0x0000000000000000000000000000000000000000'>ETH</option>
             </select>
-            <input type='text' />
+            <input type='number' onChange={e => setExitPrice(e.target.value)} defaultValue='0.01' />
           </div>
         </S.FormControlPrice>
         <S.Action>
-          <S.ButtonSecuritize>Securitize</S.ButtonSecuritize>
+          {approved === false ? (
+            <S.ButtonSecuritize onClick={getApprove}>{loading ? <Spin indicator={antIcon} /> : 'Unlock'}</S.ButtonSecuritize>
+          ) : (
+            <S.ButtonSecuritize onClick={setSecuritizeErc721}>{loading ? <Spin indicator={antIcon} /> : 'Securitize'}</S.ButtonSecuritize>
+          )}
         </S.Action>
       </S.Form>
     </S.Content>
@@ -188,9 +234,12 @@ const S = {
     justify-content: center;
     margin-top: 20px;
   `,
-  ButtonSecuritize: styled.button`
+  ButtonSecuritize: styled.a`
     width: 209px;
     height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     outline: none;
     border: none;
     background: ${colors.blue1};
@@ -201,5 +250,9 @@ const S = {
     font-size: 16px;
     line-height: 24px;
     color: ${colors.white};
+    &:hover {
+      background: ${colors.blue2};
+      color: ${colors.white};
+    }
   `
 }

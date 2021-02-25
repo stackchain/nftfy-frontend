@@ -418,6 +418,18 @@ export const getNfyBalance = async (walletAddress: string): Promise<{ balance: n
   return { balance: Number(balance) / 10 ** 18 }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const getNftWalletErc721Item = async (address: string, tokenId: string): Promise<WalletErc721Item> => {
+  return {
+    address,
+    tokenId,
+    name: 'Cat Frost',
+    description: 'description',
+    symbol: 'CFT',
+    image_url: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg'
+  }
+}
+
 export const getERC20SharesByAddress = async (walletAddress: string, erc20Address: string): Promise<WalletERC20Share | undefined> => {
   const web3 = initializeWeb3('infura')
 
