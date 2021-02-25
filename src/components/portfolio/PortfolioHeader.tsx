@@ -1,12 +1,19 @@
+import { useReactiveVar } from '@apollo/client'
 import React from 'react'
 import styled from 'styled-components'
-import { colors } from '../../styles/variables'
+import { accountVar } from '../../graphql/variables/WalletVariable'
+import { colors, viewport } from '../../styles/variables'
 
 export interface PortfolioHeaderProps {
   totalValue: string
   className?: string
 }
 export const PortfolioHeader: React.FC<PortfolioHeaderProps> = ({ className, totalValue }: PortfolioHeaderProps) => {
+  const account = useReactiveVar(accountVar)
+
+  // TODO: Implement Empty
+  if (!account) return <></>
+
   return (
     <S.PortfolioHeader className={className}>
       <S.ContentTitle>
@@ -43,6 +50,9 @@ export const S = {
     margin: 0;
 
     color: ${colors.gray2};
+    @media (max-width: ${viewport.md}) {
+      font-size: 28px;
+    }
   `,
   H2Title: styled.h2`
     font-family: Montserrat;
@@ -53,6 +63,9 @@ export const S = {
     margin: 0;
 
     color: ${colors.gray2};
+    @media (max-width: ${viewport.md}) {
+      font-size: 18px;
+    }
   `,
   ContentValues: styled.div`
     display: flex;
@@ -68,6 +81,9 @@ export const S = {
     line-height: 46px;
 
     color: ${colors.gray2};
+    @media (max-width: ${viewport.md}) {
+      font-size: 34px;
+    }
   `,
   SpanAcquiredValue: styled.span`
     font-family: Montserrat;
@@ -77,5 +93,8 @@ export const S = {
     line-height: 24px;
 
     color: ${colors.green};
+    @media (max-width: ${viewport.md}) {
+      font-size: 15px;
+    }
   `
 }
