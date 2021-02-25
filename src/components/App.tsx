@@ -7,6 +7,7 @@ import { graphQlClient } from '../graphql/ClientGraphql'
 import { accountVar, chainIdVar, connectWalletModalVar } from '../graphql/variables/WalletVariable'
 import FallbackPage from '../pages/FallbackPage'
 import Routes from '../routes/Routes'
+import { balancerSyncPools } from '../services/MarketplaceService'
 import { walletAutoConnect } from '../services/WalletService'
 import '../styles/fonts.css'
 import '../styles/reset.css'
@@ -19,6 +20,7 @@ export default function App() {
 
   useEffect(() => {
     walletAutoConnect()
+    balancerSyncPools()
   }, [])
 
   return (

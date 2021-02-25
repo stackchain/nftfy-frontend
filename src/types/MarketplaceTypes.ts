@@ -13,3 +13,11 @@ export interface MarketplaceERC20Item {
     symbol: string
   }
 }
+export interface ERC20Asset {
+  id: string
+  name: string
+  symbol: string
+  address: string
+  decimals: number
+  imageUrl: string
+}
