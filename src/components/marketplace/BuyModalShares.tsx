@@ -20,6 +20,7 @@ export function BuyModalShares() {
   })
 
   const [assetInAmount, setAssetInAmount] = useState('')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [tradeSwapsIn, setTradeSwapsIn] = useState<Swap[][]>([])
 
   const handleAssetInAmount = async (event: ChangeEvent<HTMLInputElement>) => {
