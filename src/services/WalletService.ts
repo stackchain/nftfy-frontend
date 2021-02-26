@@ -414,7 +414,7 @@ export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20
   return erc20WithMetadata
 }
 export const getNfyBalance = async (walletAddress: string): Promise<{ balance: number }> => {
-  const web3 = initializeWeb3('metamask')
+  const web3 = initializeWeb3('infura')
 
   const contractNfy = new web3.eth.Contract(erc20SharesAbi as AbiItem[], nfyAddress)
   const balance = await contractNfy.methods.balanceOf(walletAddress).call()
