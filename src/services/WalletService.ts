@@ -433,7 +433,7 @@ export const getNftWalletErc721Item = async (address: string, tokenId: string): 
 }
 
 export const getERC20SharesByAddress = async (walletAddress: string, erc20Address: string): Promise<WalletERC20Share | undefined> => {
-  const web3 = initializeWeb3('infura')
+  const web3 = initializeWeb3('metamask')
 
   const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
 
