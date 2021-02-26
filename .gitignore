@@ -23,8 +23,4 @@ yarn-error.log*
 .eslintcache
 .firebase
 
-debug.log
-
-
-.env*
 
