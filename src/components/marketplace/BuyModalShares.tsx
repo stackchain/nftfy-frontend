@@ -1,10 +1,11 @@
+import { Swap } from '@balancer-labs/sor/dist/types'
 import { Button, Input } from 'antd'
 import { ChangeEvent, useState } from 'react'
 import styled from 'styled-components'
 import arrowDown from '../../assets/arrowDown.svg'
 import switchTopDown from '../../assets/switchTopDown.svg'
 import ethereum from '../../assets/tokens/ethereum.svg'
-import { balancerAssetQuote } from '../../services/MarketplaceService'
+import { balancerAssetQuote } from '../../services/BalancerService'
 import { colors, fonts, viewport } from '../../styles/variables'
 import { ERC20Asset } from '../../types/MarketplaceTypes'
 
@@ -19,6 +20,7 @@ export function BuyModalShares() {
   })
 
   const [assetInAmount, setAssetInAmount] = useState('')
+  const [tradeSwapsIn, setTradeSwapsIn] = useState<Swap[][]>([])
 
   const handleAssetInAmount = async (event: ChangeEvent<HTMLInputElement>) => {
     setAssetInAmount(event.target.value)
@@ -34,8 +36,10 @@ export function BuyModalShares() {
 
     if (quoteResult) {
       setAssetOutAmount(quoteResult?.exitAmount)
+      setTradeSwapsIn(quoteResult.tradeSwaps)
     } else {
       setAssetOutAmount('0')
+      setTradeSwapsIn([])
     }
   }
 
@@ -49,6 +53,7 @@ export function BuyModalShares() {
   })
 
   const [assetOutAmount, setAssetOutAmount] = useState('')
+  // const [tradeSwapsOut, setTradeSwapsOut] = useState<Swap[][]>([])
 
   const handleAssetOutAmount = async (event: ChangeEvent<HTMLInputElement>) => {
     setAssetOutAmount(event.target.value)
@@ -64,9 +69,16 @@ export function BuyModalShares() {
 
     if (quoteResult) {
       setAssetInAmount(quoteResult?.exitAmount)
+      // setTradeSwapsOut(quoteResult.tradeSwaps)
     } else {
       setAssetInAmount('0')
+      // setTradeSwapsOut([])
     }
+  }
+
+  const swapIn = () => {
+    // eslint-disable-next-line no-console
+    console.log('Swap')
   }
 
   return (
@@ -132,7 +144,7 @@ export function BuyModalShares() {
         </div>
       </S.SharesTo>
       <S.SharesUnlock>
-        <S.ActionButton>Unlock</S.ActionButton>
+        <S.ActionButton onClick={swapIn}>Unlock</S.ActionButton>
       </S.SharesUnlock>
     </S.SharesContent>
   )
