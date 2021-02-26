@@ -320,7 +320,7 @@ export const getWalletItems = async (walletAddress: string): Promise<WalletItem[
 
   return items
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20Share[]> => {
   const web3 = initializeWeb3('infura')
 
@@ -368,8 +368,12 @@ export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20
     const wrapper = await contractErc20Shares.methods.wrapper().call()
     const released = await contractErc20Shares.methods.released().call()
     const vaultBalanceWallet = Number(await contractErc20Shares.methods.vaultBalanceOf(walletAddress).call())
+    const wrappedErc721Address = await contractErc20Shares.methods.wrapper().call()
+    const contractErc721Wrapped = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], wrappedErc721Address)
 
-    const { description, image_url, address, name } = await getErc721Metadata(erc20Address, tokenId, web3)
+    const erc721Address = await contractErc721Wrapped.methods.target().call()
+
+    const { description, image_url, address, name } = await getErc721Metadata(erc721Address, tokenId, web3)
 
     return {
       address: erc20Address,
@@ -417,8 +421,6 @@ export const getNfyBalance = async (walletAddress: string): Promise<{ balance: n
 
   return { balance: Number(balance) / 10 ** 18 }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getNftWalletErc721Item = async (address: string, tokenId: string): Promise<WalletErc721Item> => {
   return {
     address,
