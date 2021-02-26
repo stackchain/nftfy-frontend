@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { claimModalVar } from '../../graphql/variables/PortfolioVariable'
 import { accountVar } from '../../graphql/variables/WalletVariable'
-import { getERC20Shares } from '../../services/WalletService'
 import { colors, viewport } from '../../styles/variables'
 import { WalletERC20Share } from '../../types/WalletTypes'
 import { Erc20ShareNotFound } from './Erc20ShareNotFound'
 import { LoadingMobileSkeleton } from './LoadingMobileSkeleton'
 
 export const PortfolioContentMobile: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [erc20share, setErc20share] = useState<WalletERC20Share[]>([])
   const [loading, setLoading] = useState(true)
   const { Panel } = Collapse
@@ -19,8 +19,8 @@ export const PortfolioContentMobile: React.FC = () => {
   useEffect(() => {
     const getErc721 = async () => {
       if (account) {
-        const nfts = await getERC20Shares(account)
-        setErc20share(nfts)
+        // const nfts = await getERC20Shares(account)
+        // setErc20share(nfts)
         setLoading(false)
       } else {
         setLoading(false)
