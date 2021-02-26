@@ -1,7 +1,5 @@
-import { useReactiveVar } from '@apollo/client'
 import React from 'react'
 import styled from 'styled-components'
-import { accountVar } from '../../graphql/variables/WalletVariable'
 import { colors, viewport } from '../../styles/variables'
 
 export interface PortfolioHeaderProps {
@@ -9,11 +7,6 @@ export interface PortfolioHeaderProps {
   className?: string
 }
 export const PortfolioHeader: React.FC<PortfolioHeaderProps> = ({ className, totalValue }: PortfolioHeaderProps) => {
-  const account = useReactiveVar(accountVar)
-
-  // TODO: Implement Empty
-  if (!account) return <></>
-
   return (
     <S.PortfolioHeader className={className}>
       <S.ContentTitle>

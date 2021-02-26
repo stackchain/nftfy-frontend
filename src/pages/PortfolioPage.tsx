@@ -18,6 +18,7 @@ export default function PortfolioPage() {
   useEffect(() => {
     const getErc20shares = async () => {
       if (account) {
+        setLoading(true)
         const nfts = await getERC20Shares(account)
         setErc20share(nfts)
         setLoading(false)
@@ -33,7 +34,7 @@ export default function PortfolioPage() {
       <Header />
       <S.Main>
         <S.PortfolioWrapper>
-          <S.PortfolioHeader totalValue='3,861.7 2' />
+          {account && <S.PortfolioHeader totalValue='3,861.7 2' />}
           <S.PortfolioContent erc20share={erc20share} loading={!!loading} account={!!account} />
         </S.PortfolioWrapper>
       </S.Main>
