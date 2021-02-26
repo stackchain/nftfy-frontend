@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import arrowDown from '../../assets/arrowDown.svg'
 import switchTopDown from '../../assets/switchTopDown.svg'
 import ethereum from '../../assets/tokens/ethereum.svg'
-import { balancerAssetQuote, balancerSwapIn } from '../../services/BalancerService'
+import { balancerAssetQuote, balancerSwapIn, balancerSwapOut } from '../../services/BalancerService'
 import { scale } from '../../services/UtilService'
 import { colors, fonts, viewport } from '../../styles/variables'
 import { ERC20Asset } from '../../types/MarketplaceTypes'
@@ -56,7 +56,7 @@ export function BuyModalShares() {
   })
 
   const [assetOutAmount, setAssetOutAmount] = useState('')
-  // const [tradeSwapsOut, setTradeSwapsOut] = useState<Swap[][]>([])
+  const [tradeSwapsOut, setTradeSwapsOut] = useState<Swap[][]>([])
 
   const handleAssetOutAmount = async (event: ChangeEvent<HTMLInputElement>) => {
     setAssetOutAmount(event.target.value)
@@ -72,10 +72,10 @@ export function BuyModalShares() {
 
     if (quoteResult) {
       setAssetInAmount(quoteResult?.exitAmount)
-      // setTradeSwapsOut(quoteResult.tradeSwaps)
+      setTradeSwapsOut(quoteResult.tradeSwaps)
     } else {
       setAssetInAmount('0')
-      // setTradeSwapsOut([])
+      setTradeSwapsOut([])
     }
   }
 
@@ -86,6 +86,15 @@ export function BuyModalShares() {
       scale(new BigNumber(assetInAmount), assetIn.decimals).toString(),
       scale(new BigNumber(assetOutAmount), assetOut.decimals).toString(),
       tradeSwapsIn
+    )
+  }
+
+  const swapOut = async () => {
+    await balancerSwapOut(
+      assetIn.address,
+      assetOut.address,
+      scale(new BigNumber(assetInAmount), assetIn.decimals).toString(),
+      tradeSwapsOut
     )
   }
 
@@ -152,7 +161,8 @@ export function BuyModalShares() {
         </div>
       </S.SharesTo>
       <S.SharesUnlock>
-        <S.ActionButton onClick={swapIn}>Unlock</S.ActionButton>
+        <S.ActionButton onClick={swapIn}>Swap In</S.ActionButton>
+        <S.ActionButton onClick={swapOut}>Swap Out</S.ActionButton>
       </S.SharesUnlock>
     </S.SharesContent>
   )

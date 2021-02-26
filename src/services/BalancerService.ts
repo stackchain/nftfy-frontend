@@ -98,12 +98,11 @@ export async function balancerSwapIn(
   tradeSwaps: Swap[][]
 ) {
   try {
+    const { balancer } = getConfigByChainId(chainIdVar())
+    const slippageBufferRate = 0.005
+
     const provider = new ethers.providers.Web3Provider(window.ethereum as ExternalProvider)
     const signer = provider.getSigner()
-
-    const { balancer } = getConfigByChainId(chainIdVar())
-
-    const slippageBufferRate = 0.005
 
     const assetOutAmountMin = new BigNumber(assetOutAmount)
       .div(1 + slippageBufferRate)
@@ -125,6 +124,34 @@ export async function balancerSwapIn(
       assetOutAmountMin,
       overrides
     )
+  } catch (error) {
+    notifyError(code[5011], error)
+  }
+
+  return undefined
+}
+
+export async function balancerSwapOut(assetInAddress: string, assetOutAddress: string, assetInAmount: string, tradeSwaps: Swap[][]) {
+  try {
+    const { balancer } = getConfigByChainId(chainIdVar())
+    const slippageBufferRate = 0.005
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum as ExternalProvider)
+    const signer = provider.getSigner()
+
+    const assetInAmountMax = new BigNumber(assetInAmount)
+      .times(1 + slippageBufferRate)
+      .integerValue(BigNumber.ROUND_DOWN)
+      .toString()
+
+    const overrides = {}
+
+    const exchangeProxyContract = new Contract(balancer.addresses.exchangeProxy, exchangeProxyAbi, signer)
+
+    // eslint-disable-next-line no-console
+    console.log('balancerSwapOut', tradeSwaps, assetInAddress, assetOutAddress, assetInAmountMax, overrides)
+
+    return await exchangeProxyContract.multihopBatchSwapExactOut(tradeSwaps, assetInAddress, assetOutAddress, assetInAmountMax, overrides)
   } catch (error) {
     notifyError(code[5011], error)
   }
