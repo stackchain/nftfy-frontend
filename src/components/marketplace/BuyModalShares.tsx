@@ -1,22 +1,24 @@
 import { Swap } from '@balancer-labs/sor/dist/types'
 import { Button, Input } from 'antd'
+import BigNumber from 'bignumber.js'
 import { ChangeEvent, useState } from 'react'
 import styled from 'styled-components'
 import arrowDown from '../../assets/arrowDown.svg'
 import switchTopDown from '../../assets/switchTopDown.svg'
 import ethereum from '../../assets/tokens/ethereum.svg'
-import { balancerAssetQuote } from '../../services/BalancerService'
+import { balancerAssetQuote, balancerSwapIn } from '../../services/BalancerService'
+import { scale } from '../../services/UtilService'
 import { colors, fonts, viewport } from '../../styles/variables'
 import { ERC20Asset } from '../../types/MarketplaceTypes'
 
 export function BuyModalShares() {
   const [assetIn] = useState<ERC20Asset>({
-    id: '1',
-    name: 'USD Coin',
-    symbol: 'USDC',
-    address: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
+    id: '2',
+    name: 'Uniswap Coin',
+    symbol: 'UNI',
+    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
     imageUrl: '',
-    decimals: 6
+    decimals: 18
   })
 
   const [assetInAmount, setAssetInAmount] = useState('')
@@ -45,12 +47,12 @@ export function BuyModalShares() {
   }
 
   const [assetOut] = useState<ERC20Asset>({
-    id: '2',
-    name: 'Uniswap Coin',
-    symbol: 'UNI',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+    id: '1',
+    name: 'USD Coin',
+    symbol: 'USDC',
+    address: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
     imageUrl: '',
-    decimals: 18
+    decimals: 6
   })
 
   const [assetOutAmount, setAssetOutAmount] = useState('')
@@ -77,9 +79,14 @@ export function BuyModalShares() {
     }
   }
 
-  const swapIn = () => {
-    // eslint-disable-next-line no-console
-    console.log('Swap')
+  const swapIn = async () => {
+    await balancerSwapIn(
+      assetIn.address,
+      assetOut.address,
+      scale(new BigNumber(assetInAmount), assetIn.decimals).toString(),
+      scale(new BigNumber(assetOutAmount), assetOut.decimals).toString(),
+      tradeSwapsIn
+    )
   }
 
   return (
@@ -158,7 +165,6 @@ export const S = {
       padding: 24px 16px;
     }
   `,
-
   Header: styled.div`
     display: flex;
     flex-direction: row;

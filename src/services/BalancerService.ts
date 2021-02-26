@@ -1,15 +1,15 @@
 import { SOR } from '@balancer-labs/sor'
 import { Swap } from '@balancer-labs/sor/dist/types'
-import { InfuraProvider } from '@ethersproject/providers'
+import { Contract } from '@ethersproject/contracts'
+import { ExternalProvider, InfuraProvider } from '@ethersproject/providers'
 import BigNumber from 'bignumber.js'
-import { AbiItem } from 'web3-utils'
+import { ethers } from 'ethers'
 import exchangeProxyAbi from '../abi/exchangeProxy.json'
 import { getConfigByChainId } from '../config'
-import { accountVar, chainIdVar } from '../graphql/variables/WalletVariable'
+import { chainIdVar } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { notifyError } from './NotificationService'
 import { scale } from './UtilService'
-import { initializeWeb3 } from './WalletService'
 
 let sor: SOR | undefined
 
@@ -98,24 +98,36 @@ export async function balancerSwapIn(
   tradeSwaps: Swap[][]
 ) {
   try {
-    const web3 = initializeWeb3('metamask')
+    const provider = new ethers.providers.Web3Provider(window.ethereum as ExternalProvider)
+    const signer = provider.getSigner()
+
     const { balancer } = getConfigByChainId(chainIdVar())
 
     const slippageBufferRate = 0.005
-    const assetOutAmountMin = new BigNumber(assetOutAmount).div(1 + slippageBufferRate).integerValue(BigNumber.ROUND_DOWN)
 
-    const contractExchangeProxy = new web3.eth.Contract(exchangeProxyAbi as AbiItem[], balancer.addresses.exchangeProxy)
-    contractExchangeProxy.methods
-      .multihopBatchSwapExactIn(
-        '0',
-        tradeSwaps,
-        assetInAddress,
-        assetOutAddress,
-        new BigNumber(assetInAmount).toString(),
-        assetOutAmountMin.toString()
-      )
-      .send({ from: accountVar() })
+    const assetOutAmountMin = new BigNumber(assetOutAmount)
+      .div(1 + slippageBufferRate)
+      .integerValue(BigNumber.ROUND_DOWN)
+      .toString()
+
+    const overrides = {}
+
+    const exchangeProxyContract = new Contract(balancer.addresses.exchangeProxy, exchangeProxyAbi, signer)
+
+    // eslint-disable-next-line no-console
+    console.log('balancerSwapIn', tradeSwaps, assetInAddress, assetOutAddress, assetInAmount, assetOutAmountMin, overrides)
+
+    return await exchangeProxyContract.multihopBatchSwapExactIn(
+      tradeSwaps,
+      assetInAddress,
+      assetOutAddress,
+      assetInAmount,
+      assetOutAmountMin,
+      overrides
+    )
   } catch (error) {
     notifyError(code[5011], error)
   }
+
+  return undefined
 }
