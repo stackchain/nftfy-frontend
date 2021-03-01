@@ -25,6 +25,8 @@
     "IERC",
     "BLOCKIE",
     "ethersproject",
-    "multihop"
+    "multihop",
+    "multicall",
+    "struct"
   ]
 }

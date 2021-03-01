@@ -2,15 +2,11 @@ import { Skeleton, Spin } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 
-export interface LoadingSkeletonProps {
-  loading: boolean
-}
-
-export const LoadingMobileSkeleton: React.FC<LoadingSkeletonProps> = ({ loading }: LoadingSkeletonProps) => {
+export const LoadingMobileSkeleton: React.FC = () => {
   return (
     <>
       <S.PanelHeader>
-        <Spin indicator={<Skeleton.Avatar active size={48} shape='square' />} spinning={loading} />
+        <Spin indicator={<Skeleton.Avatar active size={48} shape='square' />} spinning />
         <S.PanelDivInfo>
           <S.PriceDiv>
             <Skeleton.Input style={{ width: 88 }} active size='small' />

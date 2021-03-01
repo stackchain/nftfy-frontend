@@ -1,19 +1,42 @@
-import React from 'react'
+import { useReactiveVar } from '@apollo/client'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ClaimModal } from '../components/portfolio/ClaimModal'
 import { PortfolioContent } from '../components/portfolio/PortfolioContent'
 import { PortfolioHeader } from '../components/portfolio/PortfolioHeader'
 import { Footer, Header } from '../components/shared/layout'
+import { accountVar } from '../graphql/variables/WalletVariable'
+import { getERC20Shares } from '../services/WalletService'
 import { colors, viewport } from '../styles/variables'
+import { WalletERC20Share } from '../types/WalletTypes'
 
 export default function PortfolioPage() {
+  const [erc20share, setErc20share] = useState<WalletERC20Share[]>([])
+  const [loading, setLoading] = useState(true)
+  const account = useReactiveVar(accountVar)
+
+  useEffect(() => {
+    const getErc20shares = async () => {
+      if (account) {
+        setLoading(true)
+        setErc20share([])
+        const nfts = await getERC20Shares(account)
+        setErc20share(nfts)
+        setLoading(false)
+      } else {
+        setLoading(false)
+      }
+    }
+    getErc20shares()
+  }, [account])
+
   return (
     <>
       <Header />
       <S.Main>
         <S.PortfolioWrapper>
-          <S.PortfolioHeader totalValue='3,861.7 2' />
-          <S.PortfolioContent />
+          {account && <S.PortfolioHeader totalValue='3,861.7 2' loading={!!loading} />}
+          <S.PortfolioContent erc20share={erc20share} loading={!!loading} account={!!account} />
         </S.PortfolioWrapper>
       </S.Main>
       <ClaimModal />
