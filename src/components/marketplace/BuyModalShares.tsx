@@ -1,5 +1,5 @@
 import { Swap } from '@balancer-labs/sor/dist/types'
-import { Button, Input, Skeleton } from 'antd'
+import { Button, Input } from 'antd'
 import BigNumber from 'bignumber.js'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -158,9 +158,7 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
       <S.SharesFrom>
         <div className={assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance) ? 'no-balance' : ''}>
           {`Balance: `}
-          <Skeleton loading={!assetInBalance} paragraph={{ rows: 1 }}>
-            {assetInBalance && assetInBalance.decimalPlaces(5).toString()}
-          </Skeleton>
+          {assetInBalance && assetInBalance.decimalPlaces(5).toString()}
         </div>
         <div>
           <div>From</div>
@@ -192,9 +190,7 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
       <S.SharesTo>
         <div className={assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance) ? 'no-balance' : ''}>
           {`Balance: `}
-          <Skeleton loading={!assetOutBalance} paragraph={{ rows: 1 }}>
-            {assetOutBalance && assetOutBalance.decimalPlaces(5).toString()}
-          </Skeleton>
+          {assetOutBalance && assetOutBalance.decimalPlaces(5).toString()}
         </div>
         <div>
           <div>To</div>
