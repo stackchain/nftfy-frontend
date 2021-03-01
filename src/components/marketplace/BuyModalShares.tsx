@@ -220,14 +220,20 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
           new BigNumber(assetInAmount).isGreaterThan(0) &&
           new BigNumber(assetOutAmount).isGreaterThan(0) &&
           swapType === 'swapExactOut' && <S.ActionButton onClick={swapOut}>Swap Out</S.ActionButton>}
-        {(!assetInAmount || !assetOutAmount) && !swapType && <S.ActionButton disabled>Enter Amount</S.ActionButton>}
-        {!(assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) &&
-          !(assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance)) &&
-          (!new BigNumber(assetInAmount).isGreaterThan(0) || !new BigNumber(assetOutAmount).isGreaterThan(0)) &&
-          swapType && <S.ActionButton disabled>Not Enough Liquidity</S.ActionButton>}
+
+        {!(
+          (assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) ||
+          (assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))
+        ) &&
+          ((swapType === 'swapExactOut' && !new BigNumber(assetInAmount).isGreaterThan(0)) ||
+            (swapType === 'swapExactIn' && !new BigNumber(assetOutAmount).isGreaterThan(0))) &&
+          (new BigNumber(assetInAmount).isGreaterThan(0) || new BigNumber(assetOutAmount).isGreaterThan(0)) && (
+            <S.ActionButton disabled>Not Enough Liquidity</S.ActionButton>
+          )}
         {((assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) ||
           (assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))) &&
           swapType && <S.ActionButton disabled>Not Enough Balance</S.ActionButton>}
+        {(!assetInAmount || !assetOutAmount) && !swapType && <S.ActionButton disabled>Enter Amount</S.ActionButton>}
       </S.SharesUnlock>
     </S.SharesContent>
   )
