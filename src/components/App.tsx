@@ -4,7 +4,7 @@ import 'antd/dist/antd.css'
 import React, { useEffect } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { graphQlClient } from '../graphql/ClientGraphql'
-import { accountVar, chainIdVar, connectWalletModalVar } from '../graphql/variables/WalletVariable'
+import { accountVar, connectWalletModalVar } from '../graphql/variables/WalletVariable'
 import FallbackPage from '../pages/FallbackPage'
 import Routes from '../routes/Routes'
 import { balancerSyncPools } from '../services/BalancerService'
@@ -15,7 +15,6 @@ import { ConnectWalletModal } from './wallet/ConnectWalletModal'
 
 export default function App() {
   const account = useReactiveVar(accountVar)
-  const chainId = useReactiveVar(chainIdVar)
   const connectWalletModal = useReactiveVar(connectWalletModalVar)
 
   useEffect(() => {
@@ -28,7 +27,7 @@ export default function App() {
       <ApolloProvider client={graphQlClient}>
         <Router>
           <Routes />
-          {!account && !chainId && connectWalletModal && <ConnectWalletModal />}
+          {!account && connectWalletModal && <ConnectWalletModal />}
         </Router>
       </ApolloProvider>
     </Sentry.ErrorBoundary>
