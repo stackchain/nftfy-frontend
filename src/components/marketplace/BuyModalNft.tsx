@@ -3,22 +3,26 @@ import styled from 'styled-components'
 import arrowDown from '../../assets/arrowDown.svg'
 import ethereum from '../../assets/tokens/ethereum.svg'
 import { colors, fonts, viewport } from '../../styles/variables'
+import { MarketplaceERC20Item } from '../../types/MarketplaceTypes'
 
-export function BuyModalNft() {
+interface BuyModalNftProps {
+  erc20: MarketplaceERC20Item
+}
+export function BuyModalNft({ erc20 }: BuyModalNftProps) {
+  const { name, symbol } = erc20
+  const { image_url } = erc20.erc721
+
   return (
     <S.NftContent>
       <S.Header>
         <div>
           <h3>
-            BLOCKIE 24
-            <small>KIE</small>
+            {name}
+            <small>{symbol}</small>
           </h3>
         </div>
         <div>
-          <img
-            src='https://lh3.googleusercontent.com/9fhtFiCAKNQfwUMxCs7vTPJTnDj9gWcEB-9TWPwL6cLxgE3DhDP7Kq4Yvs82MU4vutYuZgpc9Mu3l0TGuvAjtZgiUoiXzLKtjM_jpA'
-            alt='Google'
-          />
+          <img src={image_url} alt={`${name} ${symbol}`} />
         </div>
       </S.Header>
       <S.NftExitPrice>

@@ -1,7 +1,9 @@
 import detectEthereumProvider from '@metamask/detect-provider'
+import BigNumber from 'bignumber.js'
 import { flatten } from 'lodash'
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
+import erc20Abi from '../abi/erc20.json'
 import erc20SharesAbi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
 import erc721WrappedAbi from '../abi/erc721wrapped.json'
@@ -11,9 +13,9 @@ import { accountVar, chainIdVar, connectWalletModalVar, nfyVar, setAccount, setC
 import { code } from '../messages'
 import { WalletERC20Item, WalletERC20Share, WalletErc721Item, WalletItem } from '../types/WalletTypes'
 import { notifyError, notifyWarning } from './NotificationService'
-import paginator, { getErc721Metadata } from './UtilService'
+import paginator, { getErc721Metadata, scale } from './UtilService'
 
-const { erc721Addresses, nftfyAddress, nfyAddress, infuraAddress } = getConfigByChainId(chainIdVar() || 1)
+const { erc721Addresses, nftfyAddress, nfyAddress, nfyDecimals, infuraAddress } = getConfigByChainId(chainIdVar() || 1)
 
 export const initializeWeb3 = (provider: 'infura' | 'metamask') => {
   switch (provider) {
@@ -51,8 +53,8 @@ const connect = async () => {
       })
       if (accounts[0]) {
         setAccount(accounts[0])
-        const nfy = await getNfyBalance(accounts[0])
-        nfyVar(nfy.balance)
+        const nfy = await getErc20Balance(accounts[0], nfyAddress, nfyDecimals)
+        nfyVar(nfy.decimalPlaces(3).toString())
       } else {
         notifyError(code[5004])
       }
@@ -103,8 +105,8 @@ const handleAccounts = async (accounts: string[]) => {
     const currentAccount = accountVar()
     currentAccount && accounts[0] !== currentAccount && notifyWarning(code[5008])
     setAccount(accounts[0])
-    const nfy = await getNfyBalance(accounts[0])
-    nfyVar(nfy.balance)
+    const nfy = await getErc20Balance(accounts[0], nfyAddress, nfyDecimals)
+    nfyVar(nfy.decimalPlaces(3).toString())
   } else {
     notifyWarning(code[5007])
     setAccount(undefined)
@@ -413,14 +415,16 @@ export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20
 
   return erc20WithMetadata
 }
-export const getNfyBalance = async (walletAddress: string): Promise<{ balance: number }> => {
+
+export const getErc20Balance = async (walletAddress: string, erc20Address: string, erc20Decimals: number): Promise<BigNumber> => {
   const web3 = initializeWeb3('infura')
 
-  const contractNfy = new web3.eth.Contract(erc20SharesAbi as AbiItem[], nfyAddress)
-  const balance = await contractNfy.methods.balanceOf(walletAddress).call()
+  const contractERC20 = new web3.eth.Contract(erc20Abi as AbiItem[], erc20Address)
+  const balance = await contractERC20.methods.balanceOf(walletAddress).call()
 
-  return { balance: Number(balance) / 10 ** 18 }
+  return scale(new BigNumber(balance), -erc20Decimals)
 }
+
 export const getNftWalletErc721Item = async (address: string, tokenId: string): Promise<WalletErc721Item> => {
   return {
     address,

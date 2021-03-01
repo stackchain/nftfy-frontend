@@ -3,6 +3,7 @@ export interface ChainConfig {
   name: string
   infuraAddress: string
   nfyAddress: string
+  nfyDecimals: number
   nftfyAddress: string
   erc721Addresses: string[]
   balancer: {
@@ -27,6 +28,7 @@ export const chains: ChainConfig[] = [
     name: 'mainnet',
     infuraAddress: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     nfyAddress: '0xc633BAf9fDE99800226C74328024525192294D2b',
+    nfyDecimals: 18,
     nftfyAddress: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
     erc721Addresses: [],
     balancer: {
@@ -49,6 +51,7 @@ export const chains: ChainConfig[] = [
     name: 'rinkeby',
     infuraAddress: `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     nfyAddress: '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea',
+    nfyDecimals: 18,
     nftfyAddress: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
     erc721Addresses: [
       '0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3',
@@ -87,6 +90,7 @@ export const chains: ChainConfig[] = [
     name: 'kovan',
     infuraAddress: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     nfyAddress: '0x1528f3fcc26d13f7079325fb78d9442607781c8c',
+    nfyDecimals: 18,
     nftfyAddress: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
     erc721Addresses: ['0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3'],
     balancer: {
