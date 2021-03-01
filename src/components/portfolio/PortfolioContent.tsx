@@ -28,6 +28,17 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className, e
     connectWalletModalVar(true)
   }
 
+  const loadingShares = []
+  const loadingMobile = []
+
+  for (let i = 1; i <= 4; i += 1) {
+    loadingShares.push(<LoadingSkeleton key={`loading-${i}`} />)
+  }
+
+  for (let i = 1; i <= 4; i += 1) {
+    loadingMobile.push(<LoadingMobileSkeleton key={`loadingMobile-${i}`} />)
+  }
+
   const headerMobile = (erc20Item: WalletERC20Share) => {
     return (
       <S.PanelHeader>
@@ -50,44 +61,46 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className, e
   return (
     <S.Erc720Content className={className}>
       <S.ERC720TableItem>
-        <S.TokenTitle>
-          <S.TokenSpanTitle>ERC20 shares</S.TokenSpanTitle>
-        </S.TokenTitle>
-
-        <S.TitleTable>Price</S.TitleTable>
-        <S.TitleTable>% of Portfolio</S.TitleTable>
-        <S.TitleTable>Balance</S.TitleTable>
-        <S.TitleTable>Value</S.TitleTable>
-        <S.TitleTable>Change</S.TitleTable>
-        <S.TitleTable>Actions</S.TitleTable>
-        {loading && <LoadingSkeleton loading={!!loading} />}
-        {erc20share.map(erc20Item => (
-          <>
-            <S.DivImage key={`erc20share-${erc20Item.address}`}>
-              <S.ImageToken src={erc20Item.erc721.imageUrl} />
-              <S.Erc20SpanTable hidden={!!loading}>
-                {`${erc20Item.name} `}
-                <S.Symbol>{erc20Item.symbol}</S.Symbol>
-              </S.Erc20SpanTable>
-            </S.DivImage>
-            <S.DivErc20>
-              <S.Erc20SpanTable>{`$${erc20Item.financial.price}`}</S.Erc20SpanTable>
-            </S.DivErc20>
-            <S.DivErc20>
-              <S.Erc20SpanTable>0%</S.Erc20SpanTable>
-            </S.DivErc20>
-            <S.DivErc20>
-              <S.Erc20SpanTable>{erc20Item.balance}</S.Erc20SpanTable>
-            </S.DivErc20>
-            <S.DivErc20>
-              <S.Erc20SpanTable>{`$${erc20Item.financial.balanceDollar}`}</S.Erc20SpanTable>
-            </S.DivErc20>
-            <S.DivErc20>
-              <S.Erc20SpanTable className={returnColor(erc20Item.financial.change)}>{`${erc20Item.financial.change}%`}</S.Erc20SpanTable>
-            </S.DivErc20>
-            <S.DivErc20>{erc20Item.released && <S.Claim onClick={() => claimModalVar(erc20Item)}>Claim</S.Claim>}</S.DivErc20>
-          </>
-        ))}
+        <S.PanelHeaderTable>
+          <S.TokenTitle>
+            <S.TokenSpanTitle>ERC20 shares</S.TokenSpanTitle>
+          </S.TokenTitle>
+          <S.TitleTable>Price</S.TitleTable>
+          <S.TitleTable>% of Portfolio</S.TitleTable>
+          <S.TitleTable>Balance</S.TitleTable>
+          <S.TitleTable>Value</S.TitleTable>
+          <S.TitleTable>Change</S.TitleTable>
+          <S.TitleTable>Actions</S.TitleTable>
+          {loading && loadingShares}
+        </S.PanelHeaderTable>
+        {account &&
+          erc20share.map(erc20Item => (
+            <S.PanelContentTable key={`erc20share-${erc20Item.address}`}>
+              <S.DivImage>
+                <S.ImageToken src={erc20Item.erc721.imageUrl} />
+                <S.Erc20SpanTable hidden={!!loading}>
+                  {`${erc20Item.name} `}
+                  <S.Symbol>{erc20Item.symbol}</S.Symbol>
+                </S.Erc20SpanTable>
+              </S.DivImage>
+              <S.DivErc20>
+                <S.Erc20SpanTable>{`$${erc20Item.financial.price}`}</S.Erc20SpanTable>
+              </S.DivErc20>
+              <S.DivErc20>
+                <S.Erc20SpanTable>0%</S.Erc20SpanTable>
+              </S.DivErc20>
+              <S.DivErc20>
+                <S.Erc20SpanTable>{erc20Item.balance}</S.Erc20SpanTable>
+              </S.DivErc20>
+              <S.DivErc20>
+                <S.Erc20SpanTable>{`$${erc20Item.financial.balanceDollar}`}</S.Erc20SpanTable>
+              </S.DivErc20>
+              <S.DivErc20>
+                <S.Erc20SpanTable className={returnColor(erc20Item.financial.change)}>{`${erc20Item.financial.change}%`}</S.Erc20SpanTable>
+              </S.DivErc20>
+              <S.DivErc20>{erc20Item.released && <S.Claim onClick={() => claimModalVar(erc20Item)}>Claim</S.Claim>}</S.DivErc20>
+            </S.PanelContentTable>
+          ))}
       </S.ERC720TableItem>
       <S.ERC20TableItemMobile>
         <S.TokenTitle>
@@ -95,10 +108,10 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className, e
         </S.TokenTitle>
         <S.ERC20ContentMobile>
           <S.Collapse expandIconPosition='right' ghost>
-            {loading && <LoadingMobileSkeleton loading={loading} />}
+            {loading && loadingMobile}
             {account &&
               erc20share.map(erc20Item => (
-                <Panel header={headerMobile(erc20Item)} key={`erc20share-${erc20Item.address}`}>
+                <Panel header={headerMobile(erc20Item)} key={`erc20shareMobile-${erc20Item.address}`}>
                   <S.PanelContentItems>
                     <S.PanelContentTitle>Details</S.PanelContentTitle>
                     <S.PanelContent>
@@ -127,7 +140,7 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className, e
         <S.Erc20ShareNotFound className={className}>
           <S.H1>You have no ERC20 shares!</S.H1>
           <S.Span>To buy your first Erc20 Shares Token access the link below</S.Span>
-          <S.LinkItem to='/portfolio'>
+          <S.LinkItem to='/marketplace'>
             <S.Button>Explore</S.Button>
           </S.LinkItem>
         </S.Erc20ShareNotFound>
@@ -149,13 +162,23 @@ export const S = {
   `,
   ERC720TableItem: styled.div`
     flex: 1;
+    @media (max-width: ${viewport.md}) {
+      display: none;
+    }
+  `,
+  PanelHeaderTable: styled.div`
+    flex: 1;
     margin-bottom: 18px;
     display: grid;
     grid-template-columns: 4fr 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 16px 0px;
-    @media (max-width: ${viewport.md}) {
-      display: none;
-    }
+  `,
+  PanelContentTable: styled.div`
+    flex: 1;
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 16px 0px;
   `,
   TokenTitle: styled.div``,
   TokenSpanTitle: styled.span`
@@ -267,6 +290,7 @@ export const S = {
     .ant-collapse-header {
       padding: 0 !important;
     }
+
     .ant-collapse-content > .ant-collapse-content-box {
       padding: 0px 16px 0px 0px;
     }

@@ -1,3 +1,4 @@
+import { Skeleton } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 import { colors, viewport } from '../../styles/variables'
@@ -5,17 +6,34 @@ import { colors, viewport } from '../../styles/variables'
 export interface PortfolioHeaderProps {
   totalValue: string
   className?: string
+  loading: boolean
 }
-export const PortfolioHeader: React.FC<PortfolioHeaderProps> = ({ className, totalValue }: PortfolioHeaderProps) => {
+export const PortfolioHeader: React.FC<PortfolioHeaderProps> = ({ className, totalValue, loading }: PortfolioHeaderProps) => {
+  const titleStylePortFolio = {
+    width: '130px',
+    height: '38px',
+    margin: 0
+  }
+
+  const titleStyleValue = {
+    width: '66px',
+    height: '38px',
+    margin: 0
+  }
+
   return (
     <S.PortfolioHeader className={className}>
-      <S.ContentTitle>
-        <S.H1Title>Portfolio</S.H1Title>
-        <S.H2Title>Assets</S.H2Title>
-      </S.ContentTitle>
+      <Skeleton loading={loading} active title={{ style: titleStylePortFolio }} paragraph={{ rows: 1 }}>
+        <S.ContentTitle>
+          <S.H1Title>Portfolio</S.H1Title>
+          <S.H2Title>Assets</S.H2Title>
+        </S.ContentTitle>
+      </Skeleton>
       <S.ContentValues>
-        <S.SpanTotalValue>{`$${totalValue}`}</S.SpanTotalValue>
-        <S.SpanAcquiredValue>+2.7%($102.89)</S.SpanAcquiredValue>
+        <Skeleton loading={loading} active title={{ style: titleStyleValue }} paragraph={{ rows: 1 }}>
+          <S.SpanTotalValue>{`$${totalValue}`}</S.SpanTotalValue>
+          <S.SpanAcquiredValue>+2.7%($102.89)</S.SpanAcquiredValue>
+        </Skeleton>
       </S.ContentValues>
     </S.PortfolioHeader>
   )
@@ -27,6 +45,13 @@ export const S = {
     flex-direction: row;
     justify-content: space-between;
     background: ${colors.white};
+    .ant-skeleton-content .ant-skeleton-paragraph > li {
+      width: 66px !important;
+      height: 28px !important;
+    }
+    .ant-skeleton-content .ant-skeleton-title + .ant-skeleton-paragraph {
+      margin-top: 9px;
+    }
   `,
   ContentTitle: styled.div`
     display: flex;

@@ -2,15 +2,11 @@ import { Skeleton, Spin } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 
-export interface LoadingSkeletonProps {
-  loading: boolean
-}
-
-export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ loading }: LoadingSkeletonProps) => {
+export const LoadingSkeleton: React.FC = () => {
   return (
     <>
       <S.DivImage>
-        <Spin indicator={<Skeleton.Avatar active size={48} shape='square' />} spinning={!!loading} />
+        <Spin indicator={<Skeleton.Avatar active size={48} shape='square' />} spinning />
         <Skeleton active paragraph={{ rows: 0 }} />
       </S.DivImage>
       <S.DivErc20>
