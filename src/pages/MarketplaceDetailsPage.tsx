@@ -16,6 +16,7 @@ import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 export default function MarketplaceDetailsPage() {
   const [erc20, setErc20] = useState<MarketplaceERC20Item | undefined>(undefined)
   const { address } = useParams<{ address: string | undefined }>()
+
   useEffect(() => {
     const getNfts = async () => {
       if (address) {
@@ -28,6 +29,13 @@ export default function MarketplaceDetailsPage() {
 
   // TODO: Implement Empty
   if (!erc20) return <></>
+
+  const buyNftModal = () => {
+    buyModalVar({
+      type: 'nft',
+      item: erc20
+    })
+  }
 
   return (
     <>
@@ -44,7 +52,7 @@ export default function MarketplaceDetailsPage() {
                   <TitleNftDetails name={erc20.erc721.name} symbol={erc20.erc721.symbol} />
                 </S.TitleBox>
                 <S.BtnDesktop>
-                  <S.BuyNft onClick={() => buyModalVar('nft')}>Buy NFT</S.BuyNft>
+                  <S.BuyNft onClick={buyNftModal}>Buy NFT</S.BuyNft>
                 </S.BtnDesktop>
               </S.TitleArea>
               <NftInfoDetails
@@ -54,10 +62,10 @@ export default function MarketplaceDetailsPage() {
                 details={erc20.erc721.description}
               />
               <S.BtnMobile>
-                <S.BuyNft>Buy NFT</S.BuyNft>
+                <S.BuyNft onClick={buyNftModal}>Buy NFT</S.BuyNft>
               </S.BtnMobile>
               <S.Division />
-              <NftBuyShareDetails name={erc20.name} symbol={erc20.symbol} addressERC20={erc20.address} price={0.000051} price2={0.04} />
+              <NftBuyShareDetails erc20={erc20} price={0.000051} price2={0.04} />
             </S.Details>
           </S.Info>
         </S.Content>

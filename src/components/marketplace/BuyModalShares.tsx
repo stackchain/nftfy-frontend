@@ -1,17 +1,25 @@
 import { Swap } from '@balancer-labs/sor/dist/types'
-import { Button, Input } from 'antd'
+import { Button, Input, Skeleton } from 'antd'
 import BigNumber from 'bignumber.js'
-import { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import arrowDown from '../../assets/arrowDown.svg'
 import switchTopDown from '../../assets/switchTopDown.svg'
-import ethereum from '../../assets/tokens/ethereum.svg'
 import { balancerAssetQuote, balancerSwapIn, balancerSwapOut } from '../../services/BalancerService'
 import { scale } from '../../services/UtilService'
+import { getErc20Balance } from '../../services/WalletService'
 import { colors, fonts, viewport } from '../../styles/variables'
-import { ERC20Asset } from '../../types/MarketplaceTypes'
+import { ERC20Asset, MarketplaceERC20Item } from '../../types/MarketplaceTypes'
 
-export function BuyModalShares() {
+interface BuyModalSharesProps {
+  account: string
+  erc20: MarketplaceERC20Item
+}
+
+export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
+  const { name, symbol } = erc20
+  const { image_url } = erc20.erc721
+
   const [assetIn] = useState<ERC20Asset>({
     id: '2',
     name: 'Uniswap Coin',
@@ -20,31 +28,6 @@ export function BuyModalShares() {
     imageUrl: '',
     decimals: 18
   })
-
-  const [assetInAmount, setAssetInAmount] = useState('')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [tradeSwapsIn, setTradeSwapsIn] = useState<Swap[][]>([])
-
-  const handleAssetInAmount = async (event: ChangeEvent<HTMLInputElement>) => {
-    setAssetInAmount(event.target.value)
-
-    const quoteResult = await balancerAssetQuote(
-      assetIn.address,
-      assetIn.decimals,
-      assetOut.address,
-      assetOut.decimals,
-      'swapExactIn',
-      event.target.value || '0'
-    )
-
-    if (quoteResult) {
-      setAssetOutAmount(quoteResult?.exitAmount)
-      setTradeSwapsIn(quoteResult.tradeSwaps)
-    } else {
-      setAssetOutAmount('0')
-      setTradeSwapsIn([])
-    }
-  }
 
   const [assetOut] = useState<ERC20Asset>({
     id: '1',
@@ -55,27 +38,88 @@ export function BuyModalShares() {
     decimals: 6
   })
 
+  const [assetInAmount, setAssetInAmount] = useState('')
   const [assetOutAmount, setAssetOutAmount] = useState('')
+  const [tradeSwapsIn, setTradeSwapsIn] = useState<Swap[][]>([])
   const [tradeSwapsOut, setTradeSwapsOut] = useState<Swap[][]>([])
+  const [swapType, setSwapType] = useState<'swapExactIn' | 'swapExactOut' | undefined>(undefined)
+
+  const [assetInBalance, setAssetInBalance] = useState<BigNumber | undefined>(undefined)
+  const [assetOutBalance, setAssetOutBalance] = useState<BigNumber | undefined>(undefined)
+
+  useEffect(() => {
+    const getAssetOutBalance = async () => {
+      const balance = await getErc20Balance(account, assetIn.address, assetIn.decimals)
+
+      setAssetInBalance(balance)
+    }
+    getAssetOutBalance()
+  }, [account, assetIn.address, assetIn.decimals])
+
+  useEffect(() => {
+    const getAssetInBalance = async () => {
+      const balance = await getErc20Balance(account, assetOut.address, assetOut.decimals)
+
+      setAssetOutBalance(balance)
+    }
+    getAssetInBalance()
+  }, [account, assetOut.address, assetOut.decimals])
+
+  const handleAssetInAmount = async (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value) {
+      setAssetInAmount(event.target.value)
+
+      const quoteResult = await balancerAssetQuote(
+        assetIn.address,
+        assetIn.decimals,
+        assetOut.address,
+        assetOut.decimals,
+        'swapExactIn',
+        event.target.value || '0'
+      )
+
+      if (quoteResult) {
+        setAssetOutAmount(new BigNumber(quoteResult.exitAmount).decimalPlaces(assetOut.decimals).toString())
+        setTradeSwapsIn(quoteResult.tradeSwaps)
+      } else {
+        setAssetOutAmount('0')
+        setTradeSwapsIn([])
+      }
+
+      setSwapType('swapExactIn')
+    } else {
+      setAssetInAmount('')
+      setAssetOutAmount('')
+      setSwapType(undefined)
+    }
+  }
 
   const handleAssetOutAmount = async (event: ChangeEvent<HTMLInputElement>) => {
-    setAssetOutAmount(event.target.value)
+    if (event.target.value) {
+      setAssetOutAmount(event.target.value)
 
-    const quoteResult = await balancerAssetQuote(
-      assetIn.address,
-      assetIn.decimals,
-      assetOut.address,
-      assetOut.decimals,
-      'swapExactOut',
-      event.target.value || '0'
-    )
+      const quoteResult = await balancerAssetQuote(
+        assetIn.address,
+        assetIn.decimals,
+        assetOut.address,
+        assetOut.decimals,
+        'swapExactOut',
+        event.target.value || '0'
+      )
 
-    if (quoteResult) {
-      setAssetInAmount(quoteResult?.exitAmount)
-      setTradeSwapsOut(quoteResult.tradeSwaps)
+      if (quoteResult) {
+        setAssetInAmount(new BigNumber(quoteResult?.exitAmount).decimalPlaces(assetIn.decimals).toString())
+        setTradeSwapsOut(quoteResult.tradeSwaps)
+      } else {
+        setAssetInAmount('0')
+        setTradeSwapsOut([])
+      }
+
+      setSwapType('swapExactOut')
     } else {
-      setAssetInAmount('0')
-      setTradeSwapsOut([])
+      setAssetInAmount('')
+      setAssetOutAmount('')
+      setSwapType(undefined)
     }
   }
 
@@ -103,24 +147,25 @@ export function BuyModalShares() {
       <S.Header>
         <div>
           <h3>
-            BLOCKIE # 24 shares
-            <small>KIE24</small>
+            {name}
+            <small>{symbol}</small>
           </h3>
         </div>
         <div>
-          <img
-            src='https://lh3.googleusercontent.com/9fhtFiCAKNQfwUMxCs7vTPJTnDj9gWcEB-9TWPwL6cLxgE3DhDP7Kq4Yvs82MU4vutYuZgpc9Mu3l0TGuvAjtZgiUoiXzLKtjM_jpA'
-            alt='Google'
-          />
+          <img src={image_url} alt={`${name} ${symbol}`} />
         </div>
       </S.Header>
       <S.SharesFrom>
-        <div>Balance: 1500</div>
+        <div className={assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance) ? 'no-balance' : ''}>
+          {`Balance: `}
+          <Skeleton loading={!assetInBalance} paragraph={{ rows: 1 }}>
+            {assetInBalance && assetInBalance.decimalPlaces(5).toString()}
+          </Skeleton>
+        </div>
         <div>
           <div>From</div>
           <div>
             <S.TokenButton>
-              <img src={ethereum} alt={assetIn.name} />
               <span>{assetIn.symbol}</span>
               <img src={arrowDown} alt='Arrow Down' />
             </S.TokenButton>
@@ -137,20 +182,24 @@ export function BuyModalShares() {
           </div>
         </div>
         <div>
-          <span>1 Share =</span>
           <span>
-            0.0000053 ETH
-            <span>$0,50</span>
+            {`${new BigNumber(1).decimalPlaces(assetIn.decimals).toString()} ${assetIn.symbol} = ${new BigNumber(0.00054)
+              .decimalPlaces(assetOut.decimals)
+              .toString()} ${assetOut.symbol}`}
           </span>
         </div>
       </S.SharesSwitch>
       <S.SharesTo>
-        <div>Balance: 100.0</div>
+        <div className={assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance) ? 'no-balance' : ''}>
+          {`Balance: `}
+          <Skeleton loading={!assetOutBalance} paragraph={{ rows: 1 }}>
+            {assetOutBalance && assetOutBalance.decimalPlaces(5).toString()}
+          </Skeleton>
+        </div>
         <div>
           <div>To</div>
           <div>
             <S.TokenButton className='noDropdown'>
-              <img src={ethereum} alt={assetOut.name} />
               <span>{assetOut.symbol}</span>
               <img src={arrowDown} alt='Arrow Down' />
             </S.TokenButton>
@@ -161,8 +210,24 @@ export function BuyModalShares() {
         </div>
       </S.SharesTo>
       <S.SharesUnlock>
-        <S.ActionButton onClick={swapIn}>Swap In</S.ActionButton>
-        <S.ActionButton onClick={swapOut}>Swap Out</S.ActionButton>
+        {!(assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) &&
+          !(assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance)) &&
+          new BigNumber(assetInAmount).isGreaterThan(0) &&
+          new BigNumber(assetOutAmount).isGreaterThan(0) &&
+          swapType === 'swapExactIn' && <S.ActionButton onClick={swapIn}>Swap In</S.ActionButton>}
+        {!(assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) &&
+          !(assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance)) &&
+          new BigNumber(assetInAmount).isGreaterThan(0) &&
+          new BigNumber(assetOutAmount).isGreaterThan(0) &&
+          swapType === 'swapExactOut' && <S.ActionButton onClick={swapOut}>Swap Out</S.ActionButton>}
+        {(!assetInAmount || !assetOutAmount) && !swapType && <S.ActionButton disabled>Enter Amount</S.ActionButton>}
+        {!(assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) &&
+          !(assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance)) &&
+          (!new BigNumber(assetInAmount).isGreaterThan(0) || !new BigNumber(assetOutAmount).isGreaterThan(0)) &&
+          swapType && <S.ActionButton disabled>Not Enough Liquidity</S.ActionButton>}
+        {((assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) ||
+          (assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))) &&
+          swapType && <S.ActionButton disabled>Not Enough Balance</S.ActionButton>}
       </S.SharesUnlock>
     </S.SharesContent>
   )
@@ -225,6 +290,10 @@ export const S = {
 
       margin-top: 24px;
       height: 32px;
+
+      &.no-balance {
+        color: ${colors.red};
+      }
     }
 
     > div:nth-child(2) {
@@ -250,6 +319,7 @@ export const S = {
         border: 1px solid ${colors.gray3};
         height: 40px;
         display: flex;
+        justify-content: flex-end;
         align-items: center;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
@@ -324,7 +394,7 @@ export const S = {
       display: flex;
       flex: 1;
       font-family: ${fonts.montserrat};
-      font-size: 16px;
+      font-size: 14px;
       line-height: 24px;
       color: ${colors.gray2};
       font-weight: 500;
@@ -365,6 +435,10 @@ export const S = {
       font-weight: 500;
 
       height: 32px;
+
+      &.no-balance {
+        color: ${colors.red};
+      }
     }
 
     > div:nth-child(2) {
@@ -391,6 +465,7 @@ export const S = {
         height: 40px;
         display: flex;
         align-items: center;
+        justify-content: flex-end;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
         flex: 100px 0 0;
@@ -458,6 +533,7 @@ export const S = {
     justify-content: center;
     align-items: center;
     font-family: ${fonts.montserrat};
+    width: 100%;
 
     font-size: 16px;
     line-height: 24px;
@@ -474,8 +550,8 @@ export const S = {
       border: 1px solid ${colors.blue2};
     }
 
-    @media (max-width: ${viewport.sm}) {
-      width: 100%;
+    &:disabled {
+      border: none;
     }
   `,
   TokenInput: styled(Input)`

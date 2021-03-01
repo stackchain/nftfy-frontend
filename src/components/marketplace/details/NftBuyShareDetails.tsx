@@ -5,16 +5,24 @@ import styled from 'styled-components'
 import clip from '../../../assets/icons/clip.svg'
 import { buyModalVar } from '../../../graphql/variables/MarketplaceVariable'
 import { colors, fonts, viewport } from '../../../styles/variables'
+import { MarketplaceERC20Item } from '../../../types/MarketplaceTypes'
 
 export interface NftBuyShareDetailsProps {
-  name: string
-  symbol: string
-  addressERC20: string
+  erc20: MarketplaceERC20Item
   price: number
   price2: number
 }
 
-export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, symbol, addressERC20 }: NftBuyShareDetailsProps) => {
+export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ erc20 }: NftBuyShareDetailsProps) => {
+  const { name, symbol, address } = erc20
+
+  const buySharesModal = () => {
+    buyModalVar({
+      type: 'shares',
+      item: erc20
+    })
+  }
+
   return (
     <S.Content>
       <S.Title>
@@ -22,9 +30,9 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, sy
         <small>{symbol}</small>
       </S.Title>
       <S.AddressToken>
-        <S.CopyToClipboard text={addressERC20}>
+        <S.CopyToClipboard text={address}>
           <Tooltip placement='right' title='Copy ERC20 Shares Address'>
-            <h6>{addressERC20}</h6>
+            <h6>{address}</h6>
             <img src={clip} alt='clip' />
           </Tooltip>
         </S.CopyToClipboard>
@@ -41,7 +49,7 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ name, sy
               0.04
             </S.DollarPrice>
           </div>
-          <S.TradeSharesButton onClick={() => buyModalVar('shares')}>Buy Shares</S.TradeSharesButton>
+          <S.TradeSharesButton onClick={buySharesModal}>Buy Shares</S.TradeSharesButton>
         </S.PriceAction>
       </S.SharePrice>
     </S.Content>
