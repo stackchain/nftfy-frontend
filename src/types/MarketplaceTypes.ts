@@ -20,4 +20,5 @@ export interface ERC20Asset {
   address: string
   decimals: number
   imageUrl: string
+  locked?: boolean
 }

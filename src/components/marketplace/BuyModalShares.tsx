@@ -39,7 +39,8 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
     symbol: 'USDC',
     address: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
     imageUrl: '',
-    decimals: 6
+    decimals: 6,
+    locked: true
   }
 
   const [assetIn, setAssetIn] = useState<ERC20Asset>(asset1)
@@ -217,7 +218,7 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
         </div>
         <div>
           <div>From</div>
-          <div>
+          <div className={`${assetIn.locked ? 'no-dropdown' : ''}`}>
             <S.TokenButton>
               <span>{assetIn.symbol}</span>
               <img src={arrowDown} alt='Arrow Down' />
@@ -254,8 +255,8 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
         </div>
         <div>
           <div>To</div>
-          <div>
-            <S.TokenButton className='noDropdown'>
+          <div className={`${assetOut.locked ? 'no-dropdown' : ''}`}>
+            <S.TokenButton>
               <span>{assetOut.symbol}</span>
               <img src={arrowDown} alt='Arrow Down' />
             </S.TokenButton>
@@ -368,8 +369,18 @@ export const S = {
         border-bottom-left-radius: 8px;
         flex: 100px 0 0;
 
-        &:hover {
+        &:hover:not(&.no-dropdown) {
           background-color: ${colors.white2};
+          cursor: pointer;
+        }
+
+        &.no-dropdown {
+          * {
+            cursor: default;
+          }
+          img {
+            display: none;
+          }
         }
       }
 
@@ -512,6 +523,20 @@ export const S = {
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
         flex: 100px 0 0;
+
+        &:hover:not(&.no-dropdown) {
+          background-color: ${colors.white2};
+          cursor: pointer;
+        }
+
+        &.no-dropdown {
+          * {
+            cursor: default;
+          }
+          img {
+            display: none;
+          }
+        }
       }
 
       > div:nth-child(3) {
@@ -559,13 +584,6 @@ export const S = {
     img:nth-child(3) {
       width: 16px;
       height: 16px;
-    }
-
-    &.noDropdown {
-      cursor: default;
-      img:nth-child(3) {
-        display: none;
-      }
     }
   `,
   SwitchButton: styled(Button)`
