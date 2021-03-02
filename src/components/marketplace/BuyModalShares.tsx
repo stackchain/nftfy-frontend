@@ -187,16 +187,17 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
     !(assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))
   const ruleSwapIn = ruleNotEmpty && ruleHasBalance && swapType === 'swapExactIn'
   const ruleSwapOut = ruleNotEmpty && ruleHasBalance && swapType === 'swapExactOut'
-  const ruleNotEnoughLiquidity =
-    ruleNotEmpty &&
-    ruleHasBalance &&
-    ((swapType === 'swapExactOut' && !new BigNumber(assetInAmount).isGreaterThan(0)) ||
-      (swapType === 'swapExactIn' && !new BigNumber(assetOutAmount).isGreaterThan(0))) &&
-    (new BigNumber(assetInAmount).isGreaterThan(0) || new BigNumber(assetOutAmount).isGreaterThan(0))
   const ruleNotEnoughBalance =
     ((assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) ||
       (assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))) &&
     swapType
+
+  const ruleNotEnoughLiquidity =
+    ((swapType === 'swapExactOut' && !new BigNumber(assetInAmount).isGreaterThan(0)) ||
+      (swapType === 'swapExactIn' && !new BigNumber(assetOutAmount).isGreaterThan(0))) &&
+    (new BigNumber(assetInAmount).isGreaterThan(0) || new BigNumber(assetOutAmount).isGreaterThan(0))
+
+  console.log('ruleNotEnoughLiquidity', ruleNotEnoughLiquidity)
 
   return (
     <S.SharesContent>
@@ -240,6 +241,7 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
         <div>
           <span>
             {ruleNotEmpty &&
+              !ruleNotEnoughBalance &&
               `${new BigNumber(1).decimalPlaces(assetIn.decimals).toString()} ${assetIn.symbol} = ${new BigNumber(assetOutAmount)
                 .div(new BigNumber(assetInAmount))
                 .decimalPlaces(precision)
@@ -266,11 +268,11 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
         </div>
       </S.SharesTo>
       <S.SharesUnlock>
-        {!ruleNotEmpty && !ruleNotEnoughBalance && <S.ActionButton disabled>Enter Amount</S.ActionButton>}
+        {!ruleNotEmpty && !ruleNotEnoughBalance && !ruleNotEnoughLiquidity && <S.ActionButton disabled>Enter Amount</S.ActionButton>}
         {ruleSwapIn && <S.ActionButton onClick={swapIn}>Swap In</S.ActionButton>}
         {ruleSwapOut && <S.ActionButton onClick={swapOut}>Swap Out</S.ActionButton>}
-        {ruleNotEnoughLiquidity && <S.ActionButton disabled>Not Enough Liquidity</S.ActionButton>}
         {ruleNotEnoughBalance && <S.ActionButton disabled>Not Enough Balance</S.ActionButton>}
+        {ruleNotEnoughLiquidity && !ruleNotEnoughBalance && <S.ActionButton disabled>Not Enough Liquidity</S.ActionButton>}
       </S.SharesUnlock>
     </S.SharesContent>
   )
