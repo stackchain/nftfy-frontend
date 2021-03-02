@@ -34,12 +34,12 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
   }
 
   const asset2 = {
-    id: '1',
-    name: 'USD Coin',
-    symbol: 'USDC',
-    address: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
-    imageUrl: '',
-    decimals: 6,
+    id: erc20.address,
+    name: erc20.name,
+    symbol: erc20.symbol,
+    address: erc20.address,
+    imageUrl: erc20.erc721.image_url,
+    decimals: erc20.decimals,
     locked: true
   }
 

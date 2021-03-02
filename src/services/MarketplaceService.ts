@@ -50,6 +50,7 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
     const erc20Name = await contractErc20Shares.methods.name().call()
     const tokenId = await contractErc20Shares.methods.tokenId().call()
     const symbol = await contractErc20Shares.methods.symbol().call()
+    const decimals = await contractErc20Shares.methods.decimals().call()
     const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()
 
     const contractWrapperErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], erc721Wrapper)
@@ -61,6 +62,7 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
       name: erc20Name,
       symbol,
       securitized,
+      decimals: Number(decimals),
       erc721: {
         address: erc721Address,
         tokenId,
@@ -111,6 +113,7 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
     const erc20Name = await contractErc20Shares.methods.name().call()
     const tokenId = await contractErc20Shares.methods.tokenId().call()
     const symbol = await contractErc20Shares.methods.symbol().call()
+    const decimals = await contractErc20Shares.methods.decimals().call()
     const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()
 
     const contractWrapperErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], erc721Wrapper)
@@ -125,6 +128,7 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
       name: erc20Name,
       symbol,
       securitized,
+      decimals: Number(decimals),
       erc721: {
         name: erc721Metadata.name,
         address: erc721Address,

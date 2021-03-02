@@ -3,6 +3,7 @@ export interface MarketplaceERC20Item {
   name: string
   symbol: string
   securitized: boolean
+  decimals: number
   erc721: {
     wrapper: string
     address: string
