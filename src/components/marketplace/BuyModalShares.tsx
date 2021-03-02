@@ -20,23 +20,27 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
   const { name, symbol } = erc20
   const { image_url } = erc20.erc721
 
-  const [assetIn] = useState<ERC20Asset>({
+  const asset1 = {
     id: '2',
     name: 'Uniswap Coin',
     symbol: 'UNI',
     address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
     imageUrl: '',
     decimals: 18
-  })
+  }
 
-  const [assetOut] = useState<ERC20Asset>({
+  const asset2 = {
     id: '1',
     name: 'USD Coin',
     symbol: 'USDC',
     address: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
     imageUrl: '',
     decimals: 6
-  })
+  }
+
+  const [assetIn, setAssetIn] = useState<ERC20Asset>(asset1)
+
+  const [assetOut, setAssetOut] = useState<ERC20Asset>(asset2)
 
   const [assetInAmount, setAssetInAmount] = useState('')
   const [assetOutAmount, setAssetOutAmount] = useState('')
@@ -131,6 +135,25 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
     }
   }
 
+  const switchAsset = () => {
+    const temp = {
+      assetIn,
+      assetInAmount,
+      tradeSwapsIn,
+      assetOut,
+      assetOutAmount,
+      tradeSwapsOut
+    }
+
+    setAssetIn(temp.assetOut)
+    setAssetInAmount(temp.assetOutAmount)
+    setTradeSwapsIn(temp.tradeSwapsOut)
+
+    setAssetOut(temp.assetIn)
+    setAssetOutAmount(temp.assetInAmount)
+    setTradeSwapsOut(temp.tradeSwapsIn)
+  }
+
   const swapIn = async () => {
     await balancerSwapIn(
       assetIn.address,
@@ -201,7 +224,9 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
       <S.SharesSwitch>
         <div>
           <div>
-            <img src={switchTopDown} alt='Switch Token' />
+            <S.SwitchButton onClick={switchAsset}>
+              <img src={switchTopDown} alt='Switch Token' />
+            </S.SwitchButton>
           </div>
         </div>
         <div>
@@ -531,6 +556,28 @@ export const S = {
       img:nth-child(3) {
         display: none;
       }
+    }
+  `,
+  SwitchButton: styled(Button)`
+    &,
+    &:active,
+    &:hover,
+    &:focus {
+      background: none;
+      height: 40px;
+      width: 40px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      border: 0;
+      box-shadow: none;
+      outline: none;
+    }
+    &:after,
+    &:before {
+      display: none;
     }
   `,
   ActionButton: styled(Button)`
