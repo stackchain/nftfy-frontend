@@ -9,6 +9,6 @@ export const code = {
   5008: 'Account changed!',
   5009: 'Chain changed!',
   5010: 'Canceled by User',
-  5011: 'Error on interact with the blockchain',
+  5011: 'Transaction Error',
   5012: 'No wrapper address'
 }

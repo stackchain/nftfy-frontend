@@ -39,22 +39,24 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
   }
 
   const [assetIn, setAssetIn] = useState<ERC20Asset>(asset1)
-
   const [assetOut, setAssetOut] = useState<ERC20Asset>(asset2)
 
   const [assetInAmount, setAssetInAmount] = useState('')
   const [assetOutAmount, setAssetOutAmount] = useState('')
-  const [tradeSwapsIn, setTradeSwapsIn] = useState<Swap[][]>([])
-  const [tradeSwapsOut, setTradeSwapsOut] = useState<Swap[][]>([])
-  const [swapType, setSwapType] = useState<'swapExactIn' | 'swapExactOut' | undefined>(undefined)
 
   const [assetInBalance, setAssetInBalance] = useState<BigNumber | undefined>(undefined)
   const [assetOutBalance, setAssetOutBalance] = useState<BigNumber | undefined>(undefined)
 
+  const [tradeSwapsIn, setTradeSwapsIn] = useState<Swap[][]>([])
+  const [tradeSwapsOut, setTradeSwapsOut] = useState<Swap[][]>([])
+
+  const [swapType, setSwapType] = useState<'swapExactIn' | 'swapExactOut' | undefined>(undefined)
+
+  const [switchPosition, setSwitchPosition] = useState(true)
+
   useEffect(() => {
     const getAssetOutBalance = async () => {
       const balance = await getErc20Balance(account, assetIn.address, assetIn.decimals)
-
       setAssetInBalance(balance)
     }
     getAssetOutBalance()
@@ -152,6 +154,8 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
     setAssetOut(temp.assetIn)
     setAssetOutAmount(temp.assetInAmount)
     setTradeSwapsOut(temp.tradeSwapsIn)
+
+    setSwitchPosition(!switchPosition)
   }
 
   const swapIn = async () => {
@@ -224,7 +228,7 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
       <S.SharesSwitch>
         <div>
           <div>
-            <S.SwitchButton onClick={switchAsset}>
+            <S.SwitchButton onClick={switchAsset} className={`${switchPosition ? 'up' : 'down'}`}>
               <img src={switchTopDown} alt='Switch Token' />
             </S.SwitchButton>
           </div>
@@ -578,6 +582,36 @@ export const S = {
     &:after,
     &:before {
       display: none;
+    }
+
+    &.up {
+      transform: rotate(0deg);
+      animation-name: rotateUp;
+      animation-duration: 0.5s;
+    }
+
+    &.down {
+      transform: rotate(180deg);
+      animation-name: rotateDown;
+      animation-duration: 0.5s;
+    }
+
+    @keyframes rotateUp {
+      from {
+        transform: rotate(180deg);
+      }
+      to {
+        transform: rotate(0deg);
+      }
+    }
+
+    @keyframes rotateDown {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(180deg);
+      }
     }
   `,
   ActionButton: styled(Button)`
