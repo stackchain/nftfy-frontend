@@ -197,8 +197,6 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
       (swapType === 'swapExactIn' && !new BigNumber(assetOutAmount).isGreaterThan(0))) &&
     (new BigNumber(assetInAmount).isGreaterThan(0) || new BigNumber(assetOutAmount).isGreaterThan(0))
 
-  console.log('ruleNotEnoughLiquidity', ruleNotEnoughLiquidity)
-
   return (
     <S.SharesContent>
       <S.Header>
