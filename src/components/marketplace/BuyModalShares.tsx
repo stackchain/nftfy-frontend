@@ -169,7 +169,7 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
             </S.TokenButton>
           </div>
           <div>
-            <S.TokenInput placeholder='0' value={assetInAmount} onChange={handleAssetInAmount} />
+            <S.TokenInput type='number' placeholder='0' value={assetInAmount} onChange={handleAssetInAmount} />
           </div>
         </div>
       </S.SharesFrom>
@@ -201,7 +201,7 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
             </S.TokenButton>
           </div>
           <div>
-            <S.TokenInput placeholder='0' value={assetOutAmount} onChange={handleAssetOutAmount} />
+            <S.TokenInput type='number' placeholder='0' value={assetOutAmount} onChange={handleAssetOutAmount} />
           </div>
         </div>
       </S.SharesTo>
@@ -229,7 +229,10 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
         {((assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) ||
           (assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))) &&
           swapType && <S.ActionButton disabled>Not Enough Balance</S.ActionButton>}
-        {(!assetInAmount || !assetOutAmount) && !swapType && <S.ActionButton disabled>Enter Amount</S.ActionButton>}
+        {(!assetInAmount ||
+          !assetOutAmount ||
+          new BigNumber(assetInAmount).isLessThan(0) ||
+          new BigNumber(assetOutAmount).isLessThan(0)) && <S.ActionButton disabled>Enter Amount</S.ActionButton>}
       </S.SharesUnlock>
     </S.SharesContent>
   )
