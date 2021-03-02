@@ -5,6 +5,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import arrowDown from '../../assets/arrowDown.svg'
 import switchTopDown from '../../assets/switchTopDown.svg'
+import { getConfigByChainId } from '../../config'
+import { chainIdVar } from '../../graphql/variables/WalletVariable'
 import { balancerAssetQuote, balancerSwapIn, balancerSwapOut } from '../../services/BalancerService'
 import { scale } from '../../services/UtilService'
 import { getErc20Balance } from '../../services/WalletService'
@@ -20,6 +22,8 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
   const { name, symbol } = erc20
   const { image_url } = erc20.erc721
 
+  const { balancer } = getConfigByChainId(chainIdVar())
+  const { precision } = balancer
   const asset1 = {
     id: '2',
     name: 'Uniswap Coin',
@@ -235,9 +239,11 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
         </div>
         <div>
           <span>
-            {`${new BigNumber(1).decimalPlaces(assetIn.decimals).toString()} ${assetIn.symbol} = ${new BigNumber(0.00054)
-              .decimalPlaces(assetOut.decimals)
-              .toString()} ${assetOut.symbol}`}
+            {ruleNotEmpty &&
+              `${new BigNumber(1).decimalPlaces(assetIn.decimals).toString()} ${assetIn.symbol} = ${new BigNumber(assetOutAmount)
+                .div(new BigNumber(assetInAmount))
+                .decimalPlaces(precision)
+                .toString()} ${assetOut.symbol}`}
           </span>
         </div>
       </S.SharesSwitch>
