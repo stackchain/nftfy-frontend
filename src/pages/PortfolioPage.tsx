@@ -32,7 +32,7 @@ export default function PortfolioPage() {
 
   return (
     <>
-      <Header />
+      <Header page='portfolio' />
       <S.Main>
         <S.PortfolioWrapper>
           {account && <S.PortfolioHeader totalValue='3,861.7 2' loading={!!loading} />}

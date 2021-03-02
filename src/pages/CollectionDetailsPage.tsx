@@ -29,7 +29,7 @@ export default function CollectionDetailsPage() {
 
   return (
     <S.Collection>
-      <Header />
+      <Header page='securitize' />
       <S.Main>
         <S.Content>
           <S.Info>
@@ -70,6 +70,7 @@ const S = {
     display: flex;
     @media (max-width: ${viewport.md}) {
       margin-top: 20px;
+      padding: 32px 10px;
     }
   `,
   Content: styled.div`

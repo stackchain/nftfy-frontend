@@ -3,15 +3,25 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { colors, fonts } from '../../../../styles/variables'
 
-export const HeaderMenu: React.FC = () => {
+export interface HeaderMenuProps {
+  page: string
+}
+
+export const HeaderMenu: React.FC<HeaderMenuProps> = ({ page }: HeaderMenuProps) => {
   return (
     <S.Menu>
-      <S.LinkItem to='/marketplace' className='active'>
+      <S.LinkItem to='/marketplace' className={page === 'explore' ? 'active' : ''}>
         Explore
       </S.LinkItem>
-      <S.LinkItem to='/securitize'>Securitize</S.LinkItem>
-      <S.LinkItem to='/portfolio'>Portfolio</S.LinkItem>
-      <S.LinkItem to='/tutorial'>How it works</S.LinkItem>
+      <S.LinkItem to='/securitize' className={page === 'securitize' ? 'active' : ''}>
+        Securitize
+      </S.LinkItem>
+      <S.LinkItem to='/portfolio' className={page === 'portfolio' ? 'active' : ''}>
+        Portfolio
+      </S.LinkItem>
+      <S.LinkItem to='/tutorial' className={page === 'tutorial' ? 'active' : ''}>
+        How it works
+      </S.LinkItem>
     </S.Menu>
   )
 }

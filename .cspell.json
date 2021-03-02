@@ -27,6 +27,7 @@
     "ethersproject",
     "multihop",
     "multicall",
-    "struct"
+    "struct",
+    "securizite"
   ]
 }

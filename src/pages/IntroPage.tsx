@@ -8,7 +8,7 @@ import { colors, viewport } from '../styles/variables'
 export default function IntroPage() {
   return (
     <>
-      <Header />
+      <Header page='index' />
       <S.Main>
         <S.Container>
           <S.BoxActionIntro>

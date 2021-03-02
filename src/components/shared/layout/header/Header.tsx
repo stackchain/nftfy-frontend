@@ -13,7 +13,11 @@ import { HeaderMenu } from './HeaderMenu'
 import { HeaderSearch } from './HeaderSearch'
 import { HeaderWallet } from './HeaderWallet'
 
-export const Header: React.FC = () => {
+export interface HeaderProps {
+  page: string
+}
+
+export const Header: React.FC<HeaderProps> = ({ page }: HeaderProps) => {
   const account = useReactiveVar(accountVar)
 
   return (
@@ -23,7 +27,7 @@ export const Header: React.FC = () => {
           <S.Logo src={nftfy} alt='Nftfy' />
         </Link>
         <HeaderSearch />
-        <HeaderMenu />
+        <HeaderMenu page={page} />
         {account ? <WalletButton /> : <HeaderWallet />}
       </S.Header>
       <S.HeaderMobile>

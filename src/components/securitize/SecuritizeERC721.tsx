@@ -1,5 +1,5 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { Spin, Tooltip } from 'antd'
+import { Button, Input, Select, Spin, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import iconInfo from '../../assets/icons/info.svg'
@@ -60,7 +60,7 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
               <img src={iconInfo} alt='info' />
             </Tooltip>
           </S.Label>
-          <input type='text' value={1000000} disabled />
+          <S.SetExitPrice type='text' value={1000000} disabled />
         </S.FormControl>
 
         <S.FormControlPrice>
@@ -71,17 +71,17 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
             </Tooltip>
           </S.Label>
           <div>
-            <select name='' id=''>
+            <S.SetToken id='' defaultValue='ETH'>
               <option value='0x0000000000000000000000000000000000000000'>ETH</option>
-            </select>
-            <input type='number' onChange={e => setExitPrice(e.target.value)} defaultValue='0.01' />
+            </S.SetToken>
+            <S.SetExitPrice type='number' onChange={e => setExitPrice(e.target.value)} defaultValue='0.01' />
           </div>
         </S.FormControlPrice>
         <S.Action>
           {approved === false ? (
-            <S.ButtonSecuritize onClick={getApprove}>{loading ? <Spin indicator={antIcon} /> : 'Unlock'}</S.ButtonSecuritize>
+            <S.TradeSharesButton onClick={getApprove}>{loading ? <Spin indicator={antIcon} /> : 'Unlock'}</S.TradeSharesButton>
           ) : (
-            <S.ButtonSecuritize onClick={setSecuritizeErc721}>{loading ? <Spin indicator={antIcon} /> : 'Securitize'}</S.ButtonSecuritize>
+            <S.TradeSharesButton onClick={setSecuritizeErc721}>{loading ? <Spin indicator={antIcon} /> : 'Securitize'}</S.TradeSharesButton>
           )}
         </S.Action>
       </S.Form>
@@ -121,6 +121,36 @@ const S = {
     flex-direction: column;
     padding: 15px;
   `,
+  SetExitPrice: styled(Input)`
+    width: 440px;
+    height: 40px;
+    background: ${colors.white1};
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    font-family: ${fonts.montserrat};
+    color: ${colors.gray2};
+    text-align: end;
+    padding-right: 15px;
+  `,
+  SetToken: styled(Select)`
+    width: 152px;
+    .ant-select-selector {
+      height: 40px !important;
+      border-bottom-left-radius: 8px !important;
+      border-top-left-radius: 8px !important;
+    }
+    box-sizing: border-box;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: ${colors.gray2};
+  `,
   FormControl: styled.div`
     width: 100%;
     display: flex;
@@ -128,23 +158,6 @@ const S = {
     justify-content: space-between;
     align-items: center;
     margin: 24px 0 0;
-
-    input {
-      width: 440px;
-      height: 40px;
-      background: ${colors.white1};
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 24px;
-      font-family: ${fonts.montserrat};
-      color: ${colors.gray2};
-      text-align: end;
-      padding-right: 15px;
-    }
     @media (max-width: ${viewport.xl}) {
       flex-direction: column;
       label {
@@ -163,38 +176,20 @@ const S = {
     justify-content: space-between;
     align-items: center;
     margin: 24px 0 0;
-    select {
-      width: 152px;
-      height: 40px;
-      border: 1px solid ${colors.gray3};
-      box-sizing: border-box;
-      outline: none;
-      border-bottom-left-radius: 8px;
-      border-top-left-radius: 8px;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 24px;
-      color: ${colors.gray2};
-    }
     input {
       width: 288px;
       height: 40px;
       border: 1px solid ${colors.gray3};
-      box-sizing: border-box;
-      border-bottom-right-radius: 8px;
-      border-top-right-radius: 8px;
-      padding: none !important;
-      outline: none;
-      text-align: end;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 24px;
-      font-family: ${fonts.montserrat};
-      color: ${colors.gray2};
-      text-align: end;
-      padding-right: 15px;
+      background: ${colors.white};
+      border-bottom-right-radius: 8px !important;
+      border-top-right-radius: 8px !important;
+      border-bottom-left-radius: 0px !important;
+      border-top-left-radius: 0px !important;
+    }
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     @media (max-width: ${viewport.xl}) {
       flex-direction: column;
@@ -253,6 +248,27 @@ const S = {
     &:hover {
       background: ${colors.blue2};
       color: ${colors.white};
+    }
+  `,
+  TradeSharesButton: styled(Button)`
+    height: 40px;
+    padding: 0 64px;
+    border-radius: 8px;
+    font-family: ${fonts.montserrat};
+    font-weight: 500;
+    color: ${colors.white};
+    background-color: ${colors.blue1};
+
+    &:hover,
+    &:focus {
+      color: ${colors.white};
+      background-color: ${colors.blue2};
+      border: 1px solid ${colors.blue2};
+    }
+
+    @media (max-width: ${viewport.sm}) {
+      width: 100%;
+      margin-bottom: 32px;
     }
   `
 }

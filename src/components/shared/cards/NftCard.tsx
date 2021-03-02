@@ -60,7 +60,7 @@ const S = {
   `,
   BoxImage: styled.div`
     width: 100%;
-    height: 312px;
+    min-height: 312px;
     display: flex;
     justify-content: center;
     align-items: center;

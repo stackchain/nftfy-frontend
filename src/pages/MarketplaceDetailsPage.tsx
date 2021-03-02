@@ -39,7 +39,7 @@ export default function MarketplaceDetailsPage() {
 
   return (
     <>
-      <Header />
+      <Header page='marketplaceDetails' />
       <S.Main>
         <S.Content>
           <S.Info>

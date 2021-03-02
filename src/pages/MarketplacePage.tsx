@@ -43,7 +43,7 @@ export default function MarketplacePage({ location }: RouteProps) {
   }
   return (
     <>
-      <Header />
+      <Header page='explore' />
       <S.Main>
         <S.Content>
           {(loading || !!nfts.length) && <S.SortFilter />}

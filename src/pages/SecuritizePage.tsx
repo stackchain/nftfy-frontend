@@ -17,6 +17,7 @@ export default function SecuritizePage({ location }: RouteProps) {
   const params = new URLSearchParams(location ? location.search : '')
   const [nfts, setNfts] = useState<WalletErc721Item[]>([])
   const [totalPages, setTotalPages] = useState(0)
+  const [loading, setLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(Number(params.get('page')) || 1)
   const [currentLimit, setCurrentLimit] = useState(Number(params.get('limit')) || 12)
   const account = useReactiveVar(accountVar)
@@ -30,17 +31,19 @@ export default function SecuritizePage({ location }: RouteProps) {
 
   useEffect(() => {
     const getNfts = async () => {
+      setLoading(true)
       if (account) {
         const nftItems = await getPagedERC721Items(account, currentPage, currentLimit)
 
         setNfts(nftItems.data)
         setTotalPages(nftItems.total)
       }
+      setLoading(false)
     }
     getNfts()
   }, [currentLimit, currentPage, location, account])
 
-  if (!nfts)
+  if (!nfts && !loading)
     return (
       <>
         <S.EmptyNft>
@@ -52,22 +55,30 @@ export default function SecuritizePage({ location }: RouteProps) {
       </>
     )
 
+  const loadingCards = []
+  for (let i = 1; i <= currentLimit; i += 1) {
+    loadingCards.push(<NftCard key={`card-loading-${i}`} loading />)
+  }
+
   return (
     <>
-      <Header />
+      <Header page='securitize' />
       <S.Main>
         <S.Content>
           <S.SortFilter />
           <S.CardsContainer>
-            {nfts.map(nftItem => (
-              <NftCard
-                key={`${nftItem.address}`}
-                image={`${nftItem.image_url}`}
-                name={nftItem.name}
-                price={0}
-                url={`/securitize/${nftItem.address}/${nftItem.tokenId}`}
-              />
-            ))}
+            {loading && loadingCards}
+            {!loading &&
+              nfts.map(nftItem => (
+                <NftCard
+                  key={`${nftItem.address}`}
+                  image={`${nftItem.image_url}`}
+                  name={nftItem.name}
+                  price={0}
+                  url={`/securitize/${nftItem.address}/${nftItem.tokenId}`}
+                  loading={loading}
+                />
+              ))}
           </S.CardsContainer>
         </S.Content>
       </S.Main>
