@@ -69,24 +69,28 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
     if (event.target.value) {
       setAssetInAmount(event.target.value)
 
-      const quoteResult = await balancerAssetQuote(
-        assetIn.address,
-        assetIn.decimals,
-        assetOut.address,
-        assetOut.decimals,
-        'swapExactIn',
-        event.target.value || '0'
-      )
-
-      if (quoteResult) {
-        setAssetOutAmount(new BigNumber(quoteResult.exitAmount).decimalPlaces(assetOut.decimals).toString())
-        setTradeSwapsIn(quoteResult.tradeSwaps)
-      } else {
+      if (new BigNumber(event.target.value).isLessThan(0)) {
         setAssetOutAmount('0')
-        setTradeSwapsIn([])
-      }
+      } else {
+        const quoteResult = await balancerAssetQuote(
+          assetIn.address,
+          assetIn.decimals,
+          assetOut.address,
+          assetOut.decimals,
+          'swapExactIn',
+          event.target.value || '0'
+        )
 
-      setSwapType('swapExactIn')
+        if (quoteResult) {
+          setAssetOutAmount(new BigNumber(quoteResult.exitAmount).decimalPlaces(assetOut.decimals).toString())
+          setTradeSwapsIn(quoteResult.tradeSwaps)
+        } else {
+          setAssetOutAmount('0')
+          setTradeSwapsIn([])
+        }
+
+        setSwapType('swapExactIn')
+      }
     } else {
       setAssetInAmount('')
       setAssetOutAmount('')
@@ -98,24 +102,28 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
     if (event.target.value) {
       setAssetOutAmount(event.target.value)
 
-      const quoteResult = await balancerAssetQuote(
-        assetIn.address,
-        assetIn.decimals,
-        assetOut.address,
-        assetOut.decimals,
-        'swapExactOut',
-        event.target.value || '0'
-      )
-
-      if (quoteResult) {
-        setAssetInAmount(new BigNumber(quoteResult?.exitAmount).decimalPlaces(assetIn.decimals).toString())
-        setTradeSwapsOut(quoteResult.tradeSwaps)
-      } else {
+      if (new BigNumber(event.target.value).isLessThan(0)) {
         setAssetInAmount('0')
-        setTradeSwapsOut([])
-      }
+      } else {
+        const quoteResult = await balancerAssetQuote(
+          assetIn.address,
+          assetIn.decimals,
+          assetOut.address,
+          assetOut.decimals,
+          'swapExactOut',
+          event.target.value || '0'
+        )
 
-      setSwapType('swapExactOut')
+        if (quoteResult) {
+          setAssetInAmount(new BigNumber(quoteResult?.exitAmount).decimalPlaces(assetIn.decimals).toString())
+          setTradeSwapsOut(quoteResult.tradeSwaps)
+        } else {
+          setAssetInAmount('0')
+          setTradeSwapsOut([])
+        }
+
+        setSwapType('swapExactOut')
+      }
     } else {
       setAssetInAmount('')
       setAssetOutAmount('')
@@ -141,6 +149,23 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
       tradeSwapsOut
     )
   }
+
+  const ruleNotEmpty = new BigNumber(assetInAmount).isGreaterThan(0) && new BigNumber(assetOutAmount).isGreaterThan(0)
+  const ruleHasBalance =
+    !(assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) &&
+    !(assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))
+  const ruleSwapIn = ruleNotEmpty && ruleHasBalance && swapType === 'swapExactIn'
+  const ruleSwapOut = ruleNotEmpty && ruleHasBalance && swapType === 'swapExactOut'
+  const ruleNotEnoughLiquidity =
+    ruleNotEmpty &&
+    ruleHasBalance &&
+    ((swapType === 'swapExactOut' && !new BigNumber(assetInAmount).isGreaterThan(0)) ||
+      (swapType === 'swapExactIn' && !new BigNumber(assetOutAmount).isGreaterThan(0))) &&
+    (new BigNumber(assetInAmount).isGreaterThan(0) || new BigNumber(assetOutAmount).isGreaterThan(0))
+  const ruleNotEnoughBalance =
+    ((assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) ||
+      (assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))) &&
+    swapType
 
   return (
     <S.SharesContent>
@@ -206,33 +231,11 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
         </div>
       </S.SharesTo>
       <S.SharesUnlock>
-        {!(assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) &&
-          !(assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance)) &&
-          new BigNumber(assetInAmount).isGreaterThan(0) &&
-          new BigNumber(assetOutAmount).isGreaterThan(0) &&
-          swapType === 'swapExactIn' && <S.ActionButton onClick={swapIn}>Swap In</S.ActionButton>}
-        {!(assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) &&
-          !(assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance)) &&
-          new BigNumber(assetInAmount).isGreaterThan(0) &&
-          new BigNumber(assetOutAmount).isGreaterThan(0) &&
-          swapType === 'swapExactOut' && <S.ActionButton onClick={swapOut}>Swap Out</S.ActionButton>}
-
-        {!(
-          (assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) ||
-          (assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))
-        ) &&
-          ((swapType === 'swapExactOut' && !new BigNumber(assetInAmount).isGreaterThan(0)) ||
-            (swapType === 'swapExactIn' && !new BigNumber(assetOutAmount).isGreaterThan(0))) &&
-          (new BigNumber(assetInAmount).isGreaterThan(0) || new BigNumber(assetOutAmount).isGreaterThan(0)) && (
-            <S.ActionButton disabled>Not Enough Liquidity</S.ActionButton>
-          )}
-        {((assetOutBalance && new BigNumber(assetOutAmount).isGreaterThan(assetOutBalance)) ||
-          (assetInBalance && new BigNumber(assetInAmount).isGreaterThan(assetInBalance))) &&
-          swapType && <S.ActionButton disabled>Not Enough Balance</S.ActionButton>}
-        {(!assetInAmount ||
-          !assetOutAmount ||
-          new BigNumber(assetInAmount).isLessThan(0) ||
-          new BigNumber(assetOutAmount).isLessThan(0)) && <S.ActionButton disabled>Enter Amount</S.ActionButton>}
+        {!ruleNotEmpty && !ruleNotEnoughBalance && <S.ActionButton disabled>Enter Amount</S.ActionButton>}
+        {ruleSwapIn && <S.ActionButton onClick={swapIn}>Swap In</S.ActionButton>}
+        {ruleSwapOut && <S.ActionButton onClick={swapOut}>Swap Out</S.ActionButton>}
+        {ruleNotEnoughLiquidity && <S.ActionButton disabled>Not Enough Liquidity</S.ActionButton>}
+        {ruleNotEnoughBalance && <S.ActionButton disabled>Not Enough Balance</S.ActionButton>}
       </S.SharesUnlock>
     </S.SharesContent>
   )
