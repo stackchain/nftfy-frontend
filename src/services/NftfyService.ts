@@ -88,8 +88,29 @@ export const isRedeemableErc20 = async (erc20Address: string) => {
   try {
     const web3 = initializeWeb3('infura')
     const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
-    const address = await contractErc20Shares.methods.released().call()
-    return address === nftfyAddress
+    return !(await contractErc20Shares.methods.released().call())
+  } catch (error) {
+    notifyError(code[5011], error)
+    return false
+  }
+}
+
+export const isClaimableErc20 = async (erc20Address: string) => {
+  try {
+    const web3 = initializeWeb3('infura')
+    const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
+    return contractErc20Shares.methods.released().call()
+  } catch (error) {
+    notifyError(code[5011], error)
+    return false
+  }
+}
+
+export const claimErc721 = async (erc20Address: string) => {
+  try {
+    const web3 = initializeWeb3('infura')
+    const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
+    return contractErc20Shares.methods.claim().send({ from: accountVar() })
   } catch (error) {
     notifyError(code[5011], error)
     return false
