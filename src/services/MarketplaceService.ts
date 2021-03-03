@@ -111,7 +111,7 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
   const getERC20Metadata = async (address: string): Promise<MarketplaceERC20Item> => {
     const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], address)
     const erc20Name = await contractErc20Shares.methods.name().call()
-    const tokenId = await contractErc20Shares.methods.tokenId().call()
+    const tokenId = (await contractErc20Shares.methods.tokenId().call()).toString()
     const symbol = await contractErc20Shares.methods.symbol().call()
     const decimals = await contractErc20Shares.methods.decimals().call()
     const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()

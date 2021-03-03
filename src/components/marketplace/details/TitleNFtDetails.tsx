@@ -5,15 +5,13 @@ import { colors, fonts, viewport } from '../../../styles/variables'
 export interface TitleNftDetailsProps {
   name: string
   symbol: string
-  token?: string
-  created?: string
 }
 
-export const TitleNftDetails: React.FC<TitleNftDetailsProps> = ({ name, symbol, token }: TitleNftDetailsProps) => {
+export const TitleNftDetails: React.FC<TitleNftDetailsProps> = ({ name, symbol }: TitleNftDetailsProps) => {
   return (
     <S.Content>
       <h1>
-        {`${name} #${token}`}
+        {`${name}`}
         <small>{symbol}</small>
       </h1>
     </S.Content>

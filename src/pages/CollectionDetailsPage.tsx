@@ -33,14 +33,14 @@ export default function CollectionDetailsPage() {
         <S.Content>
           <S.Info>
             <S.MobileTitle>
-              <TitleNftDetails name={erc721.name} symbol={erc721.symbol} token={erc721.tokenId} created='moon cat 88' />
+              <TitleNftDetails name={erc721.name} symbol={erc721.symbol} />
             </S.MobileTitle>
             <S.Image>
               <NftImage name={erc721.name} image={String(erc721.image_url)} />
             </S.Image>
             <S.Details>
               <S.DesktopTitle>
-                <TitleNftDetails name={erc721.name} symbol={erc721.symbol} token={erc721.tokenId} created='moon cat 88' />
+                <TitleNftDetails name={erc721.name} symbol={erc721.symbol} />
               </S.DesktopTitle>
               <NftInfoDetails
                 contractName={erc721.name}

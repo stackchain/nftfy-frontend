@@ -431,6 +431,7 @@ export const getErc20Balance = async (walletAddress: string, erc20Address: strin
 
   return scale(new BigNumber(balance), -erc20Decimals)
 }
+
 export const getErc721ByAddress = async (erc721Address: string, erc721TokenId: string): Promise<WalletErc721Item> => {
   const web3 = initializeWeb3('infura')
 
