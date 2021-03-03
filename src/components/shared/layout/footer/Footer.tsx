@@ -43,15 +43,13 @@ const S = {
     align-items: center;
 
     color: ${colors.gray1};
-    @media (min-width: ${viewport.xxl}) {
-      &::after {
-        margin-left: 24px;
-        content: '|';
-        font-family: ${fonts.montserrat};
-        font-weight: 300;
-        color: ${colors.gray3};
-        cursor: default;
-      }
+    &::after {
+      margin-left: 24px;
+      content: '|';
+      font-family: ${fonts.montserrat};
+      font-weight: 300;
+      color: ${colors.gray3};
+      cursor: default;
     }
   `
 }

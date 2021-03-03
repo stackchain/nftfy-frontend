@@ -19,7 +19,7 @@ const S = {
     align-items: center;
     margin-right: auto;
     @media (max-width: ${viewport.xl}) {
-      display: none;
+      margin-right: 0px;
     }
   `,
   LinkItem: styled(Link)`

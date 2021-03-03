@@ -1,4 +1,5 @@
 import { useReactiveVar } from '@apollo/client'
+import { Dropdown, Menu } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -20,6 +21,28 @@ export interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ page }: HeaderProps) => {
   const account = useReactiveVar(accountVar)
 
+  const menuNavOptions = (
+    <S.StyledMenu>
+      <Menu.Item key='1'>
+        <Link to='/marketplace' className={page === 'explore' ? 'active' : ''}>
+          Explore
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/securitize' key='2' className={page === 'securitize' ? 'active' : ''}>
+          Securitize
+        </Link>
+      </Menu.Item>
+      <Menu.Item key='2'>
+        <Link to='/portfolio' className={page === 'portfolio' ? 'active' : ''}>
+          portfolio
+        </Link>
+      </Menu.Item>
+      <Menu.Item key='2' className={page === 'tutorial' ? 'active' : ''}>
+        <Link to='/tutorial'>How it works</Link>
+      </Menu.Item>
+    </S.StyledMenu>
+  )
   return (
     <>
       <S.Header>
@@ -36,7 +59,9 @@ export const Header: React.FC<HeaderProps> = ({ page }: HeaderProps) => {
           <S.LogoMobile src={nftfyIcon} alt='Nftfy' />
         </Link>
         <S.Search src={searchIcon} alt='Search' />
-        <S.Menu src={menuIcon} alt='Menu' />
+        <Dropdown overlay={menuNavOptions} trigger={['click']}>
+          <S.Menu src={menuIcon} alt='Menu' />
+        </Dropdown>
         {account ? <WalletButton /> : <HeaderWallet />}
       </S.HeaderMobile>
     </>
@@ -140,6 +165,39 @@ const S = {
     margin: 0 8px;
     @media (max-width: ${viewport.sm}) {
       margin: 0 4px;
+    }
+  `,
+  StyledMenu: styled(Menu)`
+    margin-top: 8px;
+    padding: 8px;
+    background: ${colors.white};
+    border: 1px solid ${colors.gray3};
+    box-sizing: border-box;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    .ant-dropdown-menu-item,
+    .ant-dropdown-menu-submenu-title {
+      padding: 16px 18px;
+    }
+    .ant-dropdown-menu-item {
+      &:hover {
+        background: ${colors.white};
+      }
+      & > a {
+        font-family: Montserrat;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 1.4rem;
+        line-height: 22px;
+
+        display: flex;
+        align-items: center;
+
+        color: ${colors.gray1};
+        &.active {
+          color: ${colors.gray2};
+        }
+      }
     }
   `
 }

@@ -28,6 +28,7 @@
     "multihop",
     "multicall",
     "struct",
-    "securizite"
+    "securizite",
+    "submenu"
   ]
 }
