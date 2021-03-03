@@ -9,6 +9,7 @@ export interface ChainConfig {
   balancer: {
     subgraphUrl: string
     subgraphBackupUrl: string
+    eth: string
     weth: string
     precision: number
     addresses: {
@@ -34,6 +35,7 @@ export const chains: ChainConfig[] = [
     balancer: {
       subgraphUrl: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer',
       subgraphBackupUrl: 'https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange/pools',
+      eth: '0x0000000000000000000000000000000000000000',
       weth: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
       precision: 6,
       addresses: {
@@ -73,6 +75,7 @@ export const chains: ChainConfig[] = [
     balancer: {
       subgraphUrl: '',
       subgraphBackupUrl: '',
+      eth: '',
       weth: '',
       precision: 6,
       addresses: {
@@ -96,6 +99,7 @@ export const chains: ChainConfig[] = [
     balancer: {
       subgraphUrl: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-kovan',
       subgraphBackupUrl: 'https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange-kovan/pools',
+      eth: '0x0000000000000000000000000000000000000000',
       weth: '0xd0A1E359811322d97991E03f863a0C30C2cF029C',
       precision: 6,
       addresses: {

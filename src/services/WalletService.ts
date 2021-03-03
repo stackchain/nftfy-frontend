@@ -356,6 +356,9 @@ export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20
 
   const erc20 = flatten(await Promise.all(erc20Promises))
   const getERC20Metadata = async (erc20Address: string): Promise<WalletERC20Share> => {
+    const { balancer } = getConfigByChainId(chainIdVar())
+    const { eth } = balancer
+
     const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
 
     const nameShares = await contractErc20Shares.methods.name().call()
@@ -378,7 +381,7 @@ export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20
     const { description, image_url, address, name } = await getErc721Metadata(erc721Address, tokenId, web3)
 
     const contractPayment = new web3.eth.Contract(erc20Abi as AbiItem[], paymentToken)
-    const paymentTokenSymbol = await contractPayment.methods.symbol().call()
+    const paymentTokenSymbol = (await contractPayment.methods.symbol().call()) === eth ? 'ETH' : paymentToken
 
     return {
       address: erc20Address,
@@ -449,6 +452,9 @@ export const getErc721ByAddress = async (erc721Address: string, erc721TokenId: s
 export const getERC20SharesByAddress = async (walletAddress: string, erc20Address: string): Promise<WalletERC20Share | undefined> => {
   const web3 = initializeWeb3('metamask')
 
+  const { balancer } = getConfigByChainId(chainIdVar())
+  const { eth } = balancer
+
   const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
 
   const nameShares = await contractErc20Shares.methods.name().call()
@@ -467,7 +473,7 @@ export const getERC20SharesByAddress = async (walletAddress: string, erc20Addres
   const { description, image_url, address, name } = await getErc721Metadata(erc20Address, tokenId, web3)
 
   const contractPayment = new web3.eth.Contract(erc20Abi as AbiItem[], paymentToken)
-  const paymentTokenSymbol = await contractPayment.methods.symbol().call()
+  const paymentTokenSymbol = (await contractPayment.methods.symbol().call()) === eth ? 'ETH' : paymentToken
 
   return {
     address: erc20Address,
