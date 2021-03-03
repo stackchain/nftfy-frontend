@@ -7,7 +7,7 @@ import { NftInfoDetails } from '../components/marketplace/details/NftInfoDetails
 import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetails'
 import { SecuritizeERC721 } from '../components/securitize/SecuritizeERC721'
 import { Footer, Header } from '../components/shared/layout'
-import { getNftWalletErc721Item } from '../services/WalletService'
+import { getErc721ByAddress } from '../services/WalletService'
 import { colors, viewport } from '../styles/variables'
 import { WalletErc721Item } from '../types/WalletTypes'
 
@@ -18,7 +18,7 @@ export default function CollectionDetailsPage() {
   useEffect(() => {
     const getNfts = async () => {
       if (address) {
-        const nft = await getNftWalletErc721Item(address, tokenId)
+        const nft = await getErc721ByAddress(address, tokenId)
         setErc721(nft)
       }
     }

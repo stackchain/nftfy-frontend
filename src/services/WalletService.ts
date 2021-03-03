@@ -425,14 +425,21 @@ export const getErc20Balance = async (walletAddress: string, erc20Address: strin
   return scale(new BigNumber(balance), -erc20Decimals)
 }
 
-export const getNftWalletErc721Item = async (address: string, tokenId: string): Promise<WalletErc721Item> => {
+export const getErc721ByAddress = async (erc721Address: string, erc721TokenId: string): Promise<WalletErc721Item> => {
+  const web3 = initializeWeb3('infura')
+
+  const contractErc721 = new web3.eth.Contract(erc721Abi as AbiItem[], erc721Address)
+  const name = await contractErc721.methods.name().call()
+  const symbol = await contractErc721.methods.symbol().call()
+  const { description, image_url } = await getErc721Metadata(erc721Address, erc721TokenId, web3)
+
   return {
-    address,
-    tokenId,
-    name: 'Cat Frost',
-    description: 'description',
-    symbol: 'CFT',
-    image_url: 'https://d168rbuicf8uyi.cloudfront.net/wp-content/uploads/2019/06/13145802/sonhar-com-leao-1024x649.jpg'
+    name,
+    address: erc721Address,
+    tokenId: erc721TokenId,
+    symbol,
+    description,
+    image_url
   }
 }
 
