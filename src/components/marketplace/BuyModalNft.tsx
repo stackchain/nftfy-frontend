@@ -1,7 +1,5 @@
 import { Button, Input } from 'antd'
 import styled from 'styled-components'
-import arrowDown from '../../assets/arrowDown.svg'
-import ethereum from '../../assets/tokens/ethereum.svg'
 import { colors, fonts, viewport } from '../../styles/variables'
 import { MarketplaceERC20Item } from '../../types/MarketplaceTypes'
 
@@ -29,7 +27,7 @@ export function BuyModalNft({ erc20 }: BuyModalNftProps) {
         <div>Exit Price</div>
         <div>
           <div>{`${exitPrice.toLocaleString('en-us')} ${paymentTokenSymbol}`}</div>
-          <div>{`$${exitPriceDollar.toLocaleString('en-us')}`}</div>
+          <div>{`${exitPriceDollar.toLocaleString('en-us')} ${paymentTokenSymbol}`}</div>
         </div>
       </S.NftExitPrice>
       <S.NftDetails>
@@ -37,35 +35,19 @@ export function BuyModalNft({ erc20 }: BuyModalNftProps) {
         <div>%</div>
         <div>Value</div>
         <div>Your Participation</div>
-        <div>35%</div>
-        <div>100 KIE24</div>
+        <div>{`${11}%`}</div>
+        <div>{`${10} ${symbol}`}</div>
         <div>Pay Amount</div>
-        <div>65%</div>
+        <div>{`${14}%`}</div>
         <div>
-          <div>32.5 ETH</div>
-          <div>$25.750</div>
+          <div>{`${32.5} ${paymentTokenSymbol}`}</div>
+          <div>{`$${0}`}</div>
         </div>
       </S.NftDetails>
-      <S.NftPayment>
-        <div>Balance: 100.0</div>
-        <div>
-          <div>Payment</div>
-          <div>
-            <S.TokenButton className='noDropdown'>
-              <img src={ethereum} alt='Ethereum' />
-              <span>ETH</span>
-              <img src={arrowDown} alt='Arrow Down' />
-            </S.TokenButton>
-          </div>
-          <div>
-            <S.TokenInput placeholder='0.0000' disabled />
-          </div>
-        </div>
-        <div>$ 300,00</div>
-      </S.NftPayment>
-      <S.NftUnlock>
+      <S.NftPay>
         <S.ActionButton>Unlock</S.ActionButton>
-      </S.NftUnlock>
+        <S.ActionButton>Buy NFT</S.ActionButton>
+      </S.NftPay>
     </S.NftContent>
   )
 }
@@ -113,12 +95,13 @@ export const S = {
   NftDetails: styled.div`
     display: grid;
     grid-template-columns: 2fr 1fr 1.4fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 32px 32px 32px;
 
     border: 1px solid ${colors.gray3};
     border-radius: 8px;
     padding: 16px;
-    margin-bottom: 16px;
+    padding-bottom: 32px;
+    margin-bottom: 32px;
 
     div {
       font-family: ${fonts.montserrat};
@@ -140,13 +123,21 @@ export const S = {
         color: ${colors.gray1};
         font-size: 12px;
         line-height: 16px;
+        position: absolute;
+        margin-top: 38px;
       }
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
     }
 
     > div:nth-child(1),
     > div:nth-child(4),
     > div:nth-child(7) {
-      text-align: start;
+      justify-content: flex-start;
     }
   `,
   NftExitPrice: styled.div`
@@ -193,85 +184,7 @@ export const S = {
       }
     }
   `,
-  NftPayment: styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 24px;
-
-    > div:nth-child(1) {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-
-      font-family: ${fonts.montserrat};
-      font-size: 12px;
-      line-height: 16px;
-      color: ${colors.gray1};
-      font-weight: 500;
-
-      height: 32px;
-    }
-
-    > div:nth-child(2) {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      flex-direction: row;
-      height: 40px;
-
-      > div:nth-child(1) {
-        display: flex;
-        font-family: ${fonts.montserrat};
-        font-size: 16px;
-        line-height: 24px;
-        color: ${colors.gray2};
-        font-weight: 600;
-        flex: 100px 0 0;
-        height: 40px;
-        align-items: center;
-      }
-
-      > div:nth-child(2) {
-        border: 1px solid ${colors.gray3};
-        height: 40px;
-        display: flex;
-        align-items: center;
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
-        flex: 100px 0 0;
-        background-color: ${colors.white1};
-      }
-
-      > div:nth-child(3) {
-        border: 1px solid ${colors.gray3};
-        height: 40px;
-        display: flex;
-        align-items: center;
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-        flex: 1 1 0;
-        border-left: 0;
-        justify-content: flex-end;
-        padding-right: 16px;
-        background-color: ${colors.white1};
-      }
-    }
-
-    > div:nth-child(3) {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-
-      font-family: ${fonts.montserrat};
-      font-size: 12px;
-      line-height: 16px;
-      color: ${colors.gray1};
-      font-weight: 500;
-
-      height: 32px;
-    }
-  `,
-  NftUnlock: styled.div`
+  NftPay: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -319,6 +232,7 @@ export const S = {
     justify-content: center;
     align-items: center;
     font-family: ${fonts.montserrat};
+    width: 100%;
 
     font-size: 16px;
     line-height: 24px;
