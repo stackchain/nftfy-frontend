@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DownOutlined, LoadingOutlined } from '@ant-design/icons'
-import { Button, Dropdown, Input, Spin, Tooltip } from 'antd'
-import BigNumber from 'bignumber.js'
+import { DownOutlined } from '@ant-design/icons'
+import { Button, Dropdown, Input, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import iconInfo from '../../assets/icons/info.svg'
 import { approveErc721, isApprovedErc721, securitizeErc721 } from '../../services/NftfyService'
-import { scale } from '../../services/UtilService'
+import { units } from '../../services/UtilService'
 import { colors, fonts, viewport } from '../../styles/variables'
 
 export interface securitizeErc721Props {
@@ -15,14 +14,10 @@ export interface securitizeErc721Props {
 }
 
 export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Address, erc721AddressId }: securitizeErc721Props) => {
-  const [approved, setApproved] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [exitPrice, setExitPrice] = useState('')
-  const [shares, setShares] = useState('')
-  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
+  const shares = '1000000'
 
-  const asset1 = {
-    id: '2',
+  const asset = {
+    id: '0',
     name: 'Ethereum',
     symbol: 'ETH',
     address: '0x0000000000000000000000000000000000000000',
@@ -30,39 +25,36 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
     decimals: 18
   }
 
+  const [loading, setLoading] = useState(false)
+  const [approved, setApproved] = useState(false)
+  const [exitPrice, setExitPrice] = useState('')
+
   useEffect(() => {
     const statusApprove = async () => {
-      if (erc721Address && erc721AddressId) {
-        const statusApproved = await isApprovedErc721(erc721Address, erc721AddressId)
-        setApproved(statusApproved)
-      }
-    }
-    statusApprove()
-    setShares('100000')
-  }, [erc721Address, erc721AddressId, approved])
-
-  const getApprove = async () => {
-    setLoading(true)
-    if (erc721Address && erc721AddressId) {
-      await approveErc721(erc721Address, erc721AddressId)
       const statusApproved = await isApprovedErc721(erc721Address, erc721AddressId)
       setApproved(statusApproved)
     }
+    statusApprove()
+  }, [approved, erc721Address, erc721AddressId])
+
+  const approve = async () => {
+    setLoading(true)
+    await approveErc721(erc721Address, erc721AddressId)
+    const statusApproved = await isApprovedErc721(erc721Address, erc721AddressId)
+    setApproved(statusApproved)
     setLoading(false)
   }
 
-  const setSecuritizeErc721 = async () => {
+  const securitize = async () => {
     setLoading(true)
-    if (approved) {
-      await securitizeErc721(erc721Address, erc721AddressId, shares, 0, exitPrice, asset1.address, false)
-    }
+    await securitizeErc721(erc721Address, erc721AddressId, shares, 0, units(exitPrice, asset.decimals), asset.address, false)
     setLoading(false)
   }
 
   const setToken = <span>token</span>
 
-  const SendExitPrice = async (value: string) => {
-    await setExitPrice(scale(new BigNumber(value), asset1.decimals).toString())
+  const handleExitPrice = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    setExitPrice(event.target.value)
   }
 
   return (
@@ -78,7 +70,7 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
               <img src={iconInfo} alt='info' />
             </Tooltip>
           </S.Label>
-          <S.SetExitPrice type='text' value={100000} disabled />
+          <S.SetExitPrice type='text' value={Number(shares).toLocaleString('en-US')} disabled />
         </S.FormControl>
 
         <S.FormControlPrice>
@@ -91,18 +83,22 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
           <div>
             <S.DropDownSetToken overlay={setToken} placement='bottomCenter' disabled>
               <Button>
-                {asset1.symbol}
+                {asset.symbol}
                 <DownOutlined />
               </Button>
             </S.DropDownSetToken>
-            <S.SetExitPrice type='number' onChange={e => SendExitPrice(String(e.target.value))} defaultValue='0' />
+            <S.SetExitPrice type='number' onChange={handleExitPrice} />
           </div>
         </S.FormControlPrice>
         <S.Action>
-          {approved === false ? (
-            <S.TradeSharesButton onClick={getApprove}>{loading ? <Spin indicator={antIcon} /> : 'Unlock'}</S.TradeSharesButton>
+          {!approved ? (
+            <S.TradeSharesButton loading={loading} onClick={approve}>
+              Unlock
+            </S.TradeSharesButton>
           ) : (
-            <S.TradeSharesButton onClick={setSecuritizeErc721}>{loading ? <Spin indicator={antIcon} /> : 'Securitize'}</S.TradeSharesButton>
+            <S.TradeSharesButton loading={loading} onClick={securitize}>
+              Securitize
+            </S.TradeSharesButton>
           )}
         </S.Action>
       </S.Form>

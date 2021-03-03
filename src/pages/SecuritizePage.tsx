@@ -71,7 +71,7 @@ export default function SecuritizePage({ location }: RouteProps) {
             {!loading &&
               nfts.map(nftItem => (
                 <NftCard
-                  key={`${nftItem.address}`}
+                  key={`${nftItem.address}-${nftItem.tokenId}`}
                   image={`${nftItem.image_url}`}
                   name={nftItem.name}
                   price={0}

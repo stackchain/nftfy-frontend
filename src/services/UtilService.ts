@@ -50,3 +50,10 @@ export function scale(input: BigNumber, decimalPlaces: number): BigNumber {
   const scaleMul = new BigNumber(10).pow(scalePow)
   return input.times(scaleMul)
 }
+
+export function units(value: string, decimals: number): string {
+  let i = value.indexOf('.')
+  if (i < 0) i = value.length
+  const s = value.slice(i + 1)
+  return value.slice(0, i) + s + '0'.repeat(decimals - s.length)
+}

@@ -56,7 +56,7 @@ export const securitizeErc721 = async (
   try {
     const web3 = initializeWeb3('metamask')
     const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
-    contractNftfy.methods
+    await contractNftfy.methods
       .securitize(erc721Address, erc721Id, sharesCount, sharesDecimals, exitPrice, paymentTokenAddress, remnant)
       .send({ from: accountVar() })
   } catch (error) {
