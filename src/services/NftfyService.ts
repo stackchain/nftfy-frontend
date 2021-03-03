@@ -64,18 +64,18 @@ export const securitizeErc721 = async (
   }
 }
 
-export const isSecuritizedErc721 = async (tokenAddress: string, tokenId: number) => {
+export const isSecuritizedErc721 = async (erc721Address: string, erc721TokenId: number) => {
   try {
     const web3 = initializeWeb3('infura')
     const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
-    const wrappedAddress = await contractNftfy.methods.wrappers(tokenAddress).call()
+    const wrappedAddress = await contractNftfy.methods.wrappers(erc721Address).call()
 
     if (!wrappedAddress) {
       throw new Error(code[5012])
     }
 
     const contractWrappedErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], wrappedAddress)
-    const securitized = await contractWrappedErc721.methods.securitized(tokenId).call()
+    const securitized = await contractWrappedErc721.methods.securitized(erc721TokenId).call()
 
     return !!securitized
   } catch (error) {
