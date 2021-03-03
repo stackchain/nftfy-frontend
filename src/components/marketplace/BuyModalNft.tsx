@@ -9,7 +9,7 @@ interface BuyModalNftProps {
   erc20: MarketplaceERC20Item
 }
 export function BuyModalNft({ erc20 }: BuyModalNftProps) {
-  const { name, symbol } = erc20
+  const { name, symbol, exitPrice, paymentTokenSymbol, exitPriceDollar } = erc20
   const { image_url } = erc20.erc721
 
   return (
@@ -28,8 +28,8 @@ export function BuyModalNft({ erc20 }: BuyModalNftProps) {
       <S.NftExitPrice>
         <div>Exit Price</div>
         <div>
-          <div>50.0 ETH</div>
-          <div>$63.875</div>
+          <div>{`${exitPrice.toLocaleString('en-us')} ${paymentTokenSymbol}`}</div>
+          <div>{`$${exitPriceDollar.toLocaleString('en-us')}`}</div>
         </div>
       </S.NftExitPrice>
       <S.NftDetails>

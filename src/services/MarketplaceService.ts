@@ -1,5 +1,7 @@
+import BigNumber from 'bignumber.js'
 import { flatten } from 'lodash'
 import { AbiItem } from 'web3-utils'
+import erc20Abi from '../abi/erc20.json'
 import erc20SharesAbi from '../abi/erc20shares.json'
 import erc721Abi from '../abi/erc721.json'
 import erc721WrappedAbi from '../abi/erc721wrapped.json'
@@ -8,12 +10,15 @@ import { getConfigByChainId } from '../config'
 import { chainIdVar } from '../graphql/variables/WalletVariable'
 import { MarketplaceERC20Item } from '../types/MarketplaceTypes'
 import { Paged } from '../types/UtilTypes'
-import paginator, { getErc721Metadata } from './UtilService'
+import paginator, { getErc721Metadata, scale } from './UtilService'
 import { initializeWeb3 } from './WalletService'
 
 const { erc721Addresses, nftfyAddress } = getConfigByChainId(chainIdVar())
 
 export const getMarketplaceItems = async (page?: number, limit?: number): Promise<Paged<MarketplaceERC20Item[]>> => {
+  const { balancer } = getConfigByChainId(chainIdVar())
+  const { eth } = balancer
+
   const web3 = initializeWeb3('infura')
 
   const contractNftfy = new web3.eth.Contract(nftfyAbi as AbiItem[], nftfyAddress)
@@ -51,18 +56,41 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
     const tokenId = await contractErc20Shares.methods.tokenId().call()
     const symbol = await contractErc20Shares.methods.symbol().call()
     const decimals = await contractErc20Shares.methods.decimals().call()
-    const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()
 
+    const totalSupply = await contractErc20Shares.methods.totalSupply().call()
+    const exitPrice = await contractErc20Shares.methods.exitPrice().call()
+    const paymentToken = await contractErc20Shares.methods.paymentToken().call()
+    const vaultBalance = await contractErc20Shares.methods.vaultBalance().call()
+    const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()
     const contractWrapperErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], erc721Wrapper)
     const securitized = await contractWrapperErc721.methods.securitized(tokenId).call()
     const erc721Address = await contractWrapperErc721.methods.target().call()
+
+    const getPaymentTokenSymbol = async () => {
+      try {
+        const contractErc20 = new web3.eth.Contract(erc20Abi as AbiItem[], paymentToken)
+        return contractErc20.methods.symbol().call()
+      } catch (error) {
+        console
+      }
+
+      return '-'
+    }
+
+    const paymentTokenSymbol = paymentToken === eth ? 'ETH' : await getPaymentTokenSymbol()
 
     return {
       address: addressErc20,
       name: erc20Name,
       symbol,
       securitized,
-      decimals: Number(decimals),
+      decimals,
+      totalSupply: Number(totalSupply),
+      exitPrice: Number(scale(new BigNumber(exitPrice), -18).toString()),
+      exitPriceDollar: 0,
+      paymentToken,
+      paymentTokenSymbol,
+      vaultBalance: Number(vaultBalance),
       erc721: {
         address: erc721Address,
         tokenId,
@@ -108,19 +136,40 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
 export const getMarketplaceItemByAddress = async (erc20Address: string): Promise<MarketplaceERC20Item> => {
   const web3 = initializeWeb3('infura')
 
+  const { balancer } = getConfigByChainId(chainIdVar())
+  const { eth } = balancer
+
   const getERC20Metadata = async (address: string): Promise<MarketplaceERC20Item> => {
     const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], address)
     const erc20Name = await contractErc20Shares.methods.name().call()
     const tokenId = (await contractErc20Shares.methods.tokenId().call()).toString()
     const symbol = await contractErc20Shares.methods.symbol().call()
     const decimals = await contractErc20Shares.methods.decimals().call()
-    const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()
 
+    const totalSupply = await contractErc20Shares.methods.totalSupply().call()
+    const exitPrice = await contractErc20Shares.methods.exitPrice().call()
+    const paymentToken = await contractErc20Shares.methods.paymentToken().call()
+    const vaultBalance = await contractErc20Shares.methods.vaultBalance().call()
+
+    const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()
     const contractWrapperErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], erc721Wrapper)
     const securitized = await contractWrapperErc721.methods.securitized(tokenId).call()
     const erc721Address = await contractWrapperErc721.methods.target().call()
     const contractErc721 = new web3.eth.Contract(erc721Abi as AbiItem[], erc721Address)
     const symbolErc721 = await contractErc721.methods.symbol().call()
+
+    const getPaymentTokenSymbol = async () => {
+      try {
+        const contractErc20 = new web3.eth.Contract(erc20Abi as AbiItem[], paymentToken)
+        return contractErc20.methods.symbol().call()
+      } catch (error) {
+        console
+      }
+
+      return '-'
+    }
+
+    const paymentTokenSymbol = paymentToken === eth ? 'ETH' : await getPaymentTokenSymbol()
 
     const erc721Metadata = await getErc721Metadata(erc721Address, tokenId, web3)
     return {
@@ -129,6 +178,12 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
       symbol,
       securitized,
       decimals: Number(decimals),
+      totalSupply: Number(totalSupply),
+      exitPrice: Number(scale(new BigNumber(exitPrice), -18).toString()),
+      exitPriceDollar: 0,
+      paymentToken,
+      paymentTokenSymbol,
+      vaultBalance: Number(vaultBalance),
       erc721: {
         name: erc721Metadata.name,
         address: erc721Address,

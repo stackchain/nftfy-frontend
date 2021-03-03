@@ -4,6 +4,12 @@ export interface MarketplaceERC20Item {
   symbol: string
   securitized: boolean
   decimals: number
+  totalSupply: number
+  exitPrice: number
+  exitPriceDollar: number
+  paymentToken: string
+  paymentTokenSymbol: string
+  vaultBalance: number
   erc721: {
     wrapper: string
     address: string
