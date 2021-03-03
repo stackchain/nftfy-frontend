@@ -18,6 +18,7 @@ export interface WalletERC20Share extends WalletERC20Item {
   totalSupply: number
   exitPrice: number
   paymentToken: string
+  paymentTokenSymbol: string
   vaultBalance: number
   vaultBalanceWallet: number
   released: boolean

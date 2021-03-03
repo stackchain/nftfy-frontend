@@ -377,6 +377,9 @@ export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20
 
     const { description, image_url, address, name } = await getErc721Metadata(erc721Address, tokenId, web3)
 
+    const contractPayment = new web3.eth.Contract(erc20Abi as AbiItem[], paymentToken)
+    const paymentTokenSymbol = await contractPayment.methods.symbol().call()
+
     return {
       address: erc20Address,
       symbol,
@@ -385,6 +388,7 @@ export const getERC20Shares = async (walletAddress: string): Promise<WalletERC20
       exitPrice,
       name: nameShares,
       paymentToken,
+      paymentTokenSymbol,
       vaultBalance,
       vaultBalanceWallet,
       released,
@@ -424,7 +428,6 @@ export const getErc20Balance = async (walletAddress: string, erc20Address: strin
 
   return scale(new BigNumber(balance), -erc20Decimals)
 }
-
 export const getErc721ByAddress = async (erc721Address: string, erc721TokenId: string): Promise<WalletErc721Item> => {
   const web3 = initializeWeb3('infura')
 
@@ -455,12 +458,16 @@ export const getERC20SharesByAddress = async (walletAddress: string, erc20Addres
   const totalSupply = Number(await contractErc20Shares.methods.totalSupply().call())
   const exitPrice = Number(await contractErc20Shares.methods.exitPrice().call())
   const paymentToken = await contractErc20Shares.methods.paymentToken().call()
+
   const vaultBalance = await contractErc20Shares.methods.vaultBalance().call()
   const wrapper = await contractErc20Shares.methods.wrapper().call()
   const released = await contractErc20Shares.methods.released().call()
   const vaultBalanceWallet = Number(await contractErc20Shares.methods.vaultBalanceOf(walletAddress).call())
 
   const { description, image_url, address, name } = await getErc721Metadata(erc20Address, tokenId, web3)
+
+  const contractPayment = new web3.eth.Contract(erc20Abi as AbiItem[], paymentToken)
+  const paymentTokenSymbol = await contractPayment.methods.symbol().call()
 
   return {
     address: erc20Address,
@@ -470,6 +477,7 @@ export const getERC20SharesByAddress = async (walletAddress: string, erc20Addres
     exitPrice,
     name: nameShares,
     paymentToken,
+    paymentTokenSymbol,
     vaultBalance,
     vaultBalanceWallet,
     released,
