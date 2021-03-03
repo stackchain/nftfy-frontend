@@ -77,6 +77,8 @@ export default function SecuritizePage({ location }: RouteProps) {
                   price={0}
                   url={`/securitize/${nftItem.address}/${nftItem.tokenId}`}
                   loading={loading}
+                  tokenId={nftItem.tokenId}
+                  securitize
                 />
               ))}
           </S.CardsContainer>
@@ -93,7 +95,7 @@ export const S = {
     flex: 1;
     padding: 32px 48px;
     background: ${colors.white};
-    min-height: calc(100vh - 136px);
+    min-height: calc(100vh - 200px);
     display: flex;
     justify-content: center;
     @media (max-width: ${viewport.xl}) {

@@ -60,6 +60,7 @@ const S = {
       font-family: ${fonts.montserrat};
       font-style: normal;
       font-weight: 500;
+      margin-bottom: 30px;
       font-size: 16px;
       line-height: 22px;
       color: ${colors.gray2};

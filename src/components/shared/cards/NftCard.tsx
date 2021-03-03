@@ -13,9 +13,11 @@ export interface NftCardProps {
   url?: string
   loading?: boolean
   className?: string
+  securitize?: boolean
+  tokenId?: string
 }
 
-export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, url, className }) => {
+export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, url, className, securitize, tokenId }) => {
   return (
     <S.Card className={className} to={`${url || '#'}`}>
       <S.BoxImage className={image === '' ? 'bg-fail' : ''}>
@@ -25,10 +27,13 @@ export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, u
       <S.BoxInfo>
         <S.Content>
           <Skeleton loading={!!loading} active paragraph={{ rows: 0 }}>
-            <S.Name>{`${name}`}</S.Name>
+            <S.Name>
+              {`${name}`}
+              {securitize ? ` #${tokenId} Shares` : ''}
+            </S.Name>
           </Skeleton>
         </S.Content>
-        <S.Content>
+        <S.Content hidden={securitize}>
           <Skeleton loading={!!loading} active paragraph={{ rows: 0 }}>
             <S.Price>{`${price} usd`}</S.Price>
           </Skeleton>
@@ -42,7 +47,8 @@ const S = {
   Card: styled(Link)`
     width: 100%;
     height: auto;
-    max-width: 576px;
+    max-height: 394px;
+    max-width: 314px;
 
     border: 1px solid ${colors.gray3};
     box-sizing: border-box;

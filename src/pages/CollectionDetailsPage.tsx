@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import imageNft from '../assets/nftImage/catFrost.png'
 import { NftImage } from '../components/marketplace/details/NftImage'
 import { NftInfoDetails } from '../components/marketplace/details/NftInfoDetails'
 import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetails'
@@ -34,14 +33,14 @@ export default function CollectionDetailsPage() {
         <S.Content>
           <S.Info>
             <S.MobileTitle>
-              <TitleNftDetails name={erc721.name} symbol={erc721.symbol} created='moon cat 88' />
+              <TitleNftDetails name={erc721.name} symbol={erc721.symbol} token={erc721.tokenId} created='moon cat 88' />
             </S.MobileTitle>
             <S.Image>
-              <NftImage name={erc721.name} image={imageNft} />
+              <NftImage name={erc721.name} image={String(erc721.image_url)} />
             </S.Image>
             <S.Details>
               <S.DesktopTitle>
-                <TitleNftDetails name={erc721.name} symbol={erc721.symbol} created='moon cat 88' />
+                <TitleNftDetails name={erc721.name} symbol={erc721.symbol} token={erc721.tokenId} created='moon cat 88' />
               </S.DesktopTitle>
               <NftInfoDetails
                 contractName={erc721.name}
@@ -65,7 +64,7 @@ const S = {
     flex: 1;
     padding: 32px 48px;
     min-height: calc(100vh - 136px);
-    margin-top: 80px;
+    padding-top: 80px;
     background: ${colors.white};
     display: flex;
     @media (max-width: ${viewport.md}) {

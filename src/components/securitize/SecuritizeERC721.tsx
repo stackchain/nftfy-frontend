@@ -1,9 +1,12 @@
-import { LoadingOutlined } from '@ant-design/icons'
-import { Button, Input, Select, Spin, Tooltip } from 'antd'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { DownOutlined, LoadingOutlined } from '@ant-design/icons'
+import { Button, Dropdown, Input, Spin, Tooltip } from 'antd'
+import BigNumber from 'bignumber.js'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import iconInfo from '../../assets/icons/info.svg'
 import { approveErc721, isApprovedErc721, securitizeErc721 } from '../../services/NftfyService'
+import { scale } from '../../services/UtilService'
 import { colors, fonts, viewport } from '../../styles/variables'
 
 export interface securitizeErc721Props {
@@ -14,10 +17,18 @@ export interface securitizeErc721Props {
 export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Address, erc721AddressId }: securitizeErc721Props) => {
   const [approved, setApproved] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [exitPrice, setExitPrice] = useState('100000000000000000')
+  const [exitPrice, setExitPrice] = useState('')
+  const [shares, setShares] = useState('')
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
-  const sharesCount = '100000000000000000'
-  const tokenETH = '0x0000000000000000000000000000000000000000'
+
+  const asset1 = {
+    id: '2',
+    name: 'Ethereum',
+    symbol: 'ETH',
+    address: '0x0000000000000000000000000000000000000000',
+    imageUrl: '',
+    decimals: 18
+  }
 
   useEffect(() => {
     const statusApprove = async () => {
@@ -27,6 +38,7 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
       }
     }
     statusApprove()
+    setShares('100000')
   }, [erc721Address, erc721AddressId, approved])
 
   const getApprove = async () => {
@@ -42,9 +54,15 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
   const setSecuritizeErc721 = async () => {
     setLoading(true)
     if (approved) {
-      await securitizeErc721(erc721Address, erc721AddressId, sharesCount, 0, exitPrice, tokenETH, false)
+      await securitizeErc721(erc721Address, erc721AddressId, shares, 0, exitPrice, asset1.address, false)
     }
     setLoading(false)
+  }
+
+  const setToken = <span>token</span>
+
+  const SendExitPrice = async (value: string) => {
+    await setExitPrice(scale(new BigNumber(value), asset1.decimals).toString())
   }
 
   return (
@@ -60,7 +78,7 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
               <img src={iconInfo} alt='info' />
             </Tooltip>
           </S.Label>
-          <S.SetExitPrice type='text' value={1000000} disabled />
+          <S.SetExitPrice type='text' value={100000} disabled />
         </S.FormControl>
 
         <S.FormControlPrice>
@@ -71,10 +89,13 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
             </Tooltip>
           </S.Label>
           <div>
-            <S.SetToken id='' defaultValue='ETH'>
-              <option value='0x0000000000000000000000000000000000000000'>ETH</option>
-            </S.SetToken>
-            <S.SetExitPrice type='number' onChange={e => setExitPrice(e.target.value)} defaultValue='0.01' />
+            <S.DropDownSetToken overlay={setToken} placement='bottomCenter' disabled>
+              <Button>
+                {asset1.symbol}
+                <DownOutlined />
+              </Button>
+            </S.DropDownSetToken>
+            <S.SetExitPrice type='number' onChange={e => SendExitPrice(String(e.target.value))} defaultValue='0' />
           </div>
         </S.FormControlPrice>
         <S.Action>
@@ -93,7 +114,7 @@ const S = {
   Content: styled.div`
     flex: 1;
     max-width: 624px;
-    height: 304px;
+    min-height: 304px;
     background: ${colors.white};
     font-family: ${fonts.montserrat};
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.05);
@@ -105,7 +126,7 @@ const S = {
     }
   `,
   Title: styled.div`
-    padding: 33px 0px 33px 33px;
+    padding: 20px 0px 20px 33px;
     border-bottom: 1px solid ${colors.gray3};
     span {
       font-style: normal;
@@ -136,20 +157,31 @@ const S = {
     color: ${colors.gray2};
     text-align: end;
     padding-right: 15px;
+    outline: none !important;
   `,
-  SetToken: styled(Select)`
+  DropDownSetToken: styled(Dropdown)`
     width: 152px;
-    .ant-select-selector {
-      height: 40px !important;
-      border-bottom-left-radius: 8px !important;
-      border-top-left-radius: 8px !important;
+    height: 40px;
+    border-right: none;
+    outline: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span {
+      font-family: Montserrat;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      color: ${colors.gray2};
     }
-    box-sizing: border-box;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-    color: ${colors.gray2};
+
+    &:hover {
+      border-color: ${colors.gray3};
+    }
+    &:focus {
+      border-color: ${colors.gray3};
+    }
   `,
   FormControl: styled.div`
     width: 100%;
@@ -185,6 +217,14 @@ const S = {
       border-top-right-radius: 8px !important;
       border-bottom-left-radius: 0px !important;
       border-top-left-radius: 0px !important;
+      &:focus {
+        border-color: ${colors.gray3} !important;
+        box-shadow: none !important;
+      }
+      &:hover {
+        border-color: ${colors.gray3} !important;
+        box-shadow: none !important;
+      }
     }
     div {
       display: flex;
@@ -258,6 +298,8 @@ const S = {
     font-weight: 500;
     color: ${colors.white};
     background-color: ${colors.blue1};
+    margin-top: 20px;
+    margin-bottom: 17px;
 
     &:hover,
     &:focus {
