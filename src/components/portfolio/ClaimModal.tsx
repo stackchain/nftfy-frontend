@@ -4,7 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { claimModalVar } from '../../graphql/variables/PortfolioVariable'
 import { claimErc20 } from '../../services/NftfyService'
-import { colors, viewport } from '../../styles/variables'
+import { colors, fonts, viewport } from '../../styles/variables'
 
 export interface ClaimModalProps {
   className?: string
@@ -18,318 +18,258 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ className }: ClaimModalP
   }
 
   const claim = async () => {
-    erc20Share && (await claimErc20(erc20Share?.address))
+    erc20Share && (await claimErc20(erc20Share.address))
   }
 
   return (
-    <S.ClaimModal title='Claim Share' onCancel={handleCancel} className={className} visible={!!erc20Share} footer={null}>
+    <S.ClaimModal onCancel={handleCancel} className={className} visible={!!erc20Share} footer={null}>
       {!!erc20Share && (
-        <>
+        <S.NftContent>
           <S.Header>
-            <S.HeaderDiv>
-              <S.H1header>{erc20Share.name}</S.H1header>
-              <S.ShareAddress>{erc20Share.address}</S.ShareAddress>
-            </S.HeaderDiv>
-            <S.TokenImage />
+            <div>
+              <h3>
+                {erc20Share.name}
+                <small>{erc20Share.symbol}</small>
+              </h3>
+            </div>
+            <div>
+              <img src={erc20Share.erc721.imageUrl} alt={`${erc20Share.erc721.name}`} />
+            </div>
           </S.Header>
-
-          <S.HeaderMobile>
-            <S.TokenImage />
-            <S.HeaderDiv>
-              <S.H1header>{erc20Share.name}</S.H1header>
-              <S.ShareAddress>{erc20Share.address}</S.ShareAddress>
-            </S.HeaderDiv>
-          </S.HeaderMobile>
-
-          <S.ExitPriceDiv>
-            <S.ExitSpan>Exit Price</S.ExitSpan>
-            <S.PriceDiv>
-              <S.ValueEth>{`${erc20Share.balance} ${erc20Share.symbol}`}</S.ValueEth>
-              <S.ValueMoney>{`$${erc20Share.financial.balanceDollar}`}</S.ValueMoney>
-            </S.PriceDiv>
-          </S.ExitPriceDiv>
-
-          <S.DetailsDiv>
-            <S.DetailsH1>Claim Details</S.DetailsH1>
-
-            <S.DetailsBalanceDiv>
-              <S.BalanceSpan>Balance</S.BalanceSpan>
-              <S.BalanceYcs>{`${erc20Share.balance}YCS`}</S.BalanceYcs>
-            </S.DetailsBalanceDiv>
-
-            <S.TotalReceiveDiv>
-              <S.TotalReceiveSpan>Total to receive</S.TotalReceiveSpan>
-              <S.BalanceValueDiv>
-                <S.BalanceEth>{`${erc20Share.balance} ${erc20Share.symbol}`}</S.BalanceEth>
-                <S.BalanceMoney>{`$${erc20Share.financial.balanceDollar}`}</S.BalanceMoney>
-              </S.BalanceValueDiv>
-            </S.TotalReceiveDiv>
-          </S.DetailsDiv>
-
-          <S.ButtonClaim onClick={claim}>Claim</S.ButtonClaim>
-        </>
+          <S.NftExitPrice>
+            <div>Exit Price</div>
+            <div>
+              <div>{`${erc20Share.exitPrice.toLocaleString('en-us')} ${erc20Share.paymentTokenSymbol}`}</div>
+              <div>{`$${erc20Share.financial.exitPriceDollar.toLocaleString('en-us')}`}</div>
+            </div>
+          </S.NftExitPrice>
+          <S.NftDetails>
+            <div>Share Balance</div>
+            <div>{`${erc20Share.balance} ${erc20Share.paymentTokenSymbol}`}</div>
+            <div>Claim Amount</div>
+            <div>
+              <div>{`${erc20Share.financial.price} ${erc20Share.paymentTokenSymbol}`}</div>
+              <div>{`$${erc20Share.totalSupply}`}</div>
+            </div>
+          </S.NftDetails>
+          <S.NftPay>
+            <S.ActionButton onClick={claim}>Claim</S.ActionButton>
+          </S.NftPay>
+        </S.NftContent>
       )}
     </S.ClaimModal>
   )
 }
 export const S = {
   ClaimModal: styled(Modal)`
-    background: #ffffff;
-    border-radius: 16px;
-    flex: 1;
-    padding: 0;
-    .ant-modal-header {
-      border-radius: 16px 16px 0 0;
-      padding: 28px 33px 25px 33px;
-      @media (max-width: ${viewport.sm}) {
-        padding: 21px 33px 18px 24px;
-      }
+    border-radius: 8px;
+
+    .ant-modal-body {
+      padding: 0;
     }
     .ant-modal-content {
       border-radius: 16px;
+      max-width: 400px;
     }
-    .ant-modal-body {
-      padding: 33px;
-      @media (max-width: ${viewport.sm}) {
-        padding: 24px;
+    .ant-modal-close-x {
+      display: none;
+    }
+    .ant-modal-footer {
+      display: none;
+    }
+  `,
+  NftContent: styled.div`
+    padding: 24px 32px;
+
+    @media (max-width: ${viewport.sm}) {
+      padding: 32px 16px;
+    }
+  `,
+  Header: styled.div`
+    display: flex;
+    flex-direction: row;
+
+    div {
+      &:nth-child(1) {
+        flex: 1;
+        display: flex;
+        align-items: center;
+
+        h3 {
+          font-family: ${fonts.montserrat};
+          font-size: 24px;
+          font-weight: 600;
+          line-height: 24px;
+          color: ${colors.gray2};
+
+          small {
+            color: ${colors.gray1};
+            font-size: 12px;
+            margin-left: 8px;
+          }
+        }
+      }
+
+      img {
+        width: 48px;
+        height: 48px;
+        border-radius: 4px;
+        display: flex;
       }
     }
-    .ant-modal-title {
-      font-family: Montserrat;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 24px;
-      height: auto;
-      color: ${colors.gray2};
-    }
-    span.ant-modal-close-x {
-      display: none;
-    }
   `,
-  Header: styled.header`
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    @media (max-width: ${viewport.sm}) {
-      display: none;
-    }
-  `,
-  HeaderMobile: styled.div`
-    flex: 1;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 18px;
-
-    display: none;
-    @media (max-width: ${viewport.sm}) {
-      display: flex;
-    }
-  `,
-  HeaderDiv: styled.div`
-    display: flex;
-    flex-direction: column;
-  `,
-  H1header: styled.h1`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 32px;
-    margin: 0px;
-
-    color: ${colors.gray2};
-  `,
-  ShareAddress: styled.a`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 22px;
-
-    color: ${colors.blue1};
-    &:hover {
-      color: ${colors.blue1};
-    }
-  `,
-  TokenImage: styled.div`
-    width: 48px;
-    height: 48px;
-
-    background: ${colors.black};
-    @media (max-width: ${viewport.sm}) {
-      margin-right: 10px;
-    }
-  `,
-  ExitPriceDiv: styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    margin-bottom: 18px;
-    @media (max-width: ${viewport.sm}) {
-      margin-bottom: 8px;
-    }
-  `,
-  ExitSpan: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 16px;
-
-    color: ${colors.gray2};
-  `,
-  PriceDiv: styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    @media (max-width: ${viewport.sm}) {
-      flex-direction: row;
-    }
-  `,
-  ValueEth: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 22px;
-
-    color: ${colors.gray2};
-    @media (max-width: ${viewport.sm}) {
-      margin-right: 16px;
-    }
-  `,
-  ValueMoney: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 16px;
-
-    color: ${colors.gray1};
-  `,
-
-  DetailsDiv: styled.div`
-    flex: 1;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
+  NftDetails: styled.div`
+    display: grid;
+    grid-template-columns: 2fr 1.4fr;
+    grid-template-rows: 32px 32px;
 
     border: 1px solid ${colors.gray3};
-    box-sizing: border-box;
     border-radius: 8px;
+    padding: 16px;
+    padding-bottom: 32px;
+    margin-bottom: 32px;
 
-    margin-bottom: 24px;
-  `,
-  DetailsH1: styled.h1`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 22px;
-
-    color: ${colors.gray2};
-  `,
-  DetailsBalanceDiv: styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin: 8px 0px;
-  `,
-  BalanceSpan: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 22px;
-
-    color: ${colors.gray2};
-  `,
-  BalanceYcs: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 22px;
-
-    color: ${colors.gray2};
-  `,
-  TotalReceiveDiv: styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  `,
-  TotalReceiveSpan: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 22px;
-
-    color: ${colors.gray2};
-  `,
-  BalanceValueDiv: styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  `,
-  BalanceEth: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-
-    color: ${colors.gray2};
-  `,
-  BalanceMoney: styled.span`
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 16px;
-
-    color: ${colors.gray5};
-  `,
-  ButtonClaim: styled(Button)`
-    flex: 1;
-    width: 100%;
-    max-height: 40px;
-    max-width: 209px;
-    background: ${colors.blue1};
-    border-radius: 8px;
-    margin: 0 auto;
-    padding: 19px 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-    color: ${colors.white};
-
-    &:hover {
-      color: ${colors.white};
-      background: ${colors.blue1};
+    div {
+      font-family: ${fonts.montserrat};
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 500;
+      color: ${colors.gray2};
+      text-align: end;
     }
 
+    > div:nth-child(4) {
+      > div:nth-child(2) {
+        color: ${colors.gray1};
+        font-size: 12px;
+        line-height: 16px;
+        position: absolute;
+        margin-top: 38px;
+      }
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    > div:nth-child(1),
+    > div:nth-child(3) {
+      justify-content: flex-start;
+    }
+  `,
+  NftExitPrice: styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 48px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+
+    > div:nth-child(1) {
+      display: flex;
+      flex: 100px 0 0;
+
+      font-family: ${fonts.montserrat};
+      font-size: 12px;
+      line-height: 16px;
+      font-weight: 500;
+      color: ${colors.gray1};
+    }
+
+    > div:nth-child(2) {
+      flex: 1;
+
+      > div {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      > div:nth-child(1) {
+        font-family: ${fonts.montserrat};
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: 500;
+        color: ${colors.gray2};
+      }
+
+      > div:nth-child(2) {
+        font-family: ${fonts.montserrat};
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: 500;
+        color: ${colors.gray1};
+      }
+    }
+  `,
+  NftPay: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+  `,
+  TokenButton: styled.div`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -o-user-select: none;
+    user-select: none;
+    padding: 8px;
+
+    img:nth-child(1) {
+      margin-right: 8px;
+    }
+
+    span {
+      margin-right: 8px;
+      font-family: ${fonts.montserrat};
+      font-weight: 600;
+      color: ${colors.gray2};
+    }
+
+    img:nth-child(3) {
+      width: 16px;
+      height: 16px;
+    }
+
+    &.noDropdown {
+      cursor: default;
+      img:nth-child(3) {
+        display: none;
+      }
+    }
+  `,
+  ActionButton: styled(Button)`
+    height: 40px;
+    padding: 0 64px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: ${fonts.montserrat};
+    width: 100%;
+
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    color: ${colors.white};
+    background-color: ${colors.blue1};
+    border: 1px solid ${colors.blue1};
+
+    &:hover,
     &:focus {
+      font-family: ${fonts.montserrat};
       color: ${colors.white};
-      background: ${colors.blue1};
+      background-color: ${colors.blue2};
+      border: 1px solid ${colors.blue2};
+    }
+
+    @media (max-width: ${viewport.sm}) {
+      width: 100%;
     }
   `
 }

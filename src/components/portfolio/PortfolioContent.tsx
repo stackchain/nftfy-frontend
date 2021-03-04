@@ -214,6 +214,7 @@ export const S = {
     width: 48px;
     height: 48px;
     margin-right: 16px;
+    border-radius: 8px;
   `,
   DivErc20: styled.div`
     flex: 1;

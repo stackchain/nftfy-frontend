@@ -42,6 +42,9 @@ export const S = {
     h3.ant-skeleton-title {
       margin-left: 16px;
     }
+    span.ant-skeleton-avatar.ant-skeleton-avatar-square.ant-spin-dot {
+      border-radius: 8px;
+    }
   `,
   DivErc20: styled.div`
     flex: 1;

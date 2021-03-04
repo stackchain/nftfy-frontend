@@ -40,6 +40,9 @@ export const S = {
     .ant-skeleton.ant-skeleton-element.ant-skeleton-active.ant-spin-dot {
       height: 48px;
     }
+    span.ant-skeleton-avatar.ant-skeleton-avatar-square.ant-spin-dot {
+      border-radius: 8px;
+    }
   `,
   PanelDivInfo: styled.div`
     flex: 1;

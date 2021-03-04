@@ -36,6 +36,7 @@ const S = {
     max-width: 480px;
     margin: 0 24px;
     height: 40px;
+    margin-left: auto;
   `,
   LinkItem: styled(Link)`
     font-family: ${fonts.montserrat};

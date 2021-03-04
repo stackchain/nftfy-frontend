@@ -6,12 +6,11 @@ import styled from 'styled-components'
 import menuIcon from '../../../../assets/menuIcon.svg'
 import nftfyIcon from '../../../../assets/nftfy-icon.svg'
 import nftfy from '../../../../assets/nftfy.svg'
-import searchIcon from '../../../../assets/searchIcon.svg'
+// import searchIcon from '../../../../assets/searchIcon.svg'
 import { accountVar } from '../../../../graphql/variables/WalletVariable'
 import { colors, viewport } from '../../../../styles/variables'
 import { WalletButton } from '../../../wallet/WalletButton'
 import { HeaderMenu } from './HeaderMenu'
-import { HeaderSearch } from './HeaderSearch'
 import { HeaderWallet } from './HeaderWallet'
 
 export interface HeaderProps {
@@ -49,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({ page }: HeaderProps) => {
         <Link to='/'>
           <S.Logo src={nftfy} alt='Nftfy' />
         </Link>
-        <HeaderSearch />
+        {/* <HeaderSearch /> */}
         <HeaderMenu page={page} />
         {account ? <WalletButton /> : <HeaderWallet />}
       </S.Header>
@@ -58,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({ page }: HeaderProps) => {
           <S.Logo src={nftfy} alt='Nftfy' />
           <S.LogoMobile src={nftfyIcon} alt='Nftfy' />
         </Link>
-        <S.Search src={searchIcon} alt='Search' />
+        {/* <S.Search src={searchIcon} alt='Search' /> */}
         <Dropdown overlay={menuNavOptions} trigger={['click']}>
           <S.Menu src={menuIcon} alt='Menu' />
         </Dropdown>
