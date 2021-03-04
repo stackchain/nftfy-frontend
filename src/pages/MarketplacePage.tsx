@@ -39,7 +39,7 @@ export default function MarketplacePage({ location }: RouteProps) {
 
   const loadingCards = []
   for (let i = 1; i <= currentLimit; i += 1) {
-    loadingCards.push(<NftCard key={`card-loading-${i}`} loading />)
+    loadingCards.push(<NftCard key={`card-loading-${i}`} loading securitize={false} />)
   }
   return (
     <>
@@ -58,6 +58,7 @@ export default function MarketplacePage({ location }: RouteProps) {
                   name={nftItem.name}
                   price={0}
                   url={`/marketplace/${nftItem.address}`}
+                  securitize={false}
                 />
               ))}
           </S.CardsContainer>

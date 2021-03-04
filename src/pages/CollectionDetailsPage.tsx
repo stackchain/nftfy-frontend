@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { NftImage } from '../components/marketplace/details/NftImage'
-import { NftInfoDetails } from '../components/marketplace/details/NftInfoDetails'
-import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetails'
 import { SecuritizeERC721 } from '../components/securitize/SecuritizeERC721'
+import { NftImage } from '../components/shared/cards/NftImage'
+import { NftInfoDetails } from '../components/shared/cards/NftInfoDetails'
 import { Footer, Header } from '../components/shared/layout'
 import { getErc721ByAddress } from '../services/WalletService'
-import { colors, viewport } from '../styles/variables'
+import { colors, fonts, viewport } from '../styles/variables'
 import { WalletErc721Item } from '../types/WalletTypes'
 
 export default function CollectionDetailsPage() {
@@ -33,14 +32,24 @@ export default function CollectionDetailsPage() {
         <S.Content>
           <S.Info>
             <S.MobileTitle>
-              <TitleNftDetails name={erc721.name} symbol={erc721.symbol} />
+              <S.TitleNft>
+                <h1>
+                  {`${erc721.name} #${erc721.tokenId}`}
+                  <small>{erc721.symbol}</small>
+                </h1>
+              </S.TitleNft>
             </S.MobileTitle>
             <S.Image>
               <NftImage name={erc721.name} image={String(erc721.image_url)} />
             </S.Image>
             <S.Details>
               <S.DesktopTitle>
-                <TitleNftDetails name={erc721.name} symbol={erc721.symbol} />
+                <S.TitleNft>
+                  <h1>
+                    {`${erc721.name} #${erc721.tokenId}`}
+                    <small>{erc721.symbol}</small>
+                  </h1>
+                </S.TitleNft>
               </S.DesktopTitle>
               <NftInfoDetails
                 contractName={erc721.name}
@@ -114,6 +123,38 @@ const S = {
 
     @media (max-width: ${viewport.md}) {
       width: 100%;
+    }
+  `,
+  TitleNft: styled.div`
+    max-width: 575px;
+    font-family: ${fonts.montserrat};
+    .ant-btn-link {
+      padding-left: 5px;
+    }
+
+    h1 {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 38px;
+      line-height: 40px;
+      margin-bottom: 4px;
+      color: ${colors.gray2};
+
+      small {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+        color: ${colors.gray1};
+        margin-left: 8px;
+        font-weight: 600;
+      }
+    }
+
+    @media (max-width: ${viewport.sm}) {
+      h1 {
+        line-height: 38px;
+      }
     }
   `
 }

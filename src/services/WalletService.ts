@@ -197,7 +197,6 @@ export const getERC721Items = async (walletAddress: string): Promise<WalletErc72
 
 export const getPagedERC721Items = async (walletAddress: string, page?: number, limit?: number) => {
   const erc721Items = await getERC721Items(walletAddress)
-
   return paginator(erc721Items, page || 1, limit || 12)
 }
 

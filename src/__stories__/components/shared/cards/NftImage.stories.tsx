@@ -2,10 +2,10 @@
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
 import catFrost from '../../../../assets/nftImage/catFrost.png'
-import { NftImage, NftImageProps } from '../../../../components/marketplace/details/NftImage'
+import { NftImage, NftImageProps } from '../../../../components/shared/cards/NftImage'
 
 export default {
-  title: 'components/marketplace/details/NftImage',
+  title: 'components/shared/cards/NftImage',
   component: NftImage,
   argTypes: {}
 } as Meta

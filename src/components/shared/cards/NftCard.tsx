@@ -17,6 +17,7 @@ export interface NftCardProps {
   tokenId?: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, url, className, securitize, tokenId }) => {
   return (
     <S.Card className={className} to={`${url || '#'}`}>
@@ -33,11 +34,13 @@ export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, u
             </S.Name>
           </Skeleton>
         </S.Content>
-        <S.Content hidden={securitize}>
-          <Skeleton loading={!!loading} active paragraph={{ rows: 0 }}>
-            <S.Price>{`${price} usd`}</S.Price>
-          </Skeleton>
-        </S.Content>
+        {!securitize && (
+          <S.Content>
+            <Skeleton loading={!!loading && !securitize} active paragraph={{ rows: 0 }}>
+              <S.Price>{`${price} usd`}</S.Price>
+            </Skeleton>
+          </S.Content>
+        )}
       </S.BoxInfo>
     </S.Card>
   )
@@ -59,9 +62,17 @@ const S = {
     box-shadow: 1px 1px 5px hsla(0, 0%, 0%, 0.05);
     background: ${colors.white};
 
+    .hidden {
+      display: none;
+    }
+
     &:hover {
       cursor: pointer;
       box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: ${viewport.sm}) {
+      margin: 0 auto;
     }
   `,
   BoxImage: styled.div`

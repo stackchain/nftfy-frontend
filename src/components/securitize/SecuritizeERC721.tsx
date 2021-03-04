@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { DownOutlined } from '@ant-design/icons'
-import { Button, Dropdown, Input, Tooltip } from 'antd'
+import { Button, Input, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import arrowDown from '../../assets/arrowDown.svg'
 import iconInfo from '../../assets/icons/info.svg'
-import { approveErc721, isApprovedErc721, securitizeErc721 } from '../../services/NftfyService'
+import ethereum from '../../assets/tokens/ethereum.svg'
+import { approveErc721, isApprovedErc721, isSecuritizedErc721, securitizeErc721 } from '../../services/NftfyService'
 import { units } from '../../services/UtilService'
 import { colors, fonts, viewport } from '../../styles/variables'
 
@@ -26,7 +26,9 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
   }
 
   const [loading, setLoading] = useState(false)
+  const [isSecuritize, setIsSecuritize] = useState(false)
   const [approved, setApproved] = useState(false)
+  const [releaseSecuritize, setReleaseSecuritize] = useState(false)
   const [exitPrice, setExitPrice] = useState('')
 
   useEffect(() => {
@@ -35,7 +37,12 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
       setApproved(statusApproved)
     }
     statusApprove()
-  }, [approved, erc721Address, erc721AddressId])
+  }, [approved, erc721Address, erc721AddressId, isSecuritize])
+
+  const verifySecuritize = async () => {
+    const status = await isSecuritizedErc721(erc721Address, erc721AddressId)
+    setIsSecuritize(status)
+  }
 
   const approve = async () => {
     setLoading(true)
@@ -48,13 +55,23 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
   const securitize = async () => {
     setLoading(true)
     await securitizeErc721(erc721Address, erc721AddressId, shares, 0, units(exitPrice, asset.decimals), asset.address, false)
+    await verifySecuritize()
     setLoading(false)
   }
 
-  const setToken = <span>token</span>
-
   const handleExitPrice = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value.length > 0) setReleaseSecuritize(true)
+    if (!event.target.value.length || event.target.value === '0') setReleaseSecuritize(false)
+
     setExitPrice(event.target.value)
+  }
+  if (isSecuritize) {
+    return (
+      <S.ContentAlertSecuritize>
+        <img src={iconInfo} alt='info' />
+        <span>This nft is securitized</span>
+      </S.ContentAlertSecuritize>
+    )
   }
 
   return (
@@ -81,13 +98,12 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
             </Tooltip>
           </S.Label>
           <div>
-            <S.DropDownSetToken overlay={setToken} placement='bottomCenter' disabled>
-              <Button>
-                {asset.symbol}
-                <DownOutlined />
-              </Button>
-            </S.DropDownSetToken>
-            <S.SetExitPrice type='number' onChange={handleExitPrice} />
+            <S.TokenButton className={!approved ? 'noDropdown disabled' : 'noDropdown'}>
+              <img src={ethereum} alt='Ethereum' />
+              <span>{asset.symbol}</span>
+              <img src={arrowDown} alt='Arrow Down' />
+            </S.TokenButton>
+            <S.SetExitPrice type='number' onChange={handleExitPrice} placeholder='0 ETH' disabled={!approved} />
           </div>
         </S.FormControlPrice>
         <S.Action>
@@ -96,7 +112,7 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
               Unlock
             </S.TradeSharesButton>
           ) : (
-            <S.TradeSharesButton loading={loading} onClick={securitize}>
+            <S.TradeSharesButton loading={loading} onClick={securitize} disabled={!releaseSecuritize}>
               Securitize
             </S.TradeSharesButton>
           )}
@@ -117,6 +133,10 @@ const S = {
     border-radius: 8px;
     border: 1px solid ${colors.gray3};
     box-sizing: border-box;
+
+    .disabled {
+      background-color: ${colors.white1};
+    }
     @media (max-width: ${viewport.xl}) {
       height: auto;
     }
@@ -136,7 +156,11 @@ const S = {
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 15px;
+    padding: 32px;
+
+    @media (max-width: ${viewport.sm}) {
+      padding: 15px;
+    }
   `,
   SetExitPrice: styled(Input)`
     width: 440px;
@@ -154,30 +178,6 @@ const S = {
     text-align: end;
     padding-right: 15px;
     outline: none !important;
-  `,
-  DropDownSetToken: styled(Dropdown)`
-    width: 152px;
-    height: 40px;
-    border-right: none;
-    outline: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    span {
-      font-family: Montserrat;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 24px;
-      color: ${colors.gray2};
-    }
-
-    &:hover {
-      border-color: ${colors.gray3};
-    }
-    &:focus {
-      border-color: ${colors.gray3};
-    }
   `,
   FormControl: styled.div`
     width: 100%;
@@ -253,6 +253,8 @@ const S = {
     font-size: 16px;
     line-height: 24px;
     color: ${colors.gray2};
+    display: flex;
+    align-items: center;
 
     img {
       padding-left: 5px;
@@ -307,6 +309,68 @@ const S = {
     @media (max-width: ${viewport.sm}) {
       width: 100%;
       margin-bottom: 32px;
+    }
+  `,
+  TokenButton: styled.div`
+    width: 152px;
+    height: 40px;
+    border: 1px solid ${colors.gray3};
+    cursor: pointer;
+    border-right: none;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    display: flex;
+    align-items: center;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -o-user-select: none;
+    user-select: none;
+    padding: 8px;
+
+    img:nth-child(1) {
+      margin-right: 8px;
+    }
+
+    span {
+      margin-right: 8px;
+      font-family: ${fonts.montserrat};
+      font-weight: 600;
+      color: ${colors.gray2};
+    }
+
+    img:nth-child(3) {
+      width: 16px;
+      height: 16px;
+    }
+
+    &.noDropdown {
+      cursor: default;
+      img:nth-child(3) {
+        display: none;
+      }
+    }
+  `,
+  ContentAlertSecuritize: styled.div`
+    width: 623px;
+    height: 157px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid ${colors.gray10};
+    img {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+    span {
+      font-family: ${fonts.montserrat};
+      font-style: normal;
+      font-weight: 600;
+      font-size: 24px;
+      line-height: 32px;
+      color: ${colors.gray9};
     }
   `
 }

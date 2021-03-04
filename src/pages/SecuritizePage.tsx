@@ -26,7 +26,7 @@ export default function SecuritizePage({ location }: RouteProps) {
     setCurrentPage(pageNumber)
     setCurrentLimit(pageSizeNumber)
 
-    history.push(`/marketplace/?page=${pageNumber}&limit=${pageSizeNumber}`)
+    history.push(`/securitize/?page=${pageNumber}&limit=${pageSizeNumber}`)
   }
 
   useEffect(() => {
@@ -34,7 +34,6 @@ export default function SecuritizePage({ location }: RouteProps) {
       setLoading(true)
       if (account) {
         const nftItems = await getPagedERC721Items(account, currentPage, currentLimit)
-
         setNfts(nftItems.data)
         setTotalPages(nftItems.total)
       }
@@ -57,7 +56,7 @@ export default function SecuritizePage({ location }: RouteProps) {
 
   const loadingCards = []
   for (let i = 1; i <= currentLimit; i += 1) {
-    loadingCards.push(<NftCard key={`card-loading-${i}`} loading />)
+    loadingCards.push(<NftCard key={`card-loading-${i}`} loading securitize />)
   }
 
   return (
@@ -65,8 +64,8 @@ export default function SecuritizePage({ location }: RouteProps) {
       <Header page='securitize' />
       <S.Main>
         <S.Content>
-          <S.SortFilter />
-          <S.CardsContainer>
+          {/* {(loading || !!nfts.length) && <S.SortFilter />} */}
+          <S.CardsContainer className={`${!loading && !nfts.length && 'empty'}`}>
             {loading && loadingCards}
             {!loading &&
               nfts.map(nftItem => (
@@ -92,12 +91,20 @@ export default function SecuritizePage({ location }: RouteProps) {
 
 export const S = {
   Main: styled.main`
-    flex: 1;
-    padding: 32px 48px;
+    width: 100%;
+    height: 100%;
+    min-height: calc(100vh - 136px);
     background: ${colors.white};
-    min-height: calc(100vh - 200px);
     display: flex;
     justify-content: center;
+  `,
+  Content: styled.section`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 48px;
+    max-width: ${viewport.xxl};
+    height: 100%;
     @media (max-width: ${viewport.xl}) {
       padding: 32px 24px;
     }
@@ -105,12 +112,6 @@ export const S = {
     @media (max-width: ${viewport.sm}) {
       padding: 32px 8px;
     }
-  `,
-  Content: styled.section`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    max-width: ${viewport.xxl};
   `,
   SortFilter: styled(SortDropdownFilter)`
     margin-bottom: 32px;
@@ -132,6 +133,14 @@ export const S = {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: auto;
     gap: 16px 16px;
+    margin-bottom: 32px;
+
+    &.empty {
+      grid-template-columns: 1fr;
+      height: 100px;
+      margin-top: 100px;
+      margin-bottom: 132px;
+    }
 
     @media (max-width: ${viewport.xl}) {
       grid-template-columns: 1fr 1fr 1fr 1fr;

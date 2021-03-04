@@ -1,10 +1,10 @@
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 // eslint-disable-next-line import/no-unresolved
 import { Meta, Story } from '@storybook/react/types-6-0'
-import { NftInfoDetails, NftInfoDetailsProps } from '../../../../components/marketplace/details/NftInfoDetails'
+import { NftInfoDetails, NftInfoDetailsProps } from '../../../../components/shared/cards/NftInfoDetails'
 
 export default {
-  title: 'components/marketplace/details/NftInfoDetails',
+  title: 'components/shared/cards/NftInfoDetails',
   component: NftInfoDetails,
   argTypes: {}
 } as Meta
