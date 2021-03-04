@@ -19,7 +19,14 @@ export default function App() {
 
   useEffect(() => {
     walletAutoConnect()
+  }, [])
+
+  useEffect(() => {
     balancerSyncPools()
+    const interval = setInterval(() => {
+      balancerSyncPools()
+    }, 30000)
+    return () => clearInterval(interval)
   }, [])
 
   return (
