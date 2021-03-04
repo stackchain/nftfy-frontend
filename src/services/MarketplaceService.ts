@@ -55,11 +55,14 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
     const erc20Name = await contractErc20Shares.methods.name().call()
     const tokenId = await contractErc20Shares.methods.tokenId().call()
     const symbol = await contractErc20Shares.methods.symbol().call()
-    const decimals = await contractErc20Shares.methods.decimals().call()
-
     const totalSupply = await contractErc20Shares.methods.totalSupply().call()
     const exitPrice = await contractErc20Shares.methods.exitPrice().call()
-    const paymentToken = await contractErc20Shares.methods.paymentToken().call()
+    let paymentToken = await contractErc20Shares.methods.paymentToken().call()
+    paymentToken = String(paymentToken) === eth ? null : paymentToken
+
+    let decimals = await contractErc20Shares.methods.decimals().call()
+    decimals = paymentToken ? Number(decimals) : 18
+
     const vaultBalance = await contractErc20Shares.methods.vaultBalance().call()
     const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()
     const contractWrapperErc721 = new web3.eth.Contract(erc721WrappedAbi as AbiItem[], erc721Wrapper)
@@ -67,17 +70,21 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
     const erc721Address = await contractWrapperErc721.methods.target().call()
 
     const getPaymentTokenSymbol = async () => {
+      if (!paymentToken) return 'ETH'
+
+      let paymentTokenSymbol = '-'
+
       try {
         const contractErc20 = new web3.eth.Contract(erc20Abi as AbiItem[], paymentToken)
-        return contractErc20.methods.symbol().call()
+        paymentTokenSymbol = contractErc20.methods.symbol().call()
       } catch (error) {
         console
       }
 
-      return '-'
+      return paymentTokenSymbol
     }
 
-    const paymentTokenSymbol = paymentToken === eth ? 'ETH' : await getPaymentTokenSymbol()
+    const paymentTokenSymbol = await getPaymentTokenSymbol()
 
     return {
       address: addressErc20,
@@ -144,11 +151,15 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
     const erc20Name = await contractErc20Shares.methods.name().call()
     const tokenId = (await contractErc20Shares.methods.tokenId().call()).toString()
     const symbol = await contractErc20Shares.methods.symbol().call()
-    const decimals = await contractErc20Shares.methods.decimals().call()
-
     const totalSupply = await contractErc20Shares.methods.totalSupply().call()
     const exitPrice = await contractErc20Shares.methods.exitPrice().call()
-    const paymentToken = await contractErc20Shares.methods.paymentToken().call()
+
+    let paymentToken = await contractErc20Shares.methods.paymentToken().call()
+    paymentToken = String(paymentToken) === eth ? null : paymentToken
+
+    let decimals = await contractErc20Shares.methods.decimals().call()
+    decimals = paymentToken ? Number(decimals) : 18
+
     const vaultBalance = await contractErc20Shares.methods.vaultBalance().call()
 
     const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()
@@ -159,17 +170,21 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
     const symbolErc721 = await contractErc721.methods.symbol().call()
 
     const getPaymentTokenSymbol = async () => {
+      if (!paymentToken) return 'ETH'
+
+      let paymentTokenSymbol = '-'
+
       try {
         const contractErc20 = new web3.eth.Contract(erc20Abi as AbiItem[], paymentToken)
-        return contractErc20.methods.symbol().call()
+        paymentTokenSymbol = contractErc20.methods.symbol().call()
       } catch (error) {
         console
       }
 
-      return '-'
+      return paymentTokenSymbol
     }
 
-    const paymentTokenSymbol = paymentToken === eth ? 'ETH' : await getPaymentTokenSymbol()
+    const paymentTokenSymbol = await getPaymentTokenSymbol()
 
     const erc721Metadata = await getErc721Metadata(erc721Address, tokenId, web3)
     return {
@@ -177,7 +192,7 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
       name: erc20Name,
       symbol,
       securitized,
-      decimals: Number(decimals),
+      decimals,
       totalSupply: Number(totalSupply),
       exitPrice: Number(scale(new BigNumber(exitPrice), -18).toString()),
       exitPriceDollar: 0,

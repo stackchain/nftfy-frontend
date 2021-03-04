@@ -7,7 +7,7 @@ export interface MarketplaceERC20Item {
   totalSupply: number
   exitPrice: number
   exitPriceDollar: number
-  paymentToken: string
+  paymentToken: string | null
   paymentTokenSymbol: string
   vaultBalance: number
   erc721: {

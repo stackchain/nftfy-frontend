@@ -1,5 +1,7 @@
 import { Button, Input } from 'antd'
+import { useState } from 'react'
 import styled from 'styled-components'
+import { approveErc20, getAccountRedeemAmount, redeemErc20 } from '../../services/NftfyService'
 import { colors, fonts, viewport } from '../../styles/variables'
 import { MarketplaceERC20Item } from '../../types/MarketplaceTypes'
 
@@ -7,8 +9,19 @@ interface BuyModalNftProps {
   erc20: MarketplaceERC20Item
 }
 export function BuyModalNft({ erc20 }: BuyModalNftProps) {
-  const { name, symbol, exitPrice, paymentTokenSymbol, exitPriceDollar } = erc20
+  const { name, symbol, exitPrice, paymentTokenSymbol, exitPriceDollar, address, decimals } = erc20
   const { image_url } = erc20.erc721
+
+  const [isApproved] = useState(true)
+
+  const approve = async () => {
+    const redeemAmount = await getAccountRedeemAmount(address)
+    await approveErc20(address, decimals, redeemAmount)
+  }
+
+  const redeem = async () => {
+    await redeemErc20(address)
+  }
 
   return (
     <S.NftContent>
@@ -45,8 +58,11 @@ export function BuyModalNft({ erc20 }: BuyModalNftProps) {
         </div>
       </S.NftDetails>
       <S.NftPay>
-        <S.ActionButton>Unlock</S.ActionButton>
-        <S.ActionButton>Buy NFT</S.ActionButton>
+        {!isApproved ? (
+          <S.ActionButton onClick={approve}>Unlock</S.ActionButton>
+        ) : (
+          <S.ActionButton onClick={redeem}>Buy NFT</S.ActionButton>
+        )}
       </S.NftPay>
     </S.NftContent>
   )

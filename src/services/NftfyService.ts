@@ -8,15 +8,16 @@ import { getConfigByChainId } from '../config'
 import { accountVar, chainIdVar } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { notifyError } from './NotificationService'
+import { coins, units } from './UtilService'
 import { initializeWeb3 } from './WalletService'
 
 const { nftfyAddress } = getConfigByChainId(chainIdVar())
 
-export const approveErc20 = async (erc20Address: string, spenderAddress: string, erc20Decimals: number, erc20Amount: number) => {
+export const approveErc20 = async (erc20Address: string, erc20Decimals: number, erc20Amount: string, spenderAddress?: string) => {
   try {
     const web3 = initializeWeb3('metamask')
     const contractErc20 = new web3.eth.Contract(erc20Abi as AbiItem[], erc20Address)
-    await contractErc20.methods.approve(spenderAddress, String(erc20Amount * 10 ** erc20Decimals)).send({ from: accountVar() })
+    await contractErc20.methods.approve(spenderAddress || accountVar(), units(erc20Amount, erc20Decimals)).send({ from: accountVar() })
   } catch (error) {
     notifyError(code[5011], error)
   }
@@ -43,7 +44,6 @@ export const isApprovedErc721 = async (erc721Address: string, erc721TokenId: num
     return false
   }
 }
-
 export const securitizeErc721 = async (
   erc721Address: string,
   erc721Id: number,
@@ -106,13 +106,57 @@ export const isClaimableErc20 = async (erc20Address: string) => {
   }
 }
 
-export const claimErc721 = async (erc20Address: string) => {
+export const claimErc20 = async (erc20Address: string) => {
   try {
-    const web3 = initializeWeb3('infura')
+    const web3 = initializeWeb3('metamask')
     const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
     return contractErc20Shares.methods.claim().send({ from: accountVar() })
   } catch (error) {
     notifyError(code[5011], error)
     return false
+  }
+}
+
+export const redeemErc20 = async (erc20Address: string) => {
+  const { balancer } = getConfigByChainId(chainIdVar())
+  const { eth } = balancer
+  try {
+    const web3 = initializeWeb3('metamask')
+    const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
+
+    let paymentToken = await contractErc20Shares.methods.paymentToken().call()
+    paymentToken = String(paymentToken) === eth ? null : paymentToken
+
+    let decimals = await contractErc20Shares.methods.decimals().call()
+    decimals = paymentToken ? Number(decimals) : 18
+
+    const redeemAmount = await getAccountRedeemAmount(erc20Address)
+
+    if (!paymentToken) {
+      return contractErc20Shares.methods.redeem().send({ from: accountVar(), value: units(redeemAmount, decimals) })
+    }
+
+    return contractErc20Shares.methods.redeem().send({ from: accountVar() })
+  } catch (error) {
+    notifyError(code[5011], error)
+    return false
+  }
+}
+export const getAccountRedeemAmount = async (erc20Address: string) => {
+  const { balancer } = getConfigByChainId(chainIdVar())
+  const { eth } = balancer
+
+  try {
+    const web3 = initializeWeb3('metamask')
+    const contractErc20Shares = new web3.eth.Contract(erc20SharesAbi as AbiItem[], erc20Address)
+    let paymentToken = await contractErc20Shares.methods.paymentToken().call()
+    paymentToken = String(paymentToken) === eth ? null : paymentToken
+
+    const decimals = paymentToken ? await contractErc20Shares.methods.decimals().call() : 18
+
+    return coins(await contractErc20Shares.methods.redeemAmountOf(accountVar()).call(), decimals)
+  } catch (error) {
+    notifyError(code[5011], error)
+    return '0'
   }
 }
