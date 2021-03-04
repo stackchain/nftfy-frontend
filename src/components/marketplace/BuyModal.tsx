@@ -55,7 +55,7 @@ export const S = {
     }
     .ant-modal-content {
       border-radius: 16px;
-      max-width: 400px;
+      max-width: 440px;
     }
     .ant-modal-close-x {
       display: none;

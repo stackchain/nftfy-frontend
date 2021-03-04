@@ -102,7 +102,7 @@ export const S = {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 32px 48px;
+    padding: 96px 48px 32px 48px;
     max-width: ${viewport.xxl};
     height: 100%;
     @media (max-width: ${viewport.xl}) {

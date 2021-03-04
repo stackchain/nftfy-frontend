@@ -128,8 +128,8 @@ const S = {
       margin-right: 0;
 
       img {
-        max-width: 400px;
-        max-height: 400px;
+        max-width: 440px;
+        max-height: 440px;
       }
     }
 
