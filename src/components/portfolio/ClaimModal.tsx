@@ -3,6 +3,7 @@ import { Button, Modal } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 import { claimModalVar } from '../../graphql/variables/PortfolioVariable'
+import { claimErc20 } from '../../services/NftfyService'
 import { colors, viewport } from '../../styles/variables'
 
 export interface ClaimModalProps {
@@ -14,6 +15,10 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ className }: ClaimModalP
 
   const handleCancel = () => {
     claimModalVar(undefined)
+  }
+
+  const claim = async () => {
+    erc20Share && (await claimErc20(erc20Share?.address))
   }
 
   return (
@@ -61,7 +66,7 @@ export const ClaimModal: React.FC<ClaimModalProps> = ({ className }: ClaimModalP
             </S.TotalReceiveDiv>
           </S.DetailsDiv>
 
-          <S.ButtonClaim>Claim</S.ButtonClaim>
+          <S.ButtonClaim onClick={claim}>Claim</S.ButtonClaim>
         </>
       )}
     </S.ClaimModal>
