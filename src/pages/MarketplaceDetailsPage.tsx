@@ -20,8 +20,6 @@ export default function MarketplaceDetailsPage() {
     const getNfts = async () => {
       if (address) {
         const nft = await getMarketplaceItemByAddress(address)
-
-        console.log('NFT', nft)
         setErc20(nft)
       }
     }
