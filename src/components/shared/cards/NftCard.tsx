@@ -26,8 +26,6 @@ export const NftCard: React.FC<NftCardProps> = ({ address, image, name, loading,
   const [priceDollar, setPriceDollar] = useState('')
   // const [priceWeth, setPriceWeth] = useState('')
 
-  console.log('Address que esta chegando', address)
-
   useEffect(() => {
     const checkLiquidity = async () => {
       if (address) {

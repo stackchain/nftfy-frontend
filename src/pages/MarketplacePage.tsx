@@ -33,8 +33,6 @@ export default function MarketplacePage({ location }: RouteProps) {
       setLoading(false)
       setNfts(nftItems.data)
 
-      console.log('nfts da poara', nftItems.data)
-
       setTotalPages(nftItems.total)
     }
     getNfts()
