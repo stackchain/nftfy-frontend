@@ -61,8 +61,7 @@ export const getMarketplaceItems = async (page?: number, limit?: number): Promis
     let paymentToken = await contractErc20Shares.methods.paymentToken().call()
     paymentToken = String(paymentToken) === eth ? null : paymentToken
 
-    let decimals = await contractErc20Shares.methods.decimals().call()
-    decimals = paymentToken ? Number(decimals) : 18
+    const decimals = Number(await contractErc20Shares.methods.decimals().call())
 
     const vaultBalance = await contractErc20Shares.methods.vaultBalance().call()
     const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()
@@ -163,9 +162,7 @@ export const getMarketplaceItemByAddress = async (erc20Address: string): Promise
     let paymentToken = await contractErc20Shares.methods.paymentToken().call()
     paymentToken = String(paymentToken) === eth ? null : paymentToken
 
-    let decimals = await contractErc20Shares.methods.decimals().call()
-    decimals = paymentToken ? Number(decimals) : 18
-
+    const decimals = Number(await contractErc20Shares.methods.decimals().call())
     const vaultBalance = await contractErc20Shares.methods.vaultBalance().call()
 
     const erc721Wrapper = await contractErc20Shares.methods.wrapper().call()

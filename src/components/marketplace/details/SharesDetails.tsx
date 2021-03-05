@@ -1,20 +1,34 @@
-import { Button, Tooltip } from 'antd'
-import React from 'react'
+import { useReactiveVar } from '@apollo/client'
+import { Button, Skeleton, Tooltip } from 'antd'
+import React, { useEffect, useState } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import styled from 'styled-components'
 import clip from '../../../assets/icons/clip.svg'
-import { buyModalVar } from '../../../graphql/variables/MarketplaceVariable'
+import { buyModalVar, poolsLoadingVar } from '../../../graphql/variables/MarketplaceVariable'
+import { hasLiquidityForErc20Shares } from '../../../services/BalancerService'
 import { colors, fonts, viewport } from '../../../styles/variables'
 import { MarketplaceERC20Item } from '../../../types/MarketplaceTypes'
 
-export interface NftBuyShareDetailsProps {
+export interface SharesDetailsProps {
   erc20: MarketplaceERC20Item
-  price: number
-  price2: number
 }
 
-export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ erc20 }: NftBuyShareDetailsProps) => {
+export const SharesDetails: React.FC<SharesDetailsProps> = ({ erc20 }: SharesDetailsProps) => {
   const { name, symbol, address } = erc20
+
+  const poolsLoading = useReactiveVar(poolsLoadingVar)
+  const [liquidityChecked, setLiquidityChecked] = useState(false)
+  const [hasLiquidity, setHasLiquidity] = useState(true)
+
+  useEffect(() => {
+    const checkLiquidity = async () => {
+      const liquidity = await hasLiquidityForErc20Shares(erc20.address)
+      setHasLiquidity(liquidity)
+      setLiquidityChecked(true)
+    }
+
+    checkLiquidity()
+  }, [erc20.address])
 
   const buySharesModal = () => {
     buyModalVar({
@@ -37,21 +51,29 @@ export const NftBuyShareDetails: React.FC<NftBuyShareDetailsProps> = ({ erc20 }:
           </Tooltip>
         </S.CopyToClipboard>
       </S.AddressToken>
-      <S.SharePrice>
-        <S.PriceAction>
+      <Skeleton loading={poolsLoading || !liquidityChecked} paragraph={{ rows: 0 }}>
+        {hasLiquidity ? (
+          <S.SharePrice>
+            <S.PriceAction>
+              <div>
+                <S.MainPrice>
+                  0.000051
+                  <small>ETH</small>
+                </S.MainPrice>
+                <S.DollarPrice>
+                  <small>$</small>
+                  0.04
+                </S.DollarPrice>
+              </div>
+              <S.TradeSharesButton onClick={buySharesModal}>Buy Shares</S.TradeSharesButton>
+            </S.PriceAction>
+          </S.SharePrice>
+        ) : (
           <div>
-            <S.MainPrice>
-              0.000051
-              <small>ETH</small>
-            </S.MainPrice>
-            <S.DollarPrice>
-              <small>$</small>
-              0.04
-            </S.DollarPrice>
+            <b>Without Liquidity, please add liquidity in balancer</b>
           </div>
-          <S.TradeSharesButton onClick={buySharesModal}>Buy Shares</S.TradeSharesButton>
-        </S.PriceAction>
-      </S.SharePrice>
+        )}
+      </Skeleton>
     </S.Content>
   )
 }

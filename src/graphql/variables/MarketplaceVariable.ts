@@ -9,4 +9,4 @@ export const buyModalVar = makeVar<
   | undefined
 >(undefined)
 
-export const poolsLoadedVar = makeVar<boolean>(false)
+export const poolsLoadingVar = makeVar<boolean>(true)

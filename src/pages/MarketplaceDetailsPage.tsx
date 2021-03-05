@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import BuyModal from '../components/marketplace/BuyModal'
-import { NftBuyShareDetails } from '../components/marketplace/details/NftBuyShareDetails'
-import { TitleNftDetails } from '../components/marketplace/details/TitleNFtDetails'
+import { SharesDetails } from '../components/marketplace/details/SharesDetails'
 import { NftImage } from '../components/shared/cards/NftImage'
 import { NftInfoDetails } from '../components/shared/cards/NftInfoDetails'
 import { Footer, Header } from '../components/shared/layout'
@@ -21,6 +20,8 @@ export default function MarketplaceDetailsPage() {
     const getNfts = async () => {
       if (address) {
         const nft = await getMarketplaceItemByAddress(address)
+
+        console.log('NFT', nft)
         setErc20(nft)
       }
     }
@@ -39,17 +40,20 @@ export default function MarketplaceDetailsPage() {
 
   return (
     <>
-      <Header page='marketplaceDetails' />
+      <Header page='explore-details' />
       <S.Main>
         <S.Content>
-          <S.Info>
-            <S.BoxImage>
-              <NftImage name={erc20.erc721.name} image={erc20.erc721.image_url} />
-            </S.BoxImage>
-            <S.Details>
+          <S.NftImageBox>
+            <NftImage name={erc20.erc721.name} image={erc20.erc721.image_url} />
+          </S.NftImageBox>
+          <S.DetailsBox>
+            <S.NftDetails>
               <S.TitleArea>
                 <S.TitleBox>
-                  <TitleNftDetails name={erc20.erc721.name} symbol={erc20.erc721.symbol} />
+                  <h1>
+                    {`${erc20.erc721.name}`}
+                    <small>{erc20.erc721.symbol}</small>
+                  </h1>
                 </S.TitleBox>
                 <S.BtnDesktop>
                   <S.BuyNft onClick={buyNftModal}>Buy NFT</S.BuyNft>
@@ -65,9 +69,11 @@ export default function MarketplaceDetailsPage() {
                 <S.BuyNft onClick={buyNftModal}>Buy NFT</S.BuyNft>
               </S.BtnMobile>
               <S.Division />
-              <NftBuyShareDetails erc20={erc20} price={0.000051} price2={0.04} />
-            </S.Details>
-          </S.Info>
+            </S.NftDetails>
+            <S.SharesDetails>
+              <SharesDetails erc20={erc20} />
+            </S.SharesDetails>
+          </S.DetailsBox>
         </S.Content>
       </S.Main>
       <Footer />
@@ -86,23 +92,7 @@ const S = {
     justify-content: center;
   `,
   Content: styled.div`
-    flex-direction: column;
-    padding: 32px 48px;
     margin-top: 64px;
-    height: 100%;
-    flex: 1;
-    max-width: ${viewport.xxl};
-
-    @media (max-width: ${viewport.lg}) {
-      margin-top: 32px;
-    }
-
-    @media (max-width: ${viewport.sm}) {
-      padding: 16px;
-      margin-top: 16px;
-    }
-  `,
-  Info: styled.div`
     display: flex;
     flex-direction: row;
     margin-bottom: 32px;
@@ -115,8 +105,9 @@ const S = {
       margin-bottom: 0px;
     }
   `,
-  Image: styled.div``,
-  BoxImage: styled.div`
+  NftDetails: styled.div``,
+  SharesDetails: styled.div``,
+  NftImageBox: styled.div`
     flex: 1;
     display: flex;
     justify-content: flex-end;
@@ -147,7 +138,7 @@ const S = {
       max-width: 100%;
     }
   `,
-  Details: styled.div`
+  DetailsBox: styled.div`
     flex: 1;
   `,
   Stats: styled.div`
@@ -155,10 +146,35 @@ const S = {
   `,
   TitleBox: styled.div`
     flex: 1;
-    max-width: 450px;
+    max-width: 575px;
+    font-family: ${fonts.montserrat};
+    .ant-btn-link {
+      padding-left: 5px;
+    }
 
-    @media (max-width: ${viewport.lg}) {
-      max-width: 100%;
+    h1 {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 38px;
+      line-height: 40px;
+      margin-bottom: 4px;
+      color: ${colors.gray2};
+
+      small {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+        color: ${colors.gray1};
+        margin-left: 8px;
+        font-weight: 600;
+      }
+    }
+
+    @media (max-width: ${viewport.sm}) {
+      h1 {
+        line-height: 38px;
+      }
     }
   `,
   MobileTitle: styled.div`

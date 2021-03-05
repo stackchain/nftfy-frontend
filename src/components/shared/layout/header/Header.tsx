@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({ page }: HeaderProps) => {
   const menuNavOptions = (
     <S.StyledMenu>
       <Menu.Item key='1'>
-        <Link to='/marketplace' className={page === 'explore' ? 'active' : ''}>
+        <Link to='/marketplace' className={page === ('explore' || 'explore-details') ? 'active' : ''}>
           Explore
         </Link>
       </Menu.Item>

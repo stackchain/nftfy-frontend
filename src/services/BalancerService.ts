@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
 import exchangeProxyAbi from '../abi/exchangeProxy.json'
 import { getConfigByChainId } from '../config'
-import { poolsLoadedVar } from '../graphql/variables/MarketplaceVariable'
+import { poolsLoadingVar } from '../graphql/variables/MarketplaceVariable'
 import { chainIdVar } from '../graphql/variables/WalletVariable'
 import { code } from '../messages'
 import { notifyError } from './NotificationService'
@@ -25,7 +25,7 @@ export async function balancerSyncPools() {
   sor = new SOR(provider, gasPrice, maxPools, id, poolsUrl)
 
   await sor.fetchPools()
-  poolsLoadedVar(sor.isAllFetched)
+  poolsLoadingVar(!sor.isAllFetched)
 }
 
 export async function balancerAssetQuote(
@@ -162,11 +162,12 @@ export async function balancerSwapOut(assetInAddress: string, assetOutAddress: s
   return undefined
 }
 
-export async function hasLiquidityForErc20Shares(erc20Address: string) {
+export async function hasLiquidityForErc20Shares(erc20Address: string): Promise<boolean> {
   const { nfyAddress } = getConfigByChainId(chainIdVar())
 
-  if (poolsLoadedVar()) {
-    return (await balancerAssetQuote(nfyAddress, 18, erc20Address, 6, 'swapExactIn', '0.000001'))?.tradeSwaps.length
+  if (!poolsLoadingVar()) {
+    return !!(await balancerAssetQuote(nfyAddress, 18, erc20Address, 6, 'swapExactIn', '0.000001'))?.tradeSwaps.length
   }
-  throw new Error('Pools not loaded')
+
+  return false
 }

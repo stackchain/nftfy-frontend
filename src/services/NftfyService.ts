@@ -127,9 +127,7 @@ export const redeemErc20 = async (erc20Address: string) => {
     let paymentToken = await contractErc20Shares.methods.paymentToken().call()
     paymentToken = String(paymentToken) === eth ? null : paymentToken
 
-    let decimals = await contractErc20Shares.methods.decimals().call()
-    decimals = paymentToken ? Number(decimals) : 18
-
+    const decimals = Number(await contractErc20Shares.methods.decimals().call())
     const redeemAmount = await getAccountRedeemAmount(erc20Address)
 
     if (!paymentToken) {

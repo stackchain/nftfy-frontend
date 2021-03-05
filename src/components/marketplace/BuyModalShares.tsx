@@ -25,12 +25,12 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
   const { balancer } = getConfigByChainId(chainIdVar())
   const { precision } = balancer
   const asset1 = {
-    id: '2',
-    name: 'Uniswap Coin',
-    symbol: 'UNI',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+    id: '1',
+    name: 'USD Coin',
+    symbol: 'USDC',
+    address: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
     imageUrl: '',
-    decimals: 18
+    decimals: 6
   }
 
   const asset2 = {
@@ -60,20 +60,22 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
   const [switchPosition, setSwitchPosition] = useState(true)
 
   useEffect(() => {
-    const getAssetOutBalance = async () => {
+    const getAssetInBalance = async () => {
       const balance = await getErc20Balance(account, assetIn.address, assetIn.decimals)
       setAssetInBalance(balance)
     }
-    getAssetOutBalance()
+    getAssetInBalance()
   }, [account, assetIn.address, assetIn.decimals])
 
   useEffect(() => {
-    const getAssetInBalance = async () => {
+    const getAssetOutBalance = async () => {
+      console.log('assetOut.address', assetOut.address, assetOut.decimals)
+
       const balance = await getErc20Balance(account, assetOut.address, assetOut.decimals)
 
       setAssetOutBalance(balance)
     }
-    getAssetInBalance()
+    getAssetOutBalance()
   }, [account, assetOut.address, assetOut.decimals])
 
   const handleAssetInAmount = async (event: ChangeEvent<HTMLInputElement>) => {
