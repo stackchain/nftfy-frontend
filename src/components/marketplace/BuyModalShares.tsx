@@ -69,8 +69,6 @@ export function BuyModalShares({ account, erc20 }: BuyModalSharesProps) {
 
   useEffect(() => {
     const getAssetOutBalance = async () => {
-      console.log('assetOut.address', assetOut.address, assetOut.decimals)
-
       const balance = await getErc20Balance(account, assetOut.address, assetOut.decimals)
 
       setAssetOutBalance(balance)
