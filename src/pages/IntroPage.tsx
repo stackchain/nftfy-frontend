@@ -26,34 +26,34 @@ export default function IntroPage() {
 
 export const S = {
   Main: styled.main`
-    display: flex;
     flex: 1;
-    width: 100%;
-    height: calc(100vh - 88px - 48px);
-    background: red;
-    padding: 0px 48px;
+    min-height: calc(100vh - 136px);
     background: ${colors.white};
+    display: flex;
+    justify-content: center;
+  `,
+  Container: styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    padding: 32px 48px;
+
+    max-width: ${viewport.xxl};
+
     @media (max-width: ${viewport.xxl}) {
       padding: 0px 48px;
     }
     @media (max-width: ${viewport.xl}) {
       padding: 0px 24px;
       height: calc(100vh - 64px - 48px);
+      flex-direction: column-reverse;
     }
     @media (max-width: ${viewport.sm}) {
       padding: 0px 8px;
       margin: 40px 0px;
-    }
-  `,
-  Container: styled.div`
-    flex: 1;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    @media (max-width: ${viewport.xl}) {
-      flex-direction: column-reverse;
     }
   `,
   BoxActionIntro: styled.div`

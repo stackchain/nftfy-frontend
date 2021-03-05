@@ -6,6 +6,7 @@ import { claimModalVar } from '../../graphql/variables/PortfolioVariable'
 import { connectWalletModalVar } from '../../graphql/variables/WalletVariable'
 import { colors, viewport } from '../../styles/variables'
 import { WalletERC20Share } from '../../types/WalletTypes'
+import { ContractImage } from '../shared/ContractImage'
 import { LoadingMobileSkeleton } from './LoadingMobileSkeleton'
 import { LoadingSkeleton } from './LoadingSkeleton'
 
@@ -42,7 +43,7 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className, e
   const headerMobile = (erc20Item: WalletERC20Share) => {
     return (
       <S.PanelHeader>
-        <S.ImageToken src={erc20Item.erc721.imageUrl} />
+        <ContractImage src={erc20Item.erc721.imageUrl} name={erc20Item.erc721.name} large={false} />
         <S.PanelDivInfo>
           <S.PanelErc20Name>{erc20Item.name}</S.PanelErc20Name>
           <S.PriceDiv>
@@ -77,7 +78,7 @@ export const PortfolioContent: React.FC<PortfolioContentProps> = ({ className, e
           erc20share.map(erc20Item => (
             <S.PanelContentTable key={`erc20share-${erc20Item.address}`}>
               <S.DivImage>
-                <S.ImageToken src={erc20Item.erc721.imageUrl} />
+                <ContractImage src={erc20Item.erc721.imageUrl} name={erc20Item.erc721.name} large={false} />
                 <S.Erc20SpanTable hidden={!!loading}>
                   {`${erc20Item.name} `}
                   <S.Symbol>{erc20Item.symbol}</S.Symbol>
@@ -234,7 +235,7 @@ export const S = {
     font-weight: 500;
     font-size: 14px;
     line-height: 22px;
-
+    margin-left: 16px;
     color: ${colors.gray2};
   `,
   Symbol: styled.span`
@@ -308,6 +309,7 @@ export const S = {
     flex: 1;
     display: flex;
     flex-direction: column;
+    margin-left: 16px;
   `,
   PriceDiv: styled.div`
     display: flex;
@@ -351,6 +353,7 @@ export const S = {
     font-weight: 500;
     font-size: 12px;
     line-height: 16px;
+    margin-right: 4px;
 
     color: ${colors.gray9};
   `,

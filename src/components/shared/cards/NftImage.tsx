@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import notFound from '../../../assets/notfound.svg'
 import { colors, viewport } from '../../../styles/variables'
+import { ContractImage } from '../ContractImage'
 
 export interface NftImageProps {
   image: string
@@ -12,7 +13,7 @@ export const NftImage: React.FC<NftImageProps> = ({ image, name }: NftImageProps
   return (
     <S.Content>
       <S.Card className={image === '' ? 'bg-fail' : ''}>
-        <img src={image || notFound} alt={name} />
+        <ContractImage src={image || notFound} name={name} large />
       </S.Card>
     </S.Content>
   )
@@ -37,15 +38,6 @@ const S = {
     justify-content: center;
     align-items: center;
     padding: 24px;
-
-    img {
-      width: 100%;
-      height: auto;
-      max-width: 575px;
-      max-height: 504px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
 
     @media (max-width: ${viewport.md}) {
       height: auto;

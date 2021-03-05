@@ -44,18 +44,12 @@ export function BuyModalNft({ erc20 }: BuyModalNftProps) {
         </div>
       </S.NftExitPrice>
       <S.NftDetails>
-        <div>Order Details</div>
-        <div>%</div>
-        <div>Value</div>
         <div>Your Participation</div>
-        <div>{`${11}%`}</div>
-        <div>{`${10} ${symbol}`}</div>
+        <div>{`${10}%`}</div>
+        <div>share Balance</div>
+        <div>{`${50000}`}</div>
         <div>Pay Amount</div>
-        <div>{`${14}%`}</div>
-        <div>
-          <div>{`${32.5} ${paymentTokenSymbol}`}</div>
-          <div>{`$${0}`}</div>
-        </div>
+        <div>{`${32.5} ${paymentTokenSymbol}`}</div>
       </S.NftDetails>
       <S.NftPay>
         {!isApproved ? (
@@ -110,8 +104,8 @@ export const S = {
   `,
   NftDetails: styled.div`
     display: grid;
-    grid-template-columns: 2fr 1fr 1.4fr;
-    grid-template-rows: 32px 32px 32px;
+    grid-template-columns: 2fr 1.4fr;
+    grid-template-rows: 32px 32px;
 
     border: 1px solid ${colors.gray3};
     border-radius: 8px;
@@ -126,12 +120,6 @@ export const S = {
       font-weight: 500;
       color: ${colors.gray2};
       text-align: end;
-    }
-
-    > div:nth-child(1),
-    > div:nth-child(2),
-    > div:nth-child(3) {
-      color: ${colors.gray1};
     }
 
     > div:nth-child(9) {
@@ -151,8 +139,8 @@ export const S = {
     }
 
     > div:nth-child(1),
-    > div:nth-child(4),
-    > div:nth-child(7) {
+    > div:nth-child(3),
+    > div:nth-child(5) {
       justify-content: flex-start;
     }
   `,

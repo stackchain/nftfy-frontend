@@ -155,3 +155,39 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+.ant-image-preview-operations-operation:nth-last-of-type(2) {
+  display: none;
+}
+
+.ant-image-preview-operations-operation:nth-last-of-type(1) {
+  display: none;
+}
+
+.ant-image-preview-operations {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.ant-image-preview-mask {
+  background-color: rgb(255, 255, 255);
+}
+
+.ant-image-preview-img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+}
+
+.ant-image-mask:hover {
+  opacity: 1;
+  border-radius: 4px;
+}
+
+.ant-image-preview-operations {
+  color: rgb(0, 0, 0) !important;
+  list-style: none;
+  background: transparent;
+  pointer-events: auto;
+}

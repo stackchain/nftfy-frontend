@@ -34,10 +34,10 @@ export default function PortfolioPage() {
     <>
       <Header page='portfolio' />
       <S.Main>
-        <S.PortfolioWrapper>
+        <S.Content>
           {account && <S.PortfolioHeader totalValue='3,861.7 2' loading={!!loading} />}
           <S.PortfolioContent erc20share={erc20share} loading={!!loading} account={!!account} />
-        </S.PortfolioWrapper>
+        </S.Content>
       </S.Main>
       <ClaimModal />
       <Footer />
@@ -47,10 +47,21 @@ export default function PortfolioPage() {
 
 export const S = {
   Main: styled.main`
-    flex: 1;
-    padding: 32px 48px;
-    background: ${colors.white};
+    width: 100%;
+    height: 100%;
     min-height: calc(100vh - 136px);
+    background: ${colors.white};
+    display: flex;
+    justify-content: center;
+  `,
+  Content: styled.section`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 48px;
+    height: 100%;
+
+    max-width: ${viewport.xxl};
 
     @media (max-width: ${viewport.xl}) {
       padding: 32px 24px;
@@ -60,15 +71,6 @@ export const S = {
       padding: 32px 8px;
     }
   `,
-  PortfolioWrapper: styled.section`
-    flex: 1;
-    max-width: ${viewport.xxl};
-    margin: 0 auto;
-  `,
-  PortfolioHeader: styled(PortfolioHeader)`
-    margin-bottom: 32px;
-  `,
-  PortfolioContent: styled(PortfolioContent)`
-    margin-bottom: 48px;
-  `
+  PortfolioHeader: styled(PortfolioHeader)``,
+  PortfolioContent: styled(PortfolioContent)``
 }
