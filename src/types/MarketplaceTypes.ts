@@ -3,6 +3,7 @@ export interface MarketplaceERC20Item {
   name: string
   symbol: string
   securitized: boolean
+  released: boolean
   decimals: number
   totalSupply: number
   exitPrice: number
