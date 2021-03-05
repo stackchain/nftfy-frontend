@@ -19,12 +19,16 @@ export const SharesDetails: React.FC<SharesDetailsProps> = ({ erc20 }: SharesDet
   const poolsLoading = useReactiveVar(poolsLoadingVar)
   const [liquidityChecked, setLiquidityChecked] = useState(false)
   const [hasLiquidity, setHasLiquidity] = useState(true)
+  const [priceDollar, setPriceDollar] = useState('')
+  const [priceWeth, setPriceWeth] = useState('')
 
   useEffect(() => {
     const checkLiquidity = async () => {
       const liquidity = await hasLiquidityForErc20Shares(erc20.address)
-      setHasLiquidity(liquidity)
       setLiquidityChecked(true)
+      setHasLiquidity(liquidity.hasLiquidity)
+      setPriceDollar(liquidity.priceDollar)
+      setPriceWeth(liquidity.priceWeth)
     }
 
     checkLiquidity()
@@ -57,12 +61,12 @@ export const SharesDetails: React.FC<SharesDetailsProps> = ({ erc20 }: SharesDet
             <S.PriceAction>
               <div>
                 <S.MainPrice>
-                  0.000051
+                  {priceWeth}
                   <small>ETH</small>
                 </S.MainPrice>
                 <S.DollarPrice>
                   <small>$</small>
-                  0.04
+                  {priceDollar}
                 </S.DollarPrice>
               </div>
               <S.TradeSharesButton onClick={buySharesModal}>Buy Shares</S.TradeSharesButton>

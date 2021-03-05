@@ -1,24 +1,46 @@
 /* eslint-disable react/prop-types */
+import { useReactiveVar } from '@apollo/client'
 import { Skeleton, Spin } from 'antd'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import notFound from '../../../assets/notfound.svg'
+import { poolsLoadingVar } from '../../../graphql/variables/MarketplaceVariable'
+import { hasLiquidityForErc20Shares } from '../../../services/BalancerService'
 import { colors, fonts, viewport } from '../../../styles/variables'
 
 export interface NftCardProps {
   image?: string
   name?: string
-  price?: number
   url?: string
   loading?: boolean
   className?: string
   securitize?: boolean
   tokenId?: string
+  address?: string
 }
+export const NftCard: React.FC<NftCardProps> = ({ address, image, name, loading, url, className, securitize, tokenId }) => {
+  const poolsLoading = useReactiveVar(poolsLoadingVar)
+  const [liquidityChecked, setLiquidityChecked] = useState(false)
+  const [hasLiquidity, setHasLiquidity] = useState(true)
+  const [priceDollar, setPriceDollar] = useState('')
+  // const [priceWeth, setPriceWeth] = useState('')
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, url, className, securitize, tokenId }) => {
+  console.log('Address que esta chegando', address)
+
+  useEffect(() => {
+    const checkLiquidity = async () => {
+      if (address) {
+        const liquidity = await hasLiquidityForErc20Shares(address)
+        setLiquidityChecked(true)
+        setHasLiquidity(liquidity.hasLiquidity)
+        setPriceDollar(liquidity.priceDollar)
+        // setPriceWeth(liquidity.priceWeth)
+      }
+    }
+
+    checkLiquidity()
+  }, [address])
   return (
     <S.Card className={className} to={`${url || '#'}`}>
       <S.BoxImage className={image === '' ? 'bg-fail' : ''}>
@@ -36,8 +58,8 @@ export const NftCard: React.FC<NftCardProps> = ({ image, name, price, loading, u
         </S.Content>
         {!securitize && (
           <S.Content>
-            <Skeleton loading={!!loading && !securitize} active paragraph={{ rows: 0 }}>
-              <S.Price>{`${price} usd`}</S.Price>
+            <Skeleton loading={(!!loading && !securitize) || poolsLoading || !liquidityChecked} active paragraph={{ rows: 0 }}>
+              {hasLiquidity && <S.Price>{`$${priceDollar}`}</S.Price>}
             </Skeleton>
           </S.Content>
         )}

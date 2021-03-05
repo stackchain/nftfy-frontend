@@ -161,13 +161,26 @@ export async function balancerSwapOut(assetInAddress: string, assetOutAddress: s
 
   return undefined
 }
+export async function hasLiquidityForErc20Shares(
+  erc20Address: string
+): Promise<{ priceDollar: string; priceWeth: string; hasLiquidity: boolean }> {
+  let priceDollar = ''
+  let priceWeth = ''
+  let hasLiquidity = false
 
-export async function hasLiquidityForErc20Shares(erc20Address: string): Promise<boolean> {
-  const { nfyAddress } = getConfigByChainId(chainIdVar())
+  const { stableCoinAddress, stableCoinDecimals, balancer } = getConfigByChainId(chainIdVar())
+  const { precision, weth } = balancer
 
   if (!poolsLoadingVar()) {
-    return !!(await balancerAssetQuote(nfyAddress, 18, erc20Address, 6, 'swapExactIn', '0.000001'))?.tradeSwaps.length
+    const quoteDollar = await balancerAssetQuote(erc20Address, 6, stableCoinAddress, stableCoinDecimals, 'swapExactIn', '1')
+    const quoteWeth = await balancerAssetQuote(erc20Address, 6, weth, 18, 'swapExactIn', '1')
+
+    if (quoteDollar && quoteDollar.tradeSwaps.length && quoteWeth && quoteWeth.tradeSwaps.length) {
+      priceDollar = `${new BigNumber(quoteDollar?.exitAmount).div(new BigNumber(1)).decimalPlaces(precision).toString()}`
+      priceWeth = `${new BigNumber(quoteWeth?.exitAmount).div(new BigNumber(1)).decimalPlaces(precision).toString()}`
+      hasLiquidity = true
+    }
   }
 
-  return false
+  return { hasLiquidity, priceDollar, priceWeth }
 }

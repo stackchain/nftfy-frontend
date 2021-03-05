@@ -58,7 +58,7 @@ export const chains: ChainConfig[] = [
     infuraAddress: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`,
     nfyAddress: '0x1528f3fcc26d13f7079325fb78d9442607781c8c',
     nfyDecimals: 18,
-    stableCoinAddress: '0xe6364Fe4D6708f3B21d67c3a91D43a6cd3177ef6',
+    stableCoinAddress: '0x2F375e94FC336Cdec2Dc0cCB5277FE59CBf1cAe5',
     stableCoinDecimals: 6,
     nftfyAddress: '0x727638740980aA0aA0B346d02dd91120Eaac75ed',
     erc721Addresses: ['0xE0394f4404182F537AC9F2F9695a4a4CD74a1ea3'],

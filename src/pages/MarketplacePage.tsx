@@ -32,6 +32,9 @@ export default function MarketplacePage({ location }: RouteProps) {
       const nftItems = await getMarketplaceItems(currentPage, currentLimit)
       setLoading(false)
       setNfts(nftItems.data)
+
+      console.log('nfts da poara', nftItems.data)
+
       setTotalPages(nftItems.total)
     }
     getNfts()
@@ -53,10 +56,10 @@ export default function MarketplacePage({ location }: RouteProps) {
             {!loading &&
               nfts.map(nftItem => (
                 <NftCard
+                  address={nftItem.address}
                   key={`${nftItem.address}`}
                   image={`${nftItem.erc721.image_url}`}
                   name={nftItem.name}
-                  price={0}
                   url={`/marketplace/${nftItem.address}`}
                   securitize={false}
                 />

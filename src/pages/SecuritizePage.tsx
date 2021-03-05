@@ -73,7 +73,7 @@ export default function SecuritizePage({ location }: RouteProps) {
                   key={`${nftItem.address}-${nftItem.tokenId}`}
                   image={`${nftItem.image_url}`}
                   name={nftItem.name}
-                  price={0}
+                  address={nftItem.address}
                   url={`/securitize/${nftItem.address}/${nftItem.tokenId}`}
                   loading={loading}
                   tokenId={nftItem.tokenId}
