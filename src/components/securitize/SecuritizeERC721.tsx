@@ -54,7 +54,7 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
   }
 
   const securitize = async () => {
-    setLoading(true)
+    setLoad(true)
     await securitizeErc721(erc721Address, erc721AddressId, units(shares, 6), 6, units(exitPrice, asset.decimals), asset.address, false)
     await verifySecuritize()
     setLoad(false)

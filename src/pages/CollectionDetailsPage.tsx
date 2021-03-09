@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { LoadingCollectionDetails } from '../components/securitize/loadingCollectionDetails'
+import { LoadingSecuritizeDetailsPage } from '../components/securitize/loadingSecuritizeDetailsPage'
 import { SecuritizeERC721 } from '../components/securitize/SecuritizeERC721'
 import { NftImage } from '../components/shared/cards/NftImage'
 import { NftInfoDetails } from '../components/shared/cards/NftInfoDetails'
@@ -29,7 +29,7 @@ export default function CollectionDetailsPage() {
     return (
       <>
         <Header page='securitize' />
-        <LoadingCollectionDetails />
+        <LoadingSecuritizeDetailsPage />
       </>
     )
   }
