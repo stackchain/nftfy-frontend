@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import { LoadingCollectionDetails } from '../components/securitize/loadingCollectionDetails'
 import { SecuritizeERC721 } from '../components/securitize/SecuritizeERC721'
 import { NftImage } from '../components/shared/cards/NftImage'
 import { NftInfoDetails } from '../components/shared/cards/NftInfoDetails'
 import { Footer, Header } from '../components/shared/layout'
+import { ModalAssetsToken } from '../components/shared/ModalAssetsToken'
 import { getErc721ByAddress } from '../services/WalletService'
 import { colors, fonts, viewport } from '../styles/variables'
 import { WalletErc721Item } from '../types/WalletTypes'
@@ -23,7 +25,14 @@ export default function CollectionDetailsPage() {
     getNfts()
   }, [address, tokenId])
 
-  if (!erc721) return <></>
+  if (!erc721) {
+    return (
+      <>
+        <Header page='securitize' />
+        <LoadingCollectionDetails />
+      </>
+    )
+  }
 
   return (
     <S.Collection>
@@ -63,6 +72,7 @@ export default function CollectionDetailsPage() {
         </S.Content>
       </S.Main>
       <Footer />
+      <ModalAssetsToken />
     </S.Collection>
   )
 }

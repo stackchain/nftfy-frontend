@@ -1,9 +1,9 @@
-import { Button, Input, Tooltip } from 'antd'
+import { Button, Input, Skeleton, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import arrowDown from '../../assets/arrowDown.svg'
 import iconInfo from '../../assets/icons/info.svg'
-import ethereum from '../../assets/tokens/ethereum.svg'
+import { assetsModalVar } from '../../graphql/variables/SecuritizeVariables'
 import { approveErc721, isApprovedErc721, isSecuritizedErc721, securitizeErc721 } from '../../services/NftfyService'
 import { units } from '../../services/UtilService'
 import { colors, fonts, viewport } from '../../styles/variables'
@@ -11,6 +11,7 @@ import { colors, fonts, viewport } from '../../styles/variables'
 export interface securitizeErc721Props {
   erc721Address: string
   erc721AddressId: number
+  loading?: boolean
 }
 
 export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Address, erc721AddressId }: securitizeErc721Props) => {
@@ -25,7 +26,7 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
     decimals: 18
   }
 
-  const [loading, setLoading] = useState(false)
+  const [load, setLoad] = useState(false)
   const [isSecuritize, setIsSecuritize] = useState(false)
   const [approved, setApproved] = useState(false)
   const [releaseSecuritize, setReleaseSecuritize] = useState(false)
@@ -45,18 +46,18 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
   }
 
   const approve = async () => {
-    setLoading(true)
+    setLoad(true)
     await approveErc721(erc721Address, erc721AddressId)
     const statusApproved = await isApprovedErc721(erc721Address, erc721AddressId)
     setApproved(statusApproved)
-    setLoading(false)
+    setLoad(false)
   }
 
   const securitize = async () => {
     setLoading(true)
     await securitizeErc721(erc721Address, erc721AddressId, units(shares, 6), 6, units(exitPrice, asset.decimals), asset.address, false)
     await verifySecuritize()
-    setLoading(false)
+    setLoad(false)
   }
 
   const handleExitPrice = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +66,7 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
 
     setExitPrice(event.target.value)
   }
+
   if (isSecuritize) {
     return (
       <S.ContentAlertSecuritize>
@@ -98,21 +100,21 @@ export const SecuritizeERC721: React.FC<securitizeErc721Props> = ({ erc721Addres
             </Tooltip>
           </S.Label>
           <div>
-            <S.TokenButton className={!approved ? 'noDropdown disabled' : 'noDropdown'}>
-              <img src={ethereum} alt='Ethereum' />
+            <S.TokenButton className={!approved ? ' disabled' : 'noDropdown'} onClick={() => approved && assetsModalVar(true)}>
+              {/* <img src={ethereum} alt='Ethereum' /> */}
               <span>{asset.symbol}</span>
               <img src={arrowDown} alt='Arrow Down' />
             </S.TokenButton>
-            <S.SetExitPrice type='number' onChange={handleExitPrice} placeholder='0 ETH' disabled={!approved} />
+            <S.SetExitPrice type='number' onChange={handleExitPrice} placeholder='0' disabled={!approved} />
           </div>
         </S.FormControlPrice>
         <S.Action>
           {!approved ? (
-            <S.TradeSharesButton loading={loading} onClick={approve}>
+            <S.TradeSharesButton loading={load} onClick={approve}>
               Unlock
             </S.TradeSharesButton>
           ) : (
-            <S.TradeSharesButton loading={loading} onClick={securitize} disabled={!releaseSecuritize}>
+            <S.TradeSharesButton loading={load} onClick={securitize} disabled={!releaseSecuritize}>
               Securitize
             </S.TradeSharesButton>
           )}
@@ -134,11 +136,22 @@ const S = {
     border: 1px solid ${colors.gray3};
     box-sizing: border-box;
 
+    .ant-modal-header {
+      border-top-left-radius: 15px !important;
+    }
+
     .disabled {
       background-color: ${colors.white1};
     }
     @media (max-width: ${viewport.xl}) {
       height: auto;
+    }
+  `,
+  SkeletonComponent: styled(Skeleton.Input)`
+    width: 600px;
+    height: 100px;
+    .ant-skeleton-input {
+      height: 100px;
     }
   `,
   Title: styled.div`
@@ -298,6 +311,7 @@ const S = {
     background-color: ${colors.blue1};
     margin-top: 20px;
     margin-bottom: 17px;
+    border: none !important;
 
     &:hover,
     &:focus {
@@ -312,15 +326,16 @@ const S = {
     }
   `,
   TokenButton: styled.div`
+    cursor: pointer;
     width: 152px;
     height: 40px;
     border: 1px solid ${colors.gray3};
-    cursor: pointer;
     border-right: none;
     border-bottom-left-radius: 8px;
     border-top-left-radius: 8px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: -moz-none;
@@ -342,13 +357,6 @@ const S = {
     img:nth-child(3) {
       width: 16px;
       height: 16px;
-    }
-
-    &.noDropdown {
-      cursor: default;
-      img:nth-child(3) {
-        display: none;
-      }
     }
   `,
   ContentAlertSecuritize: styled.div`

@@ -523,3 +523,44 @@ export const getERC20SharesByAddress = async (walletAddress: string, erc20Addres
     }
   }
 }
+export const getAssetsTokenList = async () => {
+  const assets = [
+    {
+      id: '0',
+      name: 'Ethereum',
+      symbol: 'ETH',
+      address: '0x0000000000000000000000000000000000000000',
+      imageUrl: '',
+      value: '3000000',
+      decimals: 18
+    },
+    {
+      id: '1',
+      name: 'DAI',
+      symbol: 'DAI',
+      address: '0x0000000000000000000000000000000000000000',
+      imageUrl: '',
+      value: '2000000',
+      decimals: 18
+    },
+    {
+      id: '3',
+      name: 'DAI',
+      symbol: 'DAI',
+      address: '0x0000000000000000000000000000000000000000',
+      imageUrl: '',
+      value: '2000000',
+      decimals: 18
+    },
+    {
+      id: '2',
+      name: 'MKR',
+      symbol: 'MKR',
+      address: '0x0000000000000000000000000000000000000000',
+      imageUrl: '',
+      value: '1000000',
+      decimals: 18
+    }
+  ]
+  return assets
+}
